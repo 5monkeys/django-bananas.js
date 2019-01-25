@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "history": "^4.7.2",
+    "js-logger": "^1.6.0",
     "loglevelnext": "^3.0.0",
     "prop-types": "^15.5.7",
     "swagger-client": "3.8.22"
