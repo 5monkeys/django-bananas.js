@@ -20,6 +20,7 @@ app/dist
 .env.development.local
 .env.test.local
 .env.production.local
+.tags
 
 npm-debug.log*
 yarn-debug.log*
