@@ -316,6 +316,7 @@ export default class Router {
 
   reroute(to) {
     // Rewrite route to current window location
+    // console.log("Router.reroute()");
     const { location } = this.history;
     const { pathname, search, hash } = location;
     this.route(

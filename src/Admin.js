@@ -187,6 +187,11 @@ class Admin extends React.Component {
     // Get route from location state
     const route = location.state ? location.state.route : null;
 
+    if (action === "POP" && !route) {
+      this.router.reroute();
+      return;
+    }
+
     // Un-mount current page, if location changed
     const currentPage = this.state.pageProps;
     if (
