@@ -85,7 +85,7 @@ class Admin extends React.Component {
       messageIndex: 0,
     };
 
-    logger.setLevel(this.getLogLevel());
+    logger.setLevel(this.getLogLevel("bananas", "WARN"));
 
     window.bananas = this;
   }
@@ -100,7 +100,7 @@ class Admin extends React.Component {
     const level =
       typeof this.props.logLevel === "string"
         ? logLevel || this.props.logLevel
-        : this.props.logLevel[namespace || "bananas"] || logLevel || "WARN";
+        : this.props.logLevel[namespace] || logLevel || "WARN";
 
     return Logger[level];
   }

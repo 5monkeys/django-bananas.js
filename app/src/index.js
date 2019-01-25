@@ -9,6 +9,7 @@ ReactDOM.render(
   <Bananas.App
     {...settings}
     pages={route => import(`./pages/${route}`)}
+    // logLevel="DEBUG"
     logLevel={{
       bananas: "INFO",
       example: "DEBUG",
