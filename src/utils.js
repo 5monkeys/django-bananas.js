@@ -1,5 +1,3 @@
-import settings from "./conf";
-
 export function getCookie(name) {
   const prefix = `${name}=`;
   const cookies = document.cookie.split(/\s*;\s*/);
@@ -79,5 +77,5 @@ export function capitalize(string) {
 
 export function t(key) {
   // TODO: Implement
-  throw new Error("Not Implemented");
+  throw new Error("Translation not implemented", key);
 }

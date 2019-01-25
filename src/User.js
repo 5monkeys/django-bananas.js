@@ -13,8 +13,8 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import AdminContext from "./context";
 import settings from "./conf";
+import AdminContext from "./context";
 
 const styles = theme => ({
   user: {

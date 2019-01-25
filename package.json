@@ -1,10 +1,10 @@
 {
   "name": "django-bananas",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
-  "author": "Simon Lydell",
-  "repository": "5monkeys/django-bananas",
-  "description": "React admin frontend for Django Bananas.",
+  "author": "Jonas Lundberg",
+  "repository": "5monkeys/django-bananas.js",
+  "description": "React admin frontend for Django.",
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -25,14 +25,13 @@
     "jest": "jest",
     "coverage": "jest --coverage",
     "buildwatch": "babel src --watch --out-dir dist",
-    "build": "webpack -p",
+    "build": "babel --delete-dir-on-start src --out-dir dist",
     "test": "npm run eslint && npm run coverage && npm run build",
     "prepublishOnly": "npm test"
   },
   "dependencies": {
     "history": "^4.7.2",
     "js-logger": "^1.6.0",
-    "loglevelnext": "^3.0.0",
     "prop-types": "^15.5.7",
     "swagger-client": "3.8.22"
   },
@@ -48,6 +47,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-syntax-jsx": "7.2.0",
+    "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "7.0.0",
     "@material-ui/core": "^3.9.0",
     "@material-ui/icons": "3.0.1",
@@ -69,10 +69,6 @@
     "react-dom": "16.6.3",
     "react-jss": "8.6.1",
     "react-test-renderer": "16.6.3",
-    "regexp-tree": "^0.1.0",
-    "uglifyjs-webpack-plugin": "^2.1.1",
-    "webpack": "^4.29.0",
-    "webpack-bundle-analyzer": "^3.0.3",
-    "webpack-cli": "^3.2.1"
+    "regexp-tree": "^0.1.0"
   }
 }
