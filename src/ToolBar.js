@@ -5,7 +5,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import WidthLimit from "./WidthLimit";
+import Container from "./Container";
 import settings from "./conf";
 import AdminContext from "./context";
 
@@ -60,14 +60,14 @@ const ToolBar = ({ classes, children, placement, ...rest }) => {
               })}
               {...rest}
             >
-              <WidthLimit>
+              <Container>
                 <Toolbar
                   className={classes.toolbar}
                   classes={{ gutters: classes.toolbarGutters }}
                 >
                   {children}
                 </Toolbar>
-              </WidthLimit>
+              </Container>
             </AppBar>
           );
         }}

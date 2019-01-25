@@ -8,8 +8,8 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
+import Container from "./Container";
 import Link from "./Link";
-import WidthLimit from "./WidthLimit";
 import settings from "./conf";
 import AdminContext from "./context";
 
@@ -89,7 +89,7 @@ const TitleBar = ({
               })}
               {...rest}
             >
-              <WidthLimit>
+              <Container>
                 <Toolbar
                   className={classes.toolbar}
                   classes={{ gutters: classes.toolbarGutters }}
@@ -122,7 +122,7 @@ const TitleBar = ({
                     {children}
                   </div>
                 </Toolbar>
-              </WidthLimit>
+              </Container>
             </AppBar>
           </div>
         );

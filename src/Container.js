@@ -12,7 +12,7 @@ const styles = () => ({
   },
 });
 
-class WidthLimit extends React.Component {
+class Container extends React.Component {
   render() {
     const { classes, children, ...rest } = this.props;
     return settings.dimensions.containerWidth ? (
@@ -25,4 +25,4 @@ class WidthLimit extends React.Component {
   }
 }
 
-export default withStyles(styles)(WidthLimit);
+export default withStyles(styles)(Container);

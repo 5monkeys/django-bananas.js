@@ -10,13 +10,13 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import Branding from "./Branding";
+import Container from "./Container";
 import ErrorBoundary from "./ErrorBoundary";
 import Hamburger from "./Hamburger";
 import LoadingScreen from "./LoadingScreen";
 import Messages from "./Messages";
 import Navigation from "./Navigation";
 import User from "./User";
-import WidthLimit from "./WidthLimit";
 import APIClient from "./api";
 import settings from "./conf";
 import AdminContext from "./context";
@@ -449,7 +449,7 @@ class Admin extends React.Component {
               <>
                 {isHorizontal ? (
                   <AppBar position={"relative"}>
-                    <WidthLimit>
+                    <Container>
                       <Toolbar
                         disableGutters
                         className={classNames(
@@ -474,11 +474,11 @@ class Admin extends React.Component {
                           }}
                         />
                       </Toolbar>
-                    </WidthLimit>
+                    </Container>
                   </AppBar>
                 ) : (
                   <AppBar position={"fixed"}>
-                    <WidthLimit>
+                    <Container>
                       <Toolbar className={classes.toolbar}>
                         <Branding
                           logo={this.props.logo}
@@ -498,7 +498,7 @@ class Admin extends React.Component {
                         />
                         <User variant="appbar" />
                       </Toolbar>
-                    </WidthLimit>
+                    </Container>
                   </AppBar>
                 )}
                 <div
@@ -524,25 +524,23 @@ class Admin extends React.Component {
                     </Drawer>
                   )}
                   <div className={classes.content}>
-                    <WidthLimit>
-                      {pageTheme ? (
-                        <MuiThemeProvider theme={pageTheme}>
-                          {Page ? (
-                            <ErrorBoundary>
-                              <Page {...pageProps} />
-                            </ErrorBoundary>
-                          ) : (
-                            <LoadingScreen color="primary" />
-                          )}
-                        </MuiThemeProvider>
-                      ) : Page ? (
-                        <ErrorBoundary>
-                          <Page {...pageProps} />
-                        </ErrorBoundary>
-                      ) : (
-                        <LoadingScreen color="primary" />
-                      )}
-                    </WidthLimit>
+                    {pageTheme ? (
+                      <MuiThemeProvider theme={pageTheme}>
+                        {Page ? (
+                          <ErrorBoundary>
+                            <Page {...pageProps} />
+                          </ErrorBoundary>
+                        ) : (
+                          <LoadingScreen color="primary" />
+                        )}
+                      </MuiThemeProvider>
+                    ) : Page ? (
+                      <ErrorBoundary>
+                        <Page {...pageProps} />
+                      </ErrorBoundary>
+                    ) : (
+                      <LoadingScreen color="primary" />
+                    )}
                   </div>
                 </div>
               </>
