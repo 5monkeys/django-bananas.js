@@ -67,9 +67,10 @@ class LoginPage extends React.Component {
     e.preventDefault();
     const { admin } = this.context;
     const { username, password } = this.state;
+    const { logger } = this.props;
 
     admin.login(username, password).catch(error => {
-      console.log("Login Failed", error);
+      logger.debug("Login Failed", error.response, error);
       this.context.admin.error("Login Failed");
     });
   };
@@ -128,6 +129,7 @@ class LoginPage extends React.Component {
 
 LoginPage.propTypes = {
   classes: PropTypes.object.isRequired,
+  logger: PropTypes.object.isRequired,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
   title: PropTypes.string,
 };

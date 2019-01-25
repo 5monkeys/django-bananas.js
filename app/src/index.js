@@ -9,6 +9,10 @@ ReactDOM.render(
   <Bananas.App
     {...settings}
     pages={route => import(`./pages/${route}`)}
+    logLevel={{
+      bananas: "INFO",
+      example: "DEBUG",
+    }}
     // layout="vertical" // horizontal|vertical
     title="Example"
     // branding="Admin"

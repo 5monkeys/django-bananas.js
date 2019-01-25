@@ -44,8 +44,9 @@ const styles = theme => ({
   },
 });
 
-const UsersPage = ({ route, data, title, classes }) => {
+const UsersPage = ({ route, data, title, logger, classes }) => {
   const { query, hash } = route;
+  logger.debug("Rendering users list with data:", data);
   return (
     <AdminContext.Consumer>
       {context => (
@@ -174,7 +175,7 @@ const UsersPage = ({ route, data, title, classes }) => {
               className={classes.toolBarButton}
               onClick={async () => {
                 const me = await context.api["bananas.me:list"]();
-                console.log("ME", me);
+                logger.info("ME", me);
                 context.admin.info(`Fetched Me: ${me.obj.username}`);
               }}
             >
@@ -191,6 +192,7 @@ UsersPage.propTypes = {
   route: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
+  logger: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
 

@@ -33,6 +33,7 @@
     "@material-ui/core": "^3.9.0",
     "@material-ui/icons": ">=3.0.0",
     "history": "^4.7.2",
+    "js-logger": "^1.6.0",
     "prop-types": "^15.5.7",
     "react-i18next": "^9.0.2",
     "swagger-client": "3.8.22"

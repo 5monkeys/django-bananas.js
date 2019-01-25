@@ -5,6 +5,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import MuiDrawer from "@material-ui/core/Drawer";
 import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -29,6 +30,9 @@ import ErrorPage from "./pages/ErrorPage";
 import LoginPage from "./pages/LoginPage";
 import Router from "./router";
 import themes from "./themes";
+
+Logger.useDefaults();
+const logger = Logger.get("bananas");
 
 const styles = () => ({
   toolbar: {
@@ -81,6 +85,8 @@ class Admin extends React.Component {
       messageIndex: 0,
     };
 
+    logger.setLevel(this.getLogLevel());
+
     window.bananas = this;
   }
 
@@ -90,12 +96,28 @@ class Admin extends React.Component {
     this.setState({ context }, callback);
   }
 
+  getLogLevel(namespace, logLevel) {
+    const level =
+      typeof this.props.logLevel === "string"
+        ? logLevel || this.props.logLevel
+        : this.props.logLevel[namespace || "bananas"] || logLevel || "WARN";
+
+    return Logger[level];
+  }
+
+  getLogger(namespace) {
+    const log = Logger.get(namespace);
+    const level = this.getLogLevel(namespace);
+    log.setLevel(level);
+    return log;
+  }
+
   componentDidMount() {
     this.boot();
   }
 
   async boot() {
-    console.log("Booting...");
+    logger.info("Booting...");
     this.setTitle();
 
     // Initialize API client
@@ -108,12 +130,12 @@ class Admin extends React.Component {
         errorHandler: this.error.bind(this),
       });
     } catch (error) {
-      console.log("Critical Error: Failed to initialize API client!", error);
+      logger.error("Critical Error: Failed to initialize API client!", error);
       this.error("Failed to boot!");
       return;
     }
 
-    console.log(
+    logger.info(
       `Initialized ${
         swagger.isAuthenticated ? "Authenticated" : "Un-authenticated"
       } Swagger Client:`,
@@ -140,7 +162,7 @@ class Admin extends React.Component {
     // Finalize boot
     this.setState({ booted: true });
 
-    console.log("Booted!");
+    logger.info("Booted!");
   }
 
   reboot(user) {
@@ -166,7 +188,7 @@ class Admin extends React.Component {
       endpoint().then(
         response => {
           this.user = { ...response.obj };
-          console.log("Authorized User:", this.user);
+          logger.info("Authorized User:", this.user);
           this.setState({ user: this.user });
           resolve(this.user);
         },
@@ -182,7 +204,7 @@ class Admin extends React.Component {
   }
 
   async routeDidUpdate(location, action) {
-    console.log("routeDidUpdate()", action, location);
+    logger.info("App.routeDidUpdate()", action, location);
 
     // Get route from location state
     const route = location.state ? location.state.route : null;
@@ -224,8 +246,8 @@ class Admin extends React.Component {
       throw new PageNotFoundError();
     }
 
-    const { id, operationId, params, path, query, hash, template } = route;
-    console.log("Load Page:", path, route);
+    const { id, operationId, params, app, path, query, hash, template } = route;
+    logger.debug("Load Page:", path, route);
 
     // Initial page props
     let Page = null;
@@ -240,6 +262,7 @@ class Admin extends React.Component {
       title: route.title,
       data: undefined,
       referer: this.state.pageProps ? this.state.pageProps.route || null : null,
+      logger: this.getLogger(app),
     };
 
     if (template === "Component") {
@@ -268,18 +291,18 @@ class Admin extends React.Component {
 
   loadPageData(operationId, params, filter) {
     if (this.api[operationId]) {
-      console.log("Loading page data...", operationId, params, filter);
+      logger.debug("Loading page data...", operationId, params, filter);
       return this.api[operationId]({ ...params, ...filter });
     }
 
-    console.log(
+    logger.debug(
       "Omitting page data...operationId is undefined, no data endpoint found"
     );
     return null;
   }
 
   mountPage(PageComponent, pageProps) {
-    console.log("Mount Page:", pageProps);
+    logger.info("Mount Page:", pageProps);
     this.Page = PageComponent;
     this.setState({ pageProps }, () => {
       this.setTitle(pageProps.title);
@@ -287,7 +310,7 @@ class Admin extends React.Component {
   }
 
   mountErrorPage(title, statusCode) {
-    console.log(title || "Page Not Found");
+    logger.warn(title || "Page Not Found");
     this.mountPage(ErrorPage, {
       title: title || "Error",
       data: { statusCode },
@@ -296,7 +319,7 @@ class Admin extends React.Component {
 
   unmountPage() {
     if (this.state.pageProps) {
-      console.log("Un-mounting page...", this.state.pageProps);
+      logger.info("Un-mounting page...", this.state.pageProps);
       this.Page = null;
       this.setState({ pageProps: null });
       this.dismissMessages();
@@ -315,7 +338,7 @@ class Admin extends React.Component {
     return new Promise((resolve, reject) => {
       this.api["bananas.login:create"]({ data: { username, password } }).then(
         response => {
-          console.log("Successfull login...reboot");
+          logger.info("Successfull login...reboot");
           const user = response.obj;
           resolve(user);
           this.dismissMessages();
@@ -524,7 +547,11 @@ class Admin extends React.Component {
                 </div>
               </>
             ) : (
-              <LoginPage logo={this.props.logo} title={this.props.title} />
+              <LoginPage
+                logo={this.props.logo}
+                title={this.props.title}
+                logger={logger}
+              />
             )}
           </AdminContext.Provider>
         ) : (
@@ -541,6 +568,7 @@ Admin.propTypes = {
   api: PropTypes.string.isRequired,
   pages: PropTypes.func.isRequired,
   prefix: PropTypes.string,
+  logLevel: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 
   layout: PropTypes.string,
 
@@ -562,6 +590,7 @@ Admin.propTypes = {
 Admin.defaultProps = {
   prefix: "",
   layout: "horizontal", // horizontal|vertical
+  logLevel: "WARN",
 
   title: "Bananas",
   branding: "Bananas",

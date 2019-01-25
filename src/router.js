@@ -1,4 +1,5 @@
 import createHistory from "history/createBrowserHistory";
+import Logger from "js-logger";
 
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import {
@@ -10,6 +11,8 @@ import {
   nthIndexOf,
   toQuery,
 } from "./utils";
+
+const logger = Logger.get("bananas");
 
 export default class Router {
   constructor(baseUrl) {
@@ -123,7 +126,7 @@ export default class Router {
         title: route.title,
       }));
 
-    console.log("Initialized Router:", this.routes);
+    logger.debug("Initialized Router:", this.routes);
   }
 
   addInternalRoutes() {
@@ -166,7 +169,7 @@ export default class Router {
       path,
       action,
       template: template || this.getTemplate(path, action),
-      app,
+      app: app || id.split(":")[0].split(".")[0],
       title: this.getTitle(title, id),
       navigation,
       pattern: new RegExp(pattern || `^${path}$`),
@@ -238,6 +241,7 @@ export default class Router {
       id: route.id,
       operationId: route.operationId,
       path: route.path,
+      app: route.app,
       action: route.action,
       title: route.title,
       template:
@@ -287,7 +291,7 @@ export default class Router {
 
       const resolved = this.ResolvedRoute(route, { path: pathname, params });
 
-      // console.log(`Router.resolve():`, resolved);
+      logger.debug(`Router.resolve():`, resolved);
       return resolved;
     }
 
@@ -316,7 +320,7 @@ export default class Router {
 
   reroute(to) {
     // Rewrite route to current window location
-    // console.log("Router.reroute()");
+    logger.debug("Router.reroute()");
     const { location } = this.history;
     const { pathname, search, hash } = location;
     this.route(
@@ -396,7 +400,7 @@ export default class Router {
       route.hash = next.hash ? next.hash.substring(1) : null; // Strip leading #
     }
 
-    console.log("Router.route():", next, route);
+    logger.debug("Router.route():", next, route);
 
     const locationChange =
       pageChange ||

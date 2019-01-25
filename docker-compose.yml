@@ -10,5 +10,5 @@ services:
       - "3000:3000"
     volumes:
       - ./app:/code
-      - ./src:/code/django-bananas:ro
+      - ./src:/code/django-bananas
       - /code/node_modules

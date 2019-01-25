@@ -46,7 +46,7 @@ class ChangePasswordPage extends React.Component {
             <FormControl>
               <form
                 onSubmit={() => {
-                  console.log("Password change requrested", this.state);
+                  // TODO: Implement
                 }}
               >
                 <div className={classes.root}>

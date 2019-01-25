@@ -1,11 +1,14 @@
+import Logger from "js-logger";
 import Swagger from "swagger-client";
 
 import { getCookie } from "./utils";
 
+const logger = Logger.get("bananas");
+
 class APIClient extends Swagger {
   constructor(url, opts = {}) {
     if (!opts.errorHandler) {
-      opts.errorHandler = console.log;
+      opts.errorHandler = logger.error;
     }
     super(url, opts);
   }
@@ -38,7 +41,7 @@ class APIClient extends Swagger {
           // Intercept response and catch API errors
           if (response.status >= 403) {
             const { operationId } = argHash;
-            console.log("Catched API Response:", operationId, response);
+            logger.debug("Catched API Response:", operationId, response);
 
             const message =
               response.obj && response.obj.detail
@@ -52,7 +55,7 @@ class APIClient extends Swagger {
       .catch(error => {
         // Connection error
         if (!error.response) {
-          console.log("API Connection Error!", error);
+          logger.error("API Connection Error!", error);
           this.errorHandler("API Connection Error!");
         }
         throw error;
