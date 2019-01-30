@@ -111,6 +111,7 @@ Link.propTypes = {
   hash: PropTypes.string,
   patch: PropTypes.bool,
 };
+
 Link.defaultProps = {
   route: undefined,
   params: undefined,

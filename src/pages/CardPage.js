@@ -6,11 +6,10 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import TitleBar from "../TitleBar";
-import settings from "../conf";
 
-const styles = _theme => ({
+const styles = theme => ({
   root: {
-    height: `calc(100vh - ${settings.dimensions.appbarHeight}px)`,
+    height: `calc(100vh - ${theme.overrides.MuiToolbar.root.minHeight}px)`,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

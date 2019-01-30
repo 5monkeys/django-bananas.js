@@ -3,17 +3,38 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
+import Container from "./Container";
+
 const styles = theme => ({
   root: {
-    padding: theme.spacing.unit * 3,
+    position: "relative",
     flexGrow: 1,
-    overflow: "auto",
+  },
+  scroll: {
+    position: "absolute",
+    overflowY: "auto",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+  },
+  padded: {
+    padding: theme.spacing.unit * 3,
   },
 });
 
-const Content = ({ children, classes, ...rest }) => (
-  <div className={classNames(classes.root, classes)} {...rest}>
-    {children}
+const Content = ({ classes, children, disablePadding, ...rest }) => (
+  <div className={classNames(classes.root, classes)}>
+    <div className={classes.scroll}>
+      <Container>
+        <div
+          className={classNames({ [classes.padded]: !disablePadding })}
+          {...rest}
+        >
+          {children}
+        </div>
+      </Container>
+    </div>
   </div>
 );
 
@@ -24,10 +45,12 @@ Content.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
+  disablePadding: PropTypes.bool,
 };
 
 Content.defaultProps = {
   children: null,
+  disablePadding: false,
 };
 
-export default withStyles(styles)(Content);
+export default withStyles(styles, { name: "BananasContent" })(Content);

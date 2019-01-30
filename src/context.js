@@ -1,10 +1,10 @@
 import React from "react";
 
 const AdminContext = React.createContext({
+  admin: undefined,
+  router: undefined,
   api: undefined,
-  settings: undefined,
   user: undefined,
-  currentPage: undefined,
 });
 
 export default AdminContext;

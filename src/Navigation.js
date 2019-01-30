@@ -1,4 +1,5 @@
 import {
+  Avatar,
   List,
   ListItem,
   ListItemIcon,
@@ -12,10 +13,35 @@ import React from "react";
 
 import AdminContext from "./context";
 
-const styles = () => ({
+const styles = theme => ({
+  root: {},
+  dense: {
+    paddingTop: theme.spacing.unit * 1.5,
+    paddingBottom: theme.spacing.unit * 1.5,
+  },
+  horizontal: {
+    display: "flex",
+    flexDirection: "row",
+  },
   subheader: {
+    backgroundColor: theme.palette.background.paper,
     textTransform: "uppercase",
     fontSize: `${0.75}rem`,
+    overflow: "hidden",
+    height: 48,
+  },
+  collapsed: {
+    height: 0,
+    transition: theme.transitions.create("height", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  expanded: {
+    transition: theme.transitions.create("height", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
 });
 
@@ -23,7 +49,7 @@ class Navigation extends React.Component {
   static contextType = AdminContext;
 
   render() {
-    const { routes, horizontal, dense, icons, classes } = this.props;
+    const { routes, collapsed, horizontal, dense, icons, classes } = this.props;
     const currentUrl = this.context.router.history.location.pathname;
 
     const groupedRoutes = routes.reduce((nav, route) => {
@@ -43,10 +69,22 @@ class Navigation extends React.Component {
       return (
         <List
           key={app}
-          dense={dense && horizontal}
+          className={classNames(classes.root, {
+            [classes.horizontal]: horizontal,
+            [classes.dense]: horizontal && dense,
+          })}
+          dense={horizontal}
+          disablePadding
           subheader={
             !horizontal && (
-              <ListSubheader className={classes.subheader}>{app}</ListSubheader>
+              <ListSubheader
+                className={classNames(classes.subheader, {
+                  [classes.collapsed]: collapsed,
+                  [classes.expanded]: !collapsed,
+                })}
+              >
+                {app}
+              </ListSubheader>
             )
           }
         >
@@ -54,9 +92,10 @@ class Navigation extends React.Component {
             <NavigationItem
               key={id}
               route={id}
-              icon={icons ? icons[id] : null}
+              icon={icons ? (icons === true ? true : icons[id]) : false}
               title={title}
               horizontal={horizontal}
+              collapsed={collapsed}
               selected={currentUrl.startsWith(path)}
             />
           ))}
@@ -66,26 +105,34 @@ class Navigation extends React.Component {
   }
 }
 
-const itemStyles = () => ({
-  root: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-  },
-  centerText: {
-    textAlign: "center",
-  },
-
-  denseItem: {
+const itemStyles = theme => ({
+  root: {},
+  dense: {
     padding: 0,
+  },
+  collapsed: {
+    paddingLeft: theme.spacing.unit,
+    transition: theme.transitions.create("padding", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  expanded: {
+    paddingLeft: theme.spacing.unit * 2,
+    transition: theme.transitions.create("padding", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  avatar: {
+    backgroundColor: "rgba(0, 0, 0, 0.14)",
+    color: "inherit",
+    opacity: 0.5,
+    marginRight: theme.spacing.unit * 2,
   },
   icon: {
     color: "inherit",
     opacity: 0.75,
-  },
-  iconVertical: {
-    marginRight: 0,
   },
 });
 
@@ -94,6 +141,7 @@ const UnstyledNavigationItem = ({
   route,
   title,
   selected,
+  collapsed,
   horizontal,
   icon,
 }) => {
@@ -102,7 +150,11 @@ const UnstyledNavigationItem = ({
     <AdminContext.Consumer>
       {context => (
         <ListItem
-          className={!horizontal ? classes.root : classes.centerText}
+          className={classNames(classes.root, {
+            [classes.collapsed]: icon === true && collapsed,
+            [classes.expanded]: icon === true && !collapsed,
+          })}
+          dense={horizontal}
           button
           selected={selected}
           onClick={e => {
@@ -110,26 +162,25 @@ const UnstyledNavigationItem = ({
             context.router.route({ id: route });
           }}
         >
-          {icon && (
-            <ListItemIcon
-              className={classNames(classes.icon, {
-                [classes.iconVertical]: !horizontal,
-              })}
-            >
-              <CustomIcon
-                color={!horizontal && !selected ? "inherit" : undefined}
-              />
-            </ListItemIcon>
-          )}
+          {icon &&
+            (icon === true ? (
+              <Avatar className={classes.avatar}>
+                {title.substring(0, 1)}
+              </Avatar>
+            ) : (
+              <ListItemIcon className={classes.icon}>
+                <CustomIcon
+                  color={!horizontal && !selected ? "inherit" : undefined}
+                />
+              </ListItemIcon>
+            ))}
 
           <ListItemText
             primaryTypographyProps={{
               color: "inherit",
             }}
-            classes={{ dense: classes.denseItem }}
-            inset={icon && !horizontal && !CustomIcon}
+            className={classes.dense}
             primary={title}
-            // secondary={!horizontal && url}
           />
         </ListItem>
       )}
@@ -141,11 +192,13 @@ const NavigationItem = withStyles(itemStyles)(UnstyledNavigationItem);
 Navigation.propTypes = {
   classes: PropTypes.object.isRequired,
   routes: PropTypes.array.isRequired,
+  collapsed: PropTypes.bool,
   horizontal: PropTypes.bool,
   dense: PropTypes.bool,
-  icons: PropTypes.object,
+  icons: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
 };
 Navigation.defaultProps = {
+  collapsed: false,
   horizontal: false,
   dense: true,
   icons: undefined,
@@ -157,13 +210,15 @@ UnstyledNavigationItem.propTypes = {
   title: PropTypes.string.isRequired,
   selected: PropTypes.bool,
   horizontal: PropTypes.bool,
-  icon: PropTypes.func,
+  collapsed: PropTypes.bool,
+  icon: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
 };
 
 UnstyledNavigationItem.defaultProps = {
   selected: false,
   horizontal: false,
-  icon: undefined,
+  collapsed: false,
+  icon: true,
 };
 
 export default withStyles(styles)(Navigation);

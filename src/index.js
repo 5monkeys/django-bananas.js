@@ -1,4 +1,4 @@
-import Admin from "./Admin";
+import App from "./Admin";
 
 export { default as AdminContext } from "./context";
 export { default as TitleBar } from "./TitleBar";
@@ -8,7 +8,7 @@ export { default as Container } from "./Container";
 export { default as Link } from "./Link";
 
 const Bananas = {
-  App: Admin,
+  App,
 };
 
 export default Bananas;

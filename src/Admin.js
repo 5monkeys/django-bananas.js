@@ -1,24 +1,16 @@
 /* eslint-disable react/no-unused-state */
-import { Divider, Toolbar } from "@material-ui/core";
-import MuiAppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import MuiDrawer from "@material-ui/core/Drawer";
 import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
-import Branding from "./Branding";
-import Container from "./Container";
 import ErrorBoundary from "./ErrorBoundary";
-import Hamburger from "./Hamburger";
 import LoadingScreen from "./LoadingScreen";
 import Messages from "./Messages";
-import Navigation from "./Navigation";
-import User from "./User";
+import NavBar from "./NavBar";
 import APIClient from "./api";
-import settings from "./conf";
 import AdminContext from "./context";
 import {
   AnonymousUserError,
@@ -29,45 +21,42 @@ import {
 import ErrorPage from "./pages/ErrorPage";
 import LoginPage from "./pages/LoginPage";
 import Router from "./router";
-import themes from "./themes";
+import themes, { createBananasTheme } from "./themes";
 
 Logger.useDefaults();
 const logger = Logger.get("bananas");
 
-const styles = () => ({
-  toolbar: {
-    height: settings.dimensions.appbarHeight,
-    paddingLeft: 0,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "stretch",
-    "& > * ": {
+const styles = theme => {
+  console.log("ADMIN", theme);
+  return {
+    root: {
       display: "flex",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: theme.palette.primary.dark,
+    },
+    horizontalRoot: {
+      width: "100%",
       flexDirection: "row",
-      alignItems: "center",
     },
-  },
-  content: {
-    marginTop: -settings.dimensions.appbarHeight,
-    width: "100%",
-    overflow: "auto",
-    position: "relative",
-  },
-  horizontalRoot: {
-    display: "flex",
-    width: "100%",
-    height: `calc(100vh - ${settings.dimensions.appbarHeight}px)`,
-  },
-  verticalRoot: {
-    display: "flex",
-    flexDirection: "column",
-    "& $content": {
-      height: `calc(100vh - ${settings.dimensions.appbarHeight}px)`,
-      marginTop: settings.dimensions.appbarHeight,
+    verticalRoot: {
+      flexDirection: "column",
     },
-  },
-});
+    admin: {
+      backgroundColor: theme.palette.background.default,
+    },
+    page: {
+      display: "flex",
+      flexDirection: "column",
+      flexGrow: 1,
+      width: "100%",
+      height: "100%",
+    },
+  };
+};
 
 class Admin extends React.Component {
   Page = null;
@@ -80,7 +69,6 @@ class Admin extends React.Component {
       user: undefined,
       pageProps: undefined,
       layout: props.layout,
-      navigationOpen: true,
       messages: [],
       messageIndex: 0,
     };
@@ -88,12 +76,6 @@ class Admin extends React.Component {
     logger.setLevel(this.getLogLevel("bananas", "WARN"));
 
     window.bananas = this;
-  }
-
-  setContext(newContext, callback) {
-    // TODO: Remove this?
-    const context = { ...this.state.context, ...newContext };
-    this.setState({ context }, callback);
   }
 
   getLogLevel(namespace, logLevel) {
@@ -358,10 +340,6 @@ class Admin extends React.Component {
     });
   }
 
-  toggleDrawer = () => {
-    this.setState({ navigationOpen: !this.state.navigationOpen });
-  };
-
   /* MESSAGING */
 
   getUniqueMessageId() {
@@ -418,130 +396,56 @@ class Admin extends React.Component {
 
   render() {
     const { Page, router, api } = this;
-    const { classes, theme, pageTheme, navigationProps } = this.props;
-    const {
-      booted,
-      user,
-      pageProps,
-      layout,
-      navigationOpen,
-      messages,
-    } = this.state;
+    const { classes, navigationProps, pageTheme } = this.props;
+    const { booted, user, pageProps, layout, messages } = this.state;
 
-    const isHorizontal = layout === "horizontal";
-    const displayDrawerToggle = isHorizontal && !navigationProps.permanent;
+    const isHorizontalLayout = layout === "horizontal";
 
     const context = {
       admin: this,
       router,
       api,
       user,
-      navigationOpen,
     };
 
     return (
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-
+      <div
+        className={classNames(classes.root, {
+          [classes.admin]: booted && user,
+          [classes.horizontalRoot]: isHorizontalLayout,
+          [classes.verticalRoot]: !isHorizontalLayout,
+        })}
+      >
         {booted ? (
           <AdminContext.Provider value={context}>
             {user ? (
               <>
-                {isHorizontal ? (
-                  <AppBar position={"relative"}>
-                    <Container>
-                      <Toolbar
-                        disableGutters
-                        className={classNames(
-                          classes.toolbar,
-                          classes.toolBarfullHeight
-                        )}
-                      >
-                        {displayDrawerToggle && (
-                          <Hamburger
-                            open={navigationOpen}
-                            onToggle={this.toggleDrawer}
-                          />
-                        )}
-
-                        <Branding
-                          logo={this.props.logo}
-                          title={this.props.title}
-                          subtitle={this.props.branding}
-                          version={this.props.version}
-                          onClick={() => {
-                            this.router.route({ id: "home" }); // TODO: Use route id
-                          }}
-                        />
-                      </Toolbar>
-                    </Container>
-                  </AppBar>
-                ) : (
-                  <AppBar position={"fixed"}>
-                    <Container>
-                      <Toolbar className={classes.toolbar}>
-                        <Branding
-                          logo={this.props.logo}
-                          title={this.props.title}
-                          subtitle={this.props.branding}
-                          version={this.props.version}
-                          onClick={() => {
-                            this.router.route({ id: "home" });
-                          }}
-                        />
-
-                        <Navigation
-                          horizontal
-                          icons={this.props.icons}
-                          routes={this.router.navigationRoutes}
-                          {...navigationProps}
-                        />
-                        <User variant="appbar" />
-                      </Toolbar>
-                    </Container>
-                  </AppBar>
-                )}
-                <div
-                  className={classNames(
-                    classes.admin,
-                    isHorizontal ? classes.horizontalRoot : classes.verticalRoot
-                  )}
-                >
-                  {isHorizontal && (
-                    <Drawer anchor="left" open={navigationOpen}>
-                      <div>
-                        <Divider />
-                        <Navigation
-                          icons={this.props.icons}
-                          routes={this.router.navigationRoutes}
-                          {...navigationProps}
-                        />
-                      </div>
-                      <div>
-                        <Divider />
-                        <User variant="drawer" />
-                      </div>
-                    </Drawer>
-                  )}
-                  <div className={classes.content}>
-                    {pageTheme ? (
-                      <MuiThemeProvider theme={pageTheme}>
-                        {Page ? (
-                          <ErrorBoundary>
-                            <Page {...pageProps} />
-                          </ErrorBoundary>
-                        ) : (
-                          <LoadingScreen color="primary" />
-                        )}
-                      </MuiThemeProvider>
-                    ) : Page ? (
-                      <ErrorBoundary>
+                <NavBar
+                  variant={
+                    this.props.layout === "horizontal" ? "drawer" : "appbar"
+                  }
+                  dense={navigationProps.dense}
+                  permanent={navigationProps.permanent}
+                  logo={this.props.logo}
+                  title={this.props.title}
+                  branding={this.props.branding}
+                  version={this.props.version}
+                  icons={this.props.icons}
+                />
+                <div className={classes.page}>
+                  {Page ? (
+                    <ErrorBoundary>
+                      {pageTheme ? (
+                        <MuiThemeProvider theme={pageTheme}>
+                          <Page {...pageProps} />
+                        </MuiThemeProvider>
+                      ) : (
                         <Page {...pageProps} />
-                      </ErrorBoundary>
-                    ) : (
-                      <LoadingScreen color="primary" />
-                    )}
-                  </div>
+                      )}
+                    </ErrorBoundary>
+                  ) : (
+                    <LoadingScreen color="primary" />
+                  )}
                 </div>
               </>
             ) : (
@@ -556,13 +460,28 @@ class Admin extends React.Component {
           <LoadingScreen logo={this.props.logo} />
         )}
         <Messages messages={messages} />
-      </MuiThemeProvider>
+      </div>
     );
   }
 }
-Admin.propTypes = {
-  classes: PropTypes.object.isRequired,
 
+const StyledAdmin = withStyles(styles)(Admin);
+
+const App = ({ ...props }) => {
+  const theme = createBananasTheme(props.theme);
+  const pageTheme = props.pageTheme
+    ? createBananasTheme(props.pageTheme)
+    : undefined;
+
+  return (
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+      <StyledAdmin {...{ ...props, theme, pageTheme }} />
+    </MuiThemeProvider>
+  );
+};
+
+App.propTypes = {
   api: PropTypes.string.isRequired,
   pages: PropTypes.func.isRequired,
   prefix: PropTypes.string,
@@ -574,7 +493,7 @@ Admin.propTypes = {
   branding: PropTypes.string,
   version: PropTypes.string,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
-  icons: PropTypes.object,
+  icons: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
 
   theme: PropTypes.object,
   pageTheme: PropTypes.object,
@@ -585,7 +504,7 @@ Admin.propTypes = {
   }),
 };
 
-Admin.defaultProps = {
+App.defaultProps = {
   prefix: "",
   layout: "horizontal", // horizontal|vertical
   logLevel: "WARN",
@@ -594,82 +513,15 @@ Admin.defaultProps = {
   branding: "Bananas",
   version: "v1.0.0", // TODO: Get package version
   logo: true,
-  icons: undefined,
+  icons: true,
 
   theme: themes.default,
   pageTheme: undefined,
 
   navigationProps: {
-    dense: true,
-    permanent: true,
+    dense: false,
+    permanent: false,
   },
 };
 
-const Drawer = withStyles(theme => ({
-  root: {
-    width: settings.dimensions.drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  drawerClosed: {
-    width: 0,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  drawerPaper: {
-    justifyContent: "space-between",
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: settings.dimensions.drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    justifyContent: "space-between",
-    position: "relative",
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-}))(({ children, open, classes, ...rest }) => (
-  <MuiDrawer
-    open={open}
-    className={classNames(classes.root, {
-      [classes.drawerClosed]: !open,
-    })}
-    classes={{
-      paper: open ? classes.drawerPaper : classes.drawerPaperClose,
-    }}
-    variant="persistent"
-    {...rest}
-  >
-    {children}
-  </MuiDrawer>
-));
-
-const AppBar = withStyles(theme => ({
-  root: {
-    overflow: "hidden",
-    backgroundColor: theme.palette.primary.dark,
-  },
-  positionRelative: {
-    width: settings.dimensions.drawerWidth + 1,
-  },
-}))(({ children, classes, ...rest }) => (
-  <MuiAppBar elevation={0} classes={classes} {...rest}>
-    {children}
-  </MuiAppBar>
-));
-
-export default withStyles(styles)(Admin);
+export default App;

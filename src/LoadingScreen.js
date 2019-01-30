@@ -8,17 +8,17 @@ import Logo from "./Logo";
 
 const styles = theme => ({
   root: {
-    position: "absolute",
+    position: "relative",
     top: 0,
     left: 0,
-    height: "100%",
     width: "100%",
+    height: "100%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    "& > * + *": {
-      marginTop: theme.spacing.unit * 3,
+    "& > *": {
+      margin: theme.spacing.unit * 1.5,
     },
   },
   defaultColor: {

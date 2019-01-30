@@ -67,7 +67,7 @@ class UnstyledCustomSnackBar extends React.Component {
         key={message + id}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "left",
+          horizontal: "right",
         }}
         onClose={this.handleClose}
         onExited={remove}
@@ -111,13 +111,18 @@ UnstyledCustomSnackBar.propTypes = {
 
 const CustomSnackBar = withStyles(styles)(UnstyledCustomSnackBar);
 
-function Messages({ messages }) {
+const Messages = withStyles(
+  {
+    root: {},
+  },
+  { name: "BananasMessages" }
+)(({ classes, messages }) => {
   const snackbars = messages.map(msg => (
     <CustomSnackBar key={msg.id + msg.message} {...msg} />
   ));
 
-  return snackbars ? <div>{snackbars}</div> : null;
-}
+  return snackbars ? <div className={classes.root}>{snackbars}</div> : null;
+});
 
 Messages.propTypes = {
   messages: PropTypes.array.isRequired,

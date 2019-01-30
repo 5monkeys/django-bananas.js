@@ -6,33 +6,15 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import Container from "./Container";
-import settings from "./conf";
-import AdminContext from "./context";
 
 const styles = theme => ({
-  contentSpacer: {
-    position: "relative",
-    height: settings.dimensions.appbarHeight - 2,
+  root: {
+    flexGrow: 0,
+    flexShrink: 0,
   },
   bottom: {
     bottom: 0,
     top: "auto",
-  },
-  appBar: {
-    marginTop: settings.dimensions.appbarHeight,
-    zIndex: theme.zIndex.drawer,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: settings.dimensions.drawerWidth,
-    width: `calc(100% - ${settings.dimensions.drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   },
   toolbar: {
     "& > * + *": {
@@ -41,38 +23,26 @@ const styles = theme => ({
   },
 });
 
-const ToolBar = ({ classes, children, placement, ...rest }) => {
+const ToolBar = ({ classes, children, placement, color, ...rest }) => {
   return (
-    <div className={classes.contentSpacer}>
-      <AdminContext.Consumer>
-        {context => {
-          // TODO: Remove admin props dependency
-          const horizontalLayout = context.admin.props.layout === "horizontal";
-          const shifted = horizontalLayout && context.navigationOpen;
-          return (
-            <AppBar
-              elevation={0}
-              position="fixed"
-              color="primary"
-              className={classNames(classes.appBar, {
-                [classes.appBarShift]: shifted,
-                [classes.bottom]: placement === "bottom",
-              })}
-              {...rest}
-            >
-              <Container>
-                <Toolbar
-                  className={classes.toolbar}
-                  classes={{ gutters: classes.toolbarGutters }}
-                >
-                  {children}
-                </Toolbar>
-              </Container>
-            </AppBar>
-          );
-        }}
-      </AdminContext.Consumer>
-    </div>
+    <AppBar
+      elevation={0}
+      position="relative"
+      color={color}
+      className={classNames(classes.root, {
+        [classes.bottom]: placement === "bottom",
+      })}
+      {...rest}
+    >
+      <Container>
+        <Toolbar
+          className={classes.toolbar}
+          classes={{ gutters: classes.toolbarGutters }}
+        >
+          {children}
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 
@@ -80,10 +50,13 @@ ToolBar.propTypes = {
   classes: PropTypes.object.isRequired,
   children: PropTypes.node,
   placement: PropTypes.string,
+  color: PropTypes.string,
 };
 
 ToolBar.defaultProps = {
-  placement: "bottom",
   children: null,
+  placement: "bottom",
+  color: "primary",
 };
-export default withStyles(styles)(ToolBar);
+
+export default withStyles(styles, { name: "BananasToolBar" })(ToolBar);

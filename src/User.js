@@ -13,13 +13,20 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import settings from "./conf";
 import AdminContext from "./context";
 
 const styles = theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    ...theme.mixins.toolbar,
+  },
+  drawerVariant: {
+    borderTop: "1px solid rgba(0, 0, 0, 0.14)",
+  },
+  appbarVariant: {},
   user: {
-    maxWidth: settings.dimensions.drawerWidth,
-    paddingRight: 0,
     flexShrink: 0,
     "& *": { lineHeight: 1.2 },
   },
@@ -30,8 +37,9 @@ const styles = theme => ({
   rightAligned: {
     flexDirection: "row-reverse",
     textAlign: "right",
+    paddingRight: theme.spacing.unit * 3,
   },
-  logOutLink: {
+  link: {
     "& > * ": {
       fontSize: "0.75rem",
     },
@@ -43,77 +51,92 @@ const styles = theme => ({
   },
   appbarLink: {
     "&:hover": {
-      color: theme.palette.secondary.main,
+      color: theme.palette.secondary.light,
     },
   },
-  drawerList: {
-    paddingTop: theme.spacing.unit * 0.75 - 1,
-    paddingBottom: theme.spacing.unit * 0.75,
+  expanded: {
+    transition: theme.transitions.create(["padding"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
-  appbarList: {},
+  collapsed: {
+    paddingLeft: theme.spacing.unit + 1,
+    transition: theme.transitions.create(["padding"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
 });
 
 class User extends React.Component {
+  static contextType = AdminContext;
+
   render() {
-    const { classes, variant } = this.props;
+    const { user, router } = this.context;
+    const { classes, variant, collapsed } = this.props;
+
     const isDrawerVariant = variant === "drawer";
     const isAppBarVariant = variant === "appbar";
+
     const UserIcon = PersonIcon;
+    const logoutText = router.reverseRoutes.bananas_logout_create.title;
+
+    if (!user) {
+      return null;
+    }
 
     return (
-      <AdminContext.Consumer>
-        {context =>
-          context.admin.user && (
-            <div>
-              <List
-                dense={true}
-                className={classNames({
-                  [classes.drawerList]: isDrawerVariant,
-                  [classes.appbarList]: isAppBarVariant,
-                })}
-              >
-                <ListItem
-                  className={classNames(classes.user, {
-                    [classes.rightAligned]: isAppBarVariant,
+      <div>
+        <List
+          dense={true}
+          className={classNames(classes.root, {
+            [classes.drawerVariant]: isDrawerVariant,
+            [classes.appbarVariant]: isAppBarVariant,
+          })}
+        >
+          <ListItem
+            disableGutters={isAppBarVariant}
+            className={classNames(classes.user, {
+              [classes.rightAligned]: isAppBarVariant,
+              [classes.collapsed]: collapsed,
+              [classes.expanded]: !collapsed,
+            })}
+          >
+            {UserIcon && (
+              <ListItemAvatar>
+                <Avatar classes={{ colorDefault: classes.avatar }}>
+                  <UserIcon />
+                </Avatar>
+              </ListItemAvatar>
+            )}
+            <ListItemText
+              primaryTypographyProps={{
+                color: "inherit",
+                noWrap: true,
+              }}
+              secondaryTypographyProps={{
+                color: "inherit",
+              }}
+              primary={user.full_name}
+              secondary={
+                <ButtonBase
+                  className={classNames(classes.link, {
+                    [classes.drawerLink]: isDrawerVariant,
+                    [classes.appbarLink]: isAppBarVariant,
                   })}
+                  onClick={e => {
+                    e.preventDefault();
+                    this.context.admin.logout();
+                  }}
                 >
-                  {UserIcon && (
-                    <ListItemAvatar>
-                      <Avatar classes={{ colorDefault: classes.avatar }}>
-                        <UserIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                  )}
-                  <ListItemText
-                    primaryTypographyProps={{
-                      color: "inherit",
-                      noWrap: true,
-                    }}
-                    secondaryTypographyProps={{
-                      color: "inherit",
-                    }}
-                    primary={context.admin.user.full_name}
-                    secondary={
-                      <ButtonBase
-                        className={classNames(classes.logOutLink, {
-                          [classes.drawerLink]: isDrawerVariant,
-                          [classes.appbarLink]: isAppBarVariant,
-                        })}
-                        onClick={e => {
-                          e.preventDefault();
-                          context.admin.logout();
-                        }}
-                      >
-                        <Typography color="inherit">Logga ut</Typography>
-                      </ButtonBase>
-                    }
-                  />
-                </ListItem>
-              </List>
-            </div>
-          )
-        }
-      </AdminContext.Consumer>
+                  <Typography color="inherit">{logoutText}</Typography>
+                </ButtonBase>
+              }
+            />
+          </ListItem>
+        </List>
+      </div>
     );
   }
 }
@@ -121,10 +144,12 @@ class User extends React.Component {
 User.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string,
+  collapsed: PropTypes.bool,
 };
 
 User.defaultProps = {
   variant: "default",
+  collapsed: false,
 };
 
 export default withStyles(styles)(User);
