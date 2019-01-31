@@ -66,13 +66,13 @@ const styles = theme => ({
   drawerBorder: {
     borderRight: "1px solid rgba(0, 0, 0, 0.14)",
   },
-  drawerOpen: {
+  drawerExpanded: {
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  drawerClosed: {
+  drawerCollapsed: {
     width: theme.spacing.unit * 7 + 1,
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
@@ -122,16 +122,21 @@ class NavBar extends React.Component {
       }
     }
 
+    const collapsed =
+      JSON.parse(window.localStorage.getItem("collapsed")) || false;
+
     this.state = {
       isDrawerVariant,
       isAppBarVariant,
       permanent,
-      open: true,
+      collapsed,
     };
   }
 
   toggle = () => {
-    this.setState({ open: !this.state.open });
+    const collapsed = !this.state.collapsed;
+    this.setState({ collapsed });
+    window.localStorage.setItem("collapsed", collapsed);
   };
 
   renderChildren() {
@@ -146,14 +151,19 @@ class NavBar extends React.Component {
       icons,
     } = this.props;
 
-    const { isDrawerVariant, isAppBarVariant, open, permanent } = this.state;
+    const {
+      isDrawerVariant,
+      isAppBarVariant,
+      collapsed,
+      permanent,
+    } = this.state;
     const routes = this.context.router.navigationRoutes;
 
     return (
       <>
         <Toolbar className={classes.branding}>
           {isDrawerVariant && !permanent && (
-            <Hamburger open={open} onToggle={this.toggle} />
+            <Hamburger open={!collapsed} onToggle={this.toggle} />
           )}
           <Branding
             logo={logo}
@@ -182,7 +192,7 @@ class NavBar extends React.Component {
           >
             <Navigation
               horizontal={isAppBarVariant}
-              collapsed={!open}
+              collapsed={collapsed}
               dense={dense}
               icons={icons}
               routes={routes}
@@ -194,7 +204,7 @@ class NavBar extends React.Component {
             [classes.drawerBorder]: isDrawerVariant,
           })}
         >
-          <User variant={variant} collapsed={!open} />
+          <User variant={variant} collapsed={collapsed} />
         </div>
       </>
     );
@@ -202,21 +212,21 @@ class NavBar extends React.Component {
 
   render() {
     const { classes, variant } = this.props;
-    const { open } = this.state;
+    const { collapsed } = this.state;
 
     return variant === "drawer" ? (
       <Drawer
         variant="permanent"
         anchor="left"
-        open={open}
+        open={!collapsed}
         classes={{
           root: classNames(classes.drawerRoot, classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClosed]: !open,
+            [classes.drawerExpanded]: !collapsed,
+            [classes.drawerCollapsed]: collapsed,
           }),
           paper: classNames(classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClosed]: !open,
+            [classes.drawerExpanded]: !collapsed,
+            [classes.drawerCollapsed]: collapsed,
           }),
         }}
       >
