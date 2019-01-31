@@ -23,17 +23,26 @@ const styles = theme => ({
   },
 });
 
-const Content = ({ classes, children, disablePadding, ...rest }) => (
+const Content = ({ classes, children, disablePadding, contained, ...rest }) => (
   <div className={classNames(classes.root, classes)}>
     <div className={classes.scroll}>
-      <Container>
+      {contained ? (
+        <Container>
+          <div
+            className={classNames({ [classes.padded]: !disablePadding })}
+            {...rest}
+          >
+            {children}
+          </div>
+        </Container>
+      ) : (
         <div
           className={classNames({ [classes.padded]: !disablePadding })}
           {...rest}
         >
           {children}
         </div>
-      </Container>
+      )}
     </div>
   </div>
 );
@@ -46,11 +55,13 @@ Content.propTypes = {
     PropTypes.array,
   ]),
   disablePadding: PropTypes.bool,
+  contained: PropTypes.bool,
 };
 
 Content.defaultProps = {
   children: null,
   disablePadding: false,
+  contained: true,
 };
 
 export default withStyles(styles, { name: "BananasContent" })(Content);
