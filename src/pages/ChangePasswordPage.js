@@ -39,7 +39,7 @@ class ChangePasswordPage extends React.Component {
 
     return (
       <>
-        <TitleBar title={title} centerChildren={false} />
+        <TitleBar title={title} />
 
         <Content>
           <div className={classes.wrapper}>

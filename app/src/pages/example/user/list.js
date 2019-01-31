@@ -65,7 +65,7 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
     <AdminContext.Consumer>
       {context => (
         <>
-          <TitleBar title={title} centerChildren={false}>
+          <TitleBar title={title}>
             <Tools>
               <Link route="example.user:create">
                 <Fab
