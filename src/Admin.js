@@ -27,7 +27,6 @@ Logger.useDefaults();
 const logger = Logger.get("bananas");
 
 const styles = theme => {
-  console.log("ADMIN", theme);
   return {
     root: {
       display: "flex",
@@ -472,6 +471,9 @@ const App = ({ ...props }) => {
   const pageTheme = props.pageTheme
     ? createBananasTheme(props.pageTheme)
     : undefined;
+
+  logger.debug("Main Theme:", theme);
+  logger.debug("Page Theme:", pageTheme);
 
   return (
     <MuiThemeProvider theme={theme}>
