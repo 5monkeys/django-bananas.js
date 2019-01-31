@@ -74,7 +74,7 @@ const TitleBar = ({
         {title && (
           <Typography
             component="h1"
-            variant={dense ? "subheading" : "h6"}
+            variant={dense ? "subtitle1" : "h6"}
             color="inherit"
             className={classNames(classes.title, {
               [overrides.title]: overrides.title,
