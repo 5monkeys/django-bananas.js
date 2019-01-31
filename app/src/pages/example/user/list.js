@@ -3,6 +3,7 @@ import {
   Button,
   Fab,
   IconButton,
+  Input,
   Paper,
   Table,
   TableBody,
@@ -13,9 +14,17 @@ import {
   Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import FilterListIcon from "@material-ui/icons/FilterList";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import { AdminContext, Content, Link, TitleBar, ToolBar } from "django-bananas";
+import {
+  AdminContext,
+  Content,
+  Link,
+  TitleBar,
+  ToolBar,
+  Tools,
+} from "django-bananas";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -42,6 +51,11 @@ const styles = theme => ({
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.dark,
   },
+  evenToolbar: {
+    "& > *": {
+      width: "33%",
+    },
+  },
 });
 
 const UsersPage = ({ route, data, title, logger, classes }) => {
@@ -52,24 +66,52 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
       {context => (
         <>
           <TitleBar title={title} centerChildren={false}>
-            <Link route="example.user:create">
-              <Fab
-                color="secondary"
-                size="medium"
-                variant="extended"
-                className={classes.addButton}
-              >
-                <PersonAddIcon className={classes.addIcon} /> Add
-              </Fab>
-            </Link>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <Tools>
+              <Link route="example.user:create">
+                <Fab
+                  color="secondary"
+                  size="medium"
+                  variant="extended"
+                  className={classes.addButton}
+                >
+                  <PersonAddIcon className={classes.addIcon} /> Add
+                </Fab>
+              </Link>
+              <Link route="example.user:create">
+                <Fab
+                  color="secondary"
+                  size="medium"
+                  variant="extended"
+                  className={classes.addButton}
+                >
+                  <PersonAddIcon className={classes.addIcon} /> Add
+                </Fab>
+              </Link>
+              <IconButton color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </Tools>
+          </TitleBar>
+          <TitleBar
+            title="Filters"
+            color="paper"
+            border="bottom"
+            dense
+            overrides={{
+              toolbar: classes.evenToolbar,
+            }}
+          >
+            <Input placeholder={"Search..."} />
+            <Tools>
+              <IconButton color="inherit">
+                <FilterListIcon />
+              </IconButton>
+            </Tools>
           </TitleBar>
 
-          <Content>
+          <Content contained={false}>
             <Typography>
               <strong>Route:</strong> {route.id}
             </Typography>
@@ -119,68 +161,70 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
               </Table>
             </Paper>
           </Content>
-          <ToolBar color="primary">
-            <Link path="/">
-              <Button variant="text" className={classes.toolBarButton}>
-                Dashboard
+          <ToolBar color="primary" justify="center">
+            <Tools>
+              <Link path="/">
+                <Button variant="text" className={classes.toolBarButton}>
+                  Dashboard
+                </Button>
+              </Link>
+              <Button
+                variant="text"
+                className={classes.toolBarButton}
+                onClick={() =>
+                  context.router.route(
+                    {
+                      query: { username: "stormtrooper", age: "40" },
+                    },
+                    { patch: true }
+                  )
+                }
+              >
+                Add Query Param
               </Button>
-            </Link>
-            <Button
-              variant="text"
-              className={classes.toolBarButton}
-              onClick={() =>
-                context.router.route(
-                  {
-                    query: { username: "stormtrooper", age: "40" },
-                  },
-                  { patch: true }
-                )
-              }
-            >
-              Add Query Param
-            </Button>
 
-            <Button
-              variant="text"
-              className={classes.toolBarButton}
-              onClick={() =>
-                context.router.route({ hash: "olof" }, { patch: true })
-              }
-            >
-              Add Hash
-            </Button>
+              <Button
+                variant="text"
+                className={classes.toolBarButton}
+                onClick={() =>
+                  context.router.route({ hash: "olof" }, { patch: true })
+                }
+              >
+                Add Hash
+              </Button>
 
-            <Button
-              variant="text"
-              className={classes.toolBarButton}
-              onClick={() =>
-                context.router.route({ query: { foo: "bar" }, hash: "#baz" })
-              }
-            >
-              Add Query and Hash
-            </Button>
+              <Button
+                variant="text"
+                className={classes.toolBarButton}
+                onClick={() =>
+                  context.router.route({ query: { foo: "bar" }, hash: "#baz" })
+                }
+              >
+                Add Query and Hash
+              </Button>
 
-            <Button
-              variant="text"
-              className={classes.toolBarButton}
-              onClick={async () => {
-                context.router.route("/foobar");
-              }}
-            >
-              404
-            </Button>
+              <Button
+                variant="text"
+                className={classes.toolBarButton}
+                onClick={async () => {
+                  context.router.route("/foobar");
+                }}
+              >
+                404
+              </Button>
 
-            <Button
-              variant="text"
-              className={classes.toolBarButton}
-              onClick={async () => {
-                const me = await context.api["bananas.me:list"]();
-                logger.info("ME", me);
-                context.admin.info(`Fetched Me: ${me.obj.username}`);
-              }}
-            >
-              API call
-            </Button>
+              <Button
+                variant="text"
+                className={classes.toolBarButton}
+                onClick={async () => {
+                  const me = await context.api["bananas.me:list"]();
+                  logger.info("ME", me);
+                  context.admin.info(`Fetched Me: ${me.obj.username}`);
+                }}
+              >
+                API call
+              </Button>
+            </Tools>
           </ToolBar>
         </>
       )}
