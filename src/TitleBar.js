@@ -1,6 +1,4 @@
-import AppBar from "@material-ui/core/AppBar";
 import Fab from "@material-ui/core/Fab";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -8,8 +6,8 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import Container from "./Container";
 import Link from "./Link";
+import ToolBar from "./ToolBar";
 
 const styles = theme => ({
   root: {
@@ -21,8 +19,15 @@ const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
+  titleRoot: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingRight: theme.spacing.unit * 2,
+  },
   title: {
-    flexGrow: 1,
+    flexGrow: 0,
+    flexShrink: 0,
   },
   back: {
     marginLeft: theme.spacing.unit / -2,
@@ -31,85 +36,76 @@ const styles = theme => ({
     borderWidth: "1.5pt",
     borderStyle: "solid",
     borderColor: theme.palette.primary.contrastText,
+    backgroundColor: "transparent",
     "&:hover, &:active": {
       boxShadow: "none",
     },
-  },
-  centerChildren: {
-    flexGrow: 1,
   },
 });
 
 const TitleBar = ({
   classes,
+  overrides,
   children,
   title,
   back,
-  centerChildren,
+  dense,
+  justify,
   ...rest
 }) => {
   const backLinkProps =
     back && back.indexOf(":") > 0 ? { route: back } : { path: back };
 
   return (
-    <AppBar
-      elevation={0}
-      position={"relative"}
-      color="primary"
-      className={classes.root}
-      {...rest}
-    >
-      <Container>
-        <Toolbar
-          className={classes.toolbar}
-          classes={{ gutters: classes.toolbarGutters }}
-        >
-          {back && (
-            <Link patch {...backLinkProps}>
-              <Fab
-                color="primary"
-                size="small"
-                className={classes.back}
-                aria-label="Back"
-              >
-                <ChevronLeftIcon />
-              </Fab>
-            </Link>
-          )}
+    <ToolBar justify={justify} dense={dense} overrides={overrides} {...rest}>
+      <div className={classes.titleRoot}>
+        {back && (
+          <Link patch {...backLinkProps}>
+            <Fab
+              color="primary"
+              size="small"
+              className={classes.back}
+              aria-label="Back"
+            >
+              <ChevronLeftIcon />
+            </Fab>
+          </Link>
+        )}
+        {title && (
           <Typography
             component="h1"
-            variant="h6"
+            variant={dense ? "subheading" : "h6"}
             color="inherit"
-            className={classes.title}
+            className={classNames(classes.title, {
+              [overrides.title]: overrides.title,
+            })}
           >
             {title}
           </Typography>
-          <div
-            className={classNames({
-              [classes.centerChildren]: centerChildren,
-            })}
-          >
-            {children}
-          </div>
-        </Toolbar>
-      </Container>
-    </AppBar>
+        )}
+      </div>
+      {children}
+    </ToolBar>
   );
 };
 
 TitleBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  overrides: PropTypes.object,
   children: PropTypes.node,
   title: PropTypes.string,
   back: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  centerChildren: PropTypes.bool,
+  dense: PropTypes.bool,
+  justify: PropTypes.string, // start|center|end|between|around|evenly
 };
 
 TitleBar.defaultProps = {
-  title: "Bananas",
-  back: false,
+  overrides: {},
   children: null,
-  centerChildren: false,
+  title: undefined,
+  back: false,
+  dense: false,
+  justify: "between",
 };
 
 export default withStyles(styles, { name: "BananasTitleBar" })(TitleBar);
