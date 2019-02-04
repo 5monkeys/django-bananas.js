@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import PeopleIcon from "@material-ui/icons/People";
 import PersonIcon from "@material-ui/icons/Person";
 import Bananas from "django-bananas";
