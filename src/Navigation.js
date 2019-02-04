@@ -125,7 +125,7 @@ const itemStyles = theme => ({
     }),
   },
   avatar: {
-    backgroundColor: "rgba(0, 0, 0, 0.14)",
+    backgroundColor: theme.palette.action.selected,
     color: "inherit",
     opacity: 0.5,
     marginRight: theme.spacing.unit * 2,

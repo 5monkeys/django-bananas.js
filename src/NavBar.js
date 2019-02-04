@@ -64,7 +64,9 @@ const styles = theme => ({
     borderRight: 0,
   },
   drawerBorder: {
-    borderRight: "1px solid rgba(0, 0, 0, 0.14)",
+    borderRightWidth: 1,
+    borderRightStyle: "solid",
+    borderRightColor: theme.palette.action.selected,
   },
   drawerExpanded: {
     transition: theme.transitions.create("width", {
@@ -151,6 +153,9 @@ class NavBar extends React.Component {
       icons,
     } = this.props;
 
+    const userIcon =
+      typeof icons === "object" ? icons["bananas.me:list"] : undefined;
+
     const {
       isDrawerVariant,
       isAppBarVariant,
@@ -204,7 +209,7 @@ class NavBar extends React.Component {
             [classes.drawerBorder]: isDrawerVariant,
           })}
         >
-          <User variant={variant} collapsed={collapsed} />
+          <User variant={variant} collapsed={collapsed} icon={userIcon} />
         </div>
       </>
     );

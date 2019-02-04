@@ -1,5 +1,4 @@
 import {
-  Avatar,
   ButtonBase,
   List,
   ListItem,
@@ -8,7 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import PersonIcon from "@material-ui/icons/Person";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -23,16 +22,27 @@ const styles = theme => ({
     ...theme.mixins.toolbar,
   },
   drawerVariant: {
-    borderTop: "1px solid rgba(0, 0, 0, 0.14)",
+    borderTopWidth: 1,
+    borderTopStyle: "solid",
+    borderTopColor: theme.palette.action.selected,
   },
   appbarVariant: {},
   user: {
     flexShrink: 0,
+    justifyContent: "center",
+    padding: 0,
+    paddingLeft: theme.spacing.unit * 2,
     "& *": { lineHeight: 1.2 },
   },
   avatar: {
-    backgroundColor: "rgba(0, 0, 0, 0.14)",
     margin: 0,
+  },
+  text: {},
+  drawerAvatar: {
+    color: theme.palette.action.selected,
+  },
+  appbarAvatar: {
+    color: "inherit",
   },
   rightAligned: {
     flexDirection: "row-reverse",
@@ -61,11 +71,14 @@ const styles = theme => ({
     }),
   },
   collapsed: {
-    paddingLeft: theme.spacing.unit + 1,
+    paddingLeft: 0,
     transition: theme.transitions.create(["padding"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    "& $text": {
+      display: "none",
+    },
   },
 });
 
@@ -74,12 +87,12 @@ class User extends React.Component {
 
   render() {
     const { user, router } = this.context;
-    const { classes, variant, collapsed } = this.props;
+    const { classes, variant, collapsed, icon } = this.props;
 
     const isDrawerVariant = variant === "drawer";
     const isAppBarVariant = variant === "appbar";
 
-    const UserIcon = PersonIcon;
+    const UserIcon = icon || AccountCircleIcon;
     const logoutText = router.reverseRoutes.bananas_logout_create.title;
 
     if (!user) {
@@ -103,14 +116,16 @@ class User extends React.Component {
               [classes.expanded]: !collapsed,
             })}
           >
-            {UserIcon && (
-              <ListItemAvatar>
-                <Avatar classes={{ colorDefault: classes.avatar }}>
-                  <UserIcon />
-                </Avatar>
-              </ListItemAvatar>
-            )}
+            <ListItemAvatar>
+              <UserIcon
+                className={classNames(classes.avatar, {
+                  [classes.drawerAvatar]: isDrawerVariant,
+                  [classes.appbarAvatar]: isAppBarVariant,
+                })}
+              />
+            </ListItemAvatar>
             <ListItemText
+              className={classes.text}
               primaryTypographyProps={{
                 color: "inherit",
                 noWrap: true,
@@ -145,11 +160,13 @@ User.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string,
   collapsed: PropTypes.bool,
+  icon: PropTypes.func,
 };
 
 User.defaultProps = {
   variant: "default",
   collapsed: false,
+  icon: undefined,
 };
 
-export default withStyles(styles)(User);
+export default withStyles(styles, { name: "BananasUser" })(User);

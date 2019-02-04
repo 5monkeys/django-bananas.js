@@ -1,9 +1,11 @@
 import PeopleIcon from "@material-ui/icons/People";
+import PersonIcon from "@material-ui/icons/Person";
 import Bananas from "django-bananas";
 import themes from "django-bananas/themes";
 import React from "react";
 import ReactDOM from "react-dom";
 
+import Gravatar from "./Gravatar";
 import settings from "./bananas.settings";
 
 const exampleAppTheme = themes.default.extend({
@@ -65,6 +67,8 @@ ReactDOM.render(
     // icons={false}
     // icons={true}
     icons={{
+      "bananas.me:list": Gravatar,
+      // "bananas.me:list": PersonIcon,
       "example.user:list": PeopleIcon,
     }}
   />,
