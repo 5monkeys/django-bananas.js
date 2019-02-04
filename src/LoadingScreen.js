@@ -17,34 +17,42 @@ const styles = theme => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    "& > *": {
-      margin: theme.spacing.unit * 1.5,
-    },
   },
   defaultColor: {
     color: theme.palette.primary.contrastText,
   },
+  logo: {
+    position: "absolute",
+    margin: 0,
+    marginTop: -36 - theme.spacing.unit * 3,
+  },
 });
 
-const LoadingScreen = ({ classes, color, logo, ...rest }) => {
+const LoadingScreen = ({ classes, loading, color, logo, ...rest }) => {
   return (
     <div className={classes.root} color={color}>
-      {logo && <Logo src={logo} />}
-      <CircularProgress
-        {...rest}
-        className={classNames({ [classes.defaultColor]: !color })}
-      />
+      <div className={classes.logo}>{logo && <Logo src={logo} />}</div>
+      {loading && (
+        <CircularProgress
+          {...rest}
+          className={classNames({
+            [classes.defaultColor]: !color,
+          })}
+        />
+      )}
     </div>
   );
 };
 
 LoadingScreen.propTypes = {
   classes: PropTypes.object.isRequired,
+  loading: PropTypes.bool,
   color: PropTypes.string,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
 };
 
 LoadingScreen.defaultProps = {
+  loading: true,
   color: undefined,
   logo: undefined,
 };

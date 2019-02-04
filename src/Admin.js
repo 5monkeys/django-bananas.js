@@ -66,6 +66,7 @@ class Admin extends React.Component {
 
     this.state = {
       booted: false,
+      loading: true,
       user: undefined,
       pageProps: undefined,
       layout: props.layout,
@@ -114,6 +115,7 @@ class Admin extends React.Component {
     } catch (error) {
       logger.error("Critical Error: Failed to initialize API client!", error);
       this.error("Failed to boot!");
+      this.setState({ loading: false });
       return;
     }
 
@@ -397,7 +399,7 @@ class Admin extends React.Component {
   render() {
     const { Page, router, api } = this;
     const { classes, navigationProps, pageTheme, loginForm } = this.props;
-    const { booted, user, pageProps, layout, messages } = this.state;
+    const { booted, loading, user, pageProps, layout, messages } = this.state;
     const LoginForm = loginForm || LoginPageForm;
 
     const isHorizontalLayout = layout === "horizontal";
@@ -459,7 +461,7 @@ class Admin extends React.Component {
             )}
           </AdminContext.Provider>
         ) : (
-          <LoadingScreen logo={this.props.logo} />
+          <LoadingScreen logo={this.props.logo} loading={loading} />
         )}
         <Messages messages={messages} />
       </div>
