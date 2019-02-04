@@ -20,6 +20,7 @@ import {
 } from "./errors";
 import ErrorPage from "./pages/ErrorPage";
 import LoginPage from "./pages/LoginPage";
+import LoginPageForm from "./pages/LoginPageForm";
 import Router from "./router";
 import themes, { createBananasTheme } from "./themes";
 
@@ -395,8 +396,9 @@ class Admin extends React.Component {
 
   render() {
     const { Page, router, api } = this;
-    const { classes, navigationProps, pageTheme } = this.props;
+    const { classes, navigationProps, pageTheme, loginForm } = this.props;
     const { booted, user, pageProps, layout, messages } = this.state;
+    const LoginForm = loginForm || LoginPageForm;
 
     const isHorizontalLayout = layout === "horizontal";
 
@@ -449,9 +451,10 @@ class Admin extends React.Component {
               </>
             ) : (
               <LoginPage
+                form={LoginForm}
+                logger={logger}
                 logo={this.props.logo}
                 title={this.props.title}
-                logger={logger}
               />
             )}
           </AdminContext.Provider>
@@ -519,6 +522,7 @@ App.defaultProps = {
 
   theme: themes.default,
   pageTheme: undefined,
+  loginForm: undefined,
 
   navigationProps: {
     dense: false,

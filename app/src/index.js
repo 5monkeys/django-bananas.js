@@ -43,6 +43,8 @@ const examplePageTheme = exampleAppTheme.extend({
 });
 */
 
+const CustomLoginForm = () => <form>This is a custom login form</form>;
+
 ReactDOM.render(
   <Bananas.App
     {...settings}
@@ -56,6 +58,7 @@ ReactDOM.render(
     title="Example"
     theme={exampleAppTheme}
     // pageTheme={examplePageTheme}
+    // loginForm={CustomLoginForm}
     // branding="Admin"
     // version="v0.1"
     // logo={true} // true|URL|node

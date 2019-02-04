@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import Logo from "../Logo";
-import LoginForm from "./LoginForm";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -40,7 +39,9 @@ const pageStyles = theme => ({
 
 class LoginPage extends React.Component {
   render() {
-    const { classes, title, logo, logger } = this.props;
+    const { classes, logger, title, logo } = this.props;
+    const Form = this.props.form;
+
     return (
       <Dialog
         onClose={this.handleClose}
@@ -56,7 +57,7 @@ class LoginPage extends React.Component {
             </Typography>
           )}
         </DialogTitle>
-        <LoginForm logger={logger} />
+        <Form logger={logger} />
       </Dialog>
     );
   }
@@ -64,6 +65,7 @@ class LoginPage extends React.Component {
 
 LoginPage.propTypes = {
   classes: PropTypes.object.isRequired,
+  form: PropTypes.func.isRequired,
   logger: PropTypes.object.isRequired,
   title: PropTypes.string,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
