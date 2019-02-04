@@ -49,16 +49,17 @@ class Navigation extends React.Component {
   static contextType = AdminContext;
 
   render() {
-    const { routes, collapsed, horizontal, dense, icons, classes } = this.props;
     const currentUrl = this.context.router.history.location.pathname;
+    const { routes, collapsed, horizontal, dense, icons, classes } = this.props;
 
     const groupedRoutes = routes.reduce((nav, route) => {
-      let app = nav[route.app];
-      if (app === undefined) {
-        app = [];
-        nav[route.app] = app;
+      const { app } = route;
+      let appRoutes = nav[app];
+      if (appRoutes === undefined) {
+        appRoutes = [];
+        nav[app] = appRoutes;
       }
-      app.push(route);
+      appRoutes.push(route);
       return nav;
     }, {});
 
@@ -76,6 +77,7 @@ class Navigation extends React.Component {
           dense={horizontal}
           disablePadding
           subheader={
+            app &&
             !horizontal && (
               <ListSubheader
                 className={classNames(classes.subheader, {
@@ -88,17 +90,24 @@ class Navigation extends React.Component {
             )
           }
         >
-          {appRoutes.map(({ id, path, title }) => (
-            <NavigationItem
-              key={id}
-              route={id}
-              icon={icons ? (icons === true ? true : icons[id]) : false}
-              title={title}
-              horizontal={horizontal}
-              collapsed={collapsed}
-              selected={currentUrl.startsWith(path)}
-            />
-          ))}
+          {appRoutes.map(
+            ({ id, path, title }) =>
+              (collapsed || (!collapsed && id !== "home")) && (
+                <NavigationItem
+                  key={id}
+                  route={id}
+                  icon={icons.enabled ? icons[id] : null}
+                  title={title}
+                  horizontal={horizontal}
+                  collapsed={collapsed}
+                  selected={
+                    path.length > 1
+                      ? currentUrl.startsWith(path)
+                      : currentUrl === path
+                  }
+                />
+              )
+          )}
         </List>
       );
     });
@@ -125,6 +134,9 @@ const itemStyles = theme => ({
     }),
   },
   avatar: {
+    width: 24,
+    height: 24,
+    fontSize: "0.8em",
     backgroundColor: theme.palette.action.selected,
     color: "inherit",
     opacity: 0.5,
@@ -141,7 +153,6 @@ const UnstyledNavigationItem = ({
   route,
   title,
   selected,
-  collapsed,
   horizontal,
   icon,
 }) => {
@@ -150,10 +161,7 @@ const UnstyledNavigationItem = ({
     <AdminContext.Consumer>
       {context => (
         <ListItem
-          className={classNames(classes.root, {
-            [classes.collapsed]: icon === true && collapsed,
-            [classes.expanded]: icon === true && !collapsed,
-          })}
+          className={classes.root}
           dense={horizontal}
           button
           selected={selected}
@@ -162,8 +170,8 @@ const UnstyledNavigationItem = ({
             context.router.route({ id: route });
           }}
         >
-          {icon &&
-            (icon === true ? (
+          {icon !== null &&
+            (icon === undefined ? (
               <Avatar className={classes.avatar}>
                 {title.substring(0, 1)}
               </Avatar>
@@ -195,7 +203,7 @@ Navigation.propTypes = {
   collapsed: PropTypes.bool,
   horizontal: PropTypes.bool,
   dense: PropTypes.bool,
-  icons: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+  icons: PropTypes.object,
 };
 Navigation.defaultProps = {
   collapsed: false,
@@ -210,15 +218,13 @@ UnstyledNavigationItem.propTypes = {
   title: PropTypes.string.isRequired,
   selected: PropTypes.bool,
   horizontal: PropTypes.bool,
-  collapsed: PropTypes.bool,
-  icon: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  icon: PropTypes.func,
 };
 
 UnstyledNavigationItem.defaultProps = {
   selected: false,
   horizontal: false,
-  collapsed: false,
-  icon: true,
+  icon: undefined,
 };
 
 export default withStyles(styles)(Navigation);

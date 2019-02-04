@@ -2,6 +2,8 @@ import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 import Toolbar from "@material-ui/core/Toolbar";
 import { withStyles } from "@material-ui/core/styles";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import HomeIcon from "@material-ui/icons/Home";
 import classNames from "classnames";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
@@ -124,6 +126,14 @@ class NavBar extends React.Component {
       }
     }
 
+    // Set default icons
+    this.icons = {
+      enabled: Boolean(icons), // Helper: Show icons or not
+      home: HomeIcon,
+      "bananas.me:list": AccountCircleIcon,
+      ...icons,
+    };
+
     const collapsed =
       JSON.parse(window.localStorage.getItem("collapsed")) || false;
 
@@ -150,11 +160,7 @@ class NavBar extends React.Component {
       title,
       branding,
       version,
-      icons,
     } = this.props;
-
-    const userIcon =
-      typeof icons === "object" ? icons["bananas.me:list"] : undefined;
 
     const {
       isDrawerVariant,
@@ -199,7 +205,7 @@ class NavBar extends React.Component {
               horizontal={isAppBarVariant}
               collapsed={collapsed}
               dense={dense}
-              icons={icons}
+              icons={this.icons}
               routes={routes}
             />
           </div>
@@ -209,7 +215,11 @@ class NavBar extends React.Component {
             [classes.drawerBorder]: isDrawerVariant,
           })}
         >
-          <User variant={variant} collapsed={collapsed} icon={userIcon} />
+          <User
+            variant={variant}
+            collapsed={collapsed}
+            icon={this.icons["bananas.me:list"]}
+          />
         </div>
       </>
     );

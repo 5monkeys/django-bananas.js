@@ -69,7 +69,6 @@ ReactDOM.render(
       }
     }
     // icons={false}
-    // icons={true}
     icons={{
       "bananas.me:list": Gravatar,
       // "bananas.me:list": PersonIcon,

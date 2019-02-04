@@ -122,7 +122,7 @@ export default class Router {
       .map(route => ({
         id: route.id,
         path: route.path,
-        app: route.app,
+        app: route.app || "",
         title: route.title,
       }));
 
@@ -133,9 +133,11 @@ export default class Router {
     // Dashboard Route
     this.add({
       id: "home",
+      app: "",
       path: "/",
       title: "Dashboard",
       template: "index.js",
+      navigation: true,
     });
 
     // Change Password Route
@@ -169,7 +171,7 @@ export default class Router {
       path,
       action,
       template: template || this.getTemplate(path, action),
-      app: app || id.split(":")[0].split(".")[0],
+      app: app !== undefined ? app : id.split(":")[0].split(".")[0],
       title: this.getTitle(title, id),
       navigation,
       pattern: new RegExp(pattern || `^${path}$`),
@@ -230,9 +232,13 @@ export default class Router {
     );
   }
 
-  getOperationTemplate(id) {
+  getRoute(id) {
     const operationId = this.getOperationFromId(id);
-    return this.reverseRoutes[operationId].template;
+    return this.reverseRoutes[operationId];
+  }
+
+  getOperationTemplate(id) {
+    return this.getRoute(id).template;
   }
 
   ResolvedRoute(route, overrides) {
