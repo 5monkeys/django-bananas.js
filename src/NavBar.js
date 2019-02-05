@@ -126,6 +126,10 @@ class NavBar extends React.Component {
       }
     }
 
+    const collapsed =
+      !permanent &&
+      (JSON.parse(window.localStorage.getItem("collapsed")) || false);
+
     // Set default icons
     this.icons = {
       enabled: Boolean(icons), // Helper: Show icons or not
@@ -133,9 +137,6 @@ class NavBar extends React.Component {
       "bananas.me:list": AccountCircleIcon,
       ...icons,
     };
-
-    const collapsed =
-      JSON.parse(window.localStorage.getItem("collapsed")) || false;
 
     this.state = {
       isDrawerVariant,

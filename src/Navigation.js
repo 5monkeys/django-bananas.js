@@ -14,7 +14,14 @@ import React from "react";
 import AdminContext from "./context";
 
 const styles = theme => ({
-  root: {},
+  root: {
+    "& > $list + $list": {
+      borderTopWidth: 1,
+      borderTopStyle: "solid",
+      borderTopColor: theme.palette.action.selected,
+    },
+  },
+  list: {},
   dense: {
     paddingTop: theme.spacing.unit * 1.5,
     paddingBottom: theme.spacing.unit * 1.5,
@@ -65,52 +72,64 @@ class Navigation extends React.Component {
 
     const apps = Object.keys(groupedRoutes).sort((a, b) => a < b);
 
-    return apps.map(app => {
-      const appRoutes = groupedRoutes[app];
-      return (
-        <List
-          key={app}
-          className={classNames(classes.root, {
-            [classes.horizontal]: horizontal,
-            [classes.dense]: horizontal && dense,
-          })}
-          dense={horizontal}
-          disablePadding
-          subheader={
-            app &&
-            !horizontal && (
-              <ListSubheader
-                className={classNames(classes.subheader, {
-                  [classes.collapsed]: collapsed,
-                  [classes.expanded]: !collapsed,
-                })}
-              >
-                {app}
-              </ListSubheader>
-            )
-          }
-        >
-          {appRoutes.map(
-            ({ id, path, title }) =>
-              (collapsed || (!collapsed && id !== "home")) && (
-                <NavigationItem
-                  key={id}
-                  route={id}
-                  icon={icons.enabled ? icons[id] : null}
-                  title={title}
-                  horizontal={horizontal}
-                  collapsed={collapsed}
-                  selected={
-                    path.length > 1
-                      ? currentUrl.startsWith(path)
-                      : currentUrl === path
-                  }
-                />
-              )
-          )}
-        </List>
-      );
-    });
+    return (
+      <div
+        className={classNames(classes.root, {
+          [classes.horizontal]: horizontal,
+        })}
+      >
+        {apps.map(app => {
+          const appRoutes = groupedRoutes[app];
+          return (
+            <List
+              key={app}
+              className={classNames(classes.list, {
+                [classes.horizontal]: horizontal,
+                [classes.dense]: horizontal && dense,
+              })}
+              dense={horizontal}
+              disablePadding
+              subheader={
+                app &&
+                apps.length > 2 &&
+                !horizontal && (
+                  <ListSubheader
+                    className={classNames(classes.subheader, {
+                      [classes.collapsed]: collapsed,
+                      [classes.expanded]: !collapsed,
+                    })}
+                  >
+                    {app}
+                  </ListSubheader>
+                )
+              }
+            >
+              {appRoutes.map(
+                ({ id, path, title }) =>
+                  // Only show "Dashboard" item in vertical+icon mode
+                  ((!horizontal &&
+                    (icons.enabled || (!icons.enabled && id !== "home"))) ||
+                    (horizontal && id !== "home")) && (
+                    <NavigationItem
+                      key={id}
+                      route={id}
+                      icon={icons.enabled ? icons[id] : null}
+                      title={title}
+                      horizontal={horizontal}
+                      collapsed={collapsed}
+                      selected={
+                        path.length > 1
+                          ? currentUrl.startsWith(path)
+                          : currentUrl === path
+                      }
+                    />
+                  )
+              )}
+            </List>
+          );
+        })}
+      </div>
+    );
   }
 }
 
