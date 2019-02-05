@@ -7,6 +7,7 @@ export { default as Tools } from "./Tools";
 export { default as Content } from "./Content";
 export { default as Container } from "./Container";
 export { default as Link } from "./Link";
+export { default as LoginForm } from "./pages/LoginPageForm";
 
 const Bananas = {
   App,
