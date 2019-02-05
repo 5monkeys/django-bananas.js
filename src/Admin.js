@@ -520,7 +520,7 @@ App.defaultProps = {
   branding: "Bananas",
   version: "v1.0.0", // TODO: Get package version
   logo: true,
-  icons: true,
+  icons: {},
 
   theme: themes.default,
   pageTheme: undefined,
