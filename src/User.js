@@ -1,4 +1,5 @@
 import {
+  Avatar,
   ButtonBase,
   List,
   ListItem,
@@ -35,9 +36,21 @@ const styles = theme => ({
     "& *": { lineHeight: 1.2 },
   },
   avatar: {
+    backgroundColor: "transparent",
+    fontSize: 36,
     margin: 0,
   },
-  text: {},
+  icon: {
+    width: "100%",
+    height: "100%",
+  },
+  text: {
+    opacity: 1.0,
+    transition: theme.transitions.create(["opacity"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
   drawerAvatar: {
     color: theme.palette.action.selected,
   },
@@ -71,13 +84,17 @@ const styles = theme => ({
     }),
   },
   collapsed: {
-    paddingLeft: 0,
+    paddingLeft: theme.spacing.unit * 4.0,
     transition: theme.transitions.create(["padding"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
     "& $text": {
-      display: "none",
+      opacity: 0.0,
+      transition: theme.transitions.create(["opacity"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
     },
   },
 });
@@ -116,13 +133,18 @@ class User extends React.Component {
               [classes.expanded]: !collapsed,
             })}
           >
-            <ListItemAvatar>
-              <UserIcon
-                className={classNames(classes.avatar, {
+            <ListItemAvatar
+              classes={{
+                root: classes.avatar,
+                icon: classNames(classes.icon, {
                   [classes.drawerAvatar]: isDrawerVariant,
                   [classes.appbarAvatar]: isAppBarVariant,
-                })}
-              />
+                }),
+              }}
+            >
+              <Avatar>
+                <UserIcon />
+              </Avatar>
             </ListItemAvatar>
             <ListItemText
               className={classes.text}
