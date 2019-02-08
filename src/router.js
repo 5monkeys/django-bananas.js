@@ -1,7 +1,7 @@
 import createHistory from "history/createBrowserHistory";
 import Logger from "js-logger";
 
-import ChangePasswordPage from "./pages/ChangePasswordPage";
+import MePage from "./pages/MePage";
 import {
   absolutePath,
   capitalize,
@@ -209,11 +209,21 @@ export default class Router {
     return originalOperationId ? originalOperationId.split(":")[1] : null;
   }
 
-  getTemplate(path, action) {
+  getTemplate(id, path, action) {
+    const internalPages = {
+      "bananas.me:list": MePage,
+    };
+
+    let template = internalPages[id];
+
     // Build route template relative url path
-    const basePath = this.getBasePath(path, true);
-    const relativeBasePath = basePath.substring(1);
-    return `${relativeBasePath}${action}.js`;
+    if (!template) {
+      const basePath = this.getBasePath(path, true);
+      const relativeBasePath = basePath.substring(1);
+      template = `${relativeBasePath}${action}.js`;
+    }
+
+    return template;
   }
 
   getAppLabel(tags) {
