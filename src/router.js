@@ -30,7 +30,6 @@ export default class Router {
 
     // Add API prospect routes
     this.routes = Object.entries(swagger.spec.paths)
-      // .filter(([_, spec]) => spec.get || spec.post)
       .reduce(
         (specs, [endpoint, methods]) => [
           ...specs,
@@ -54,16 +53,17 @@ export default class Router {
           summary,
           tags,
         } = spec;
-        const action = this.getAction(__originalOperationId);
+        const id = __originalOperationId;
+        const action = this.getAction(id);
         const path = this.getPath(endpoint, method, action);
-        const template = this.getTemplate(path, action);
+        const template = this.getTemplate(id, path, action);
         const app = this.getAppLabel(tags);
-        const title = this.getTitle(summary, __originalOperationId);
+        const title = this.getTitle(summary, id);
         const params = parameters.filter(
           param => param.required && param.in === "path"
         );
         return {
-          id: __originalOperationId,
+          id,
           operationId,
           path,
           action,
@@ -93,9 +93,16 @@ export default class Router {
         };
       });
 
-    // Add internal routes
+    // Add non-api routes
     if (swagger.isAuthenticated) {
-      this.addInternalRoutes();
+      this.add({
+        id: "home",
+        app: "",
+        path: "/",
+        title: "Dashboard",
+        template: "index.js",
+        navigation: true,
+      });
     }
 
     // Build reverse routes
@@ -127,35 +134,6 @@ export default class Router {
       }));
 
     logger.debug("Initialized Router:", this.routes);
-  }
-
-  addInternalRoutes() {
-    // Dashboard Route
-    this.add({
-      id: "home",
-      app: "",
-      path: "/",
-      title: "Dashboard",
-      template: "index.js",
-      navigation: true,
-    });
-
-    // Change Password Route
-    const changePasswordOperationId = "bananas_change_password_create";
-    const changePasswordSpec = Object.values(this.swagger.spec.paths)
-      .filter(
-        spec => spec.post && spec.post.operationId === changePasswordOperationId
-      )
-      .map(spec => spec.post)[0];
-
-    const { __originalOperationId, summary } = changePasswordSpec;
-    this.add({
-      id: __originalOperationId,
-      operationId: changePasswordOperationId,
-      path: "/change_password/",
-      title: summary,
-      template: ChangePasswordPage,
-    });
   }
 
   add({ id, operationId, path, title, template, pattern, app, navigation }) {
@@ -194,9 +172,11 @@ export default class Router {
     return path.substring(0, nthIndexOf(path, "/", 2, 1) + 1 || undefined);
   }
 
-  getOperationFromId(id) {
-    // Converts original operationId to normalized swagger client format
-    // foo.bar:read -> foo_bar_read
+  getReverseOperationId(id) {
+    /*
+     * Converts original operationId to normalized swagger client format
+     * foo.bar:read -> foo_bar_read
+     * */
     return id.replace(new RegExp(/[.:-]/, "g"), "_");
   }
 
@@ -243,7 +223,7 @@ export default class Router {
   }
 
   getRoute(id) {
-    const operationId = this.getOperationFromId(id);
+    const operationId = this.getReverseOperationId(id);
     return this.reverseRoutes[operationId];
   }
 
@@ -316,8 +296,7 @@ export default class Router {
 
   reverse(id, params) {
     // Reverse resolve route by operationId
-    const operationId = this.getOperationFromId(id);
-    const route = this.reverseRoutes[operationId];
+    const route = this.getRoute(id);
 
     if (route) {
       // Render parameterized path
