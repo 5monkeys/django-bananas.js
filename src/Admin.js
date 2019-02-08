@@ -64,14 +64,38 @@ class Admin extends React.Component {
   constructor(props) {
     super(props);
 
+    // Default GUI settings from props
+    const propSettings = {
+      horizontal: props.layout === "horizontal",
+      icons: props.icons !== null,
+      collapsable: !(props.navigationProps.permanent || false),
+      collapsed: props.navigationProps.collapsed || false,
+      dense: props.navigationProps.dense || false,
+    };
+
+    // Load User GUI settings from local storage
+    const userSettings = Object.keys(propSettings)
+      .map(setting => [
+        setting,
+        JSON.parse(window.localStorage.getItem(setting)),
+      ])
+      .filter(([_, value]) => ![null, undefined].includes(value))
+      .reduce(
+        (loaded, [setting, value]) => ({ ...loaded, [setting]: value }),
+        {}
+      );
+
+    // Merge and validate GUI settings
+    const settings = this.cleanSettings({ ...propSettings, ...userSettings });
+
     this.state = {
       booted: false,
       loading: true,
       user: undefined,
       pageProps: undefined,
-      layout: props.layout,
       messages: [],
       messageIndex: 0,
+      settings,
     };
 
     logger.setLevel(this.getLogLevel("bananas", "WARN"));
@@ -157,6 +181,36 @@ class Admin extends React.Component {
     this.swagger = undefined;
 
     this.setState({ booted: false, user }, this.boot.bind(this));
+  }
+
+  configure(newSettings) {
+    const settings = this.cleanSettings({
+      ...this.state.settings,
+      ...newSettings,
+    });
+
+    this.setState({ settings });
+
+    // Save new settings (un-cleaned)
+    for (const setting of Object.keys(newSettings)) {
+      window.localStorage.setItem(setting, newSettings[setting]);
+      console.log("SAVING", setting, newSettings[setting]);
+    }
+  }
+
+  cleanSettings(settings) {
+    if (settings.collapsable && (!settings.horizontal || !settings.icons)) {
+      if (settings.horizontal) {
+        logger.error("No icons provided for collapsable navbar");
+      }
+      logger.warn("Forcing permanent navbar");
+      settings.collapsable = false;
+    }
+    if (settings.collapsed && !settings.collapsable) {
+      logger.warn("Expanding collapsed permanent navbar");
+      settings.collapsed = false;
+    }
+    return settings;
   }
 
   authorize() {
@@ -398,11 +452,12 @@ class Admin extends React.Component {
 
   render() {
     const { Page, router, api } = this;
-    const { classes, navigationProps, pageTheme, loginForm } = this.props;
-    const { booted, loading, user, pageProps, layout, messages } = this.state;
+    const { classes, pageTheme, loginForm } = this.props;
+    const { booted, loading, user, pageProps, settings, messages } = this.state;
     const LoginForm = loginForm || LoginPageForm;
 
-    const isHorizontalLayout = layout === "horizontal";
+    const isHorizontalLayout = settings.horizontal;
+    const isVerticalLayout = !settings.horizontal;
 
     const context = {
       admin: this,
@@ -416,7 +471,7 @@ class Admin extends React.Component {
         className={classNames(classes.root, {
           [classes.admin]: booted && user,
           [classes.horizontalRoot]: isHorizontalLayout,
-          [classes.verticalRoot]: !isHorizontalLayout,
+          [classes.verticalRoot]: isVerticalLayout,
         })}
       >
         {booted ? (
@@ -424,16 +479,15 @@ class Admin extends React.Component {
             {user ? (
               <>
                 <NavBar
-                  variant={
-                    this.props.layout === "horizontal" ? "drawer" : "appbar"
-                  }
-                  dense={navigationProps.dense}
-                  permanent={navigationProps.permanent}
+                  variant={settings.horizontal ? "drawer" : "appbar"}
+                  dense={settings.dense}
+                  permanent={!settings.collapsable}
+                  collapsed={settings.collapsed}
+                  icons={settings.icons ? this.props.icons : null}
                   logo={this.props.logo}
                   title={this.props.title}
                   branding={this.props.branding}
                   version={this.props.version}
-                  icons={this.props.icons}
                 />
                 <div className={classes.page}>
                   {Page ? (
@@ -500,7 +554,7 @@ App.propTypes = {
   branding: PropTypes.string,
   version: PropTypes.string,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
-  icons: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+  icons: PropTypes.object,
 
   theme: PropTypes.object,
   pageTheme: PropTypes.object,

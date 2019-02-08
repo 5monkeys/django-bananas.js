@@ -5,7 +5,6 @@ import { withStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import classNames from "classnames";
-import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -15,8 +14,6 @@ import Hamburger from "./Hamburger";
 import Navigation from "./Navigation";
 import User from "./User";
 import AdminContext from "./context";
-
-const logger = Logger.get("bananas");
 
 const styles = theme => ({
   branding: {
@@ -77,7 +74,8 @@ const styles = theme => ({
     }),
   },
   drawerCollapsed: {
-    width: theme.spacing.unit * 7 + 1,
+    // width: theme.spacing.unit * 7 + 1,
+    width: 40 + theme.spacing.unit * 2 + 1,
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -109,47 +107,33 @@ const styles = theme => ({
 
 class NavBar extends React.Component {
   static contextType = AdminContext;
+  state = {};
 
-  constructor(props) {
-    super(props);
-
-    const { variant, icons } = props;
+  static getDerivedStateFromProps(props, state) {
+    const { variant, permanent, collapsed } = props;
     const isDrawerVariant = variant === "drawer";
     const isAppBarVariant = variant === "appbar";
-    let { permanent } = props;
-
-    if (!permanent && (isAppBarVariant || !icons)) {
-      logger.warn("Forcing permanent navbar");
-      permanent = true;
-      if (isDrawerVariant) {
-        logger.error("No icons provided for non-permanent navbar");
-      }
-    }
-
-    const collapsed =
-      !permanent &&
-      (JSON.parse(window.localStorage.getItem("collapsed")) || false);
 
     // Set default icons
-    this.icons = {
-      enabled: Boolean(icons), // Helper: Show icons or not
+    const icons = {
+      enabled: Boolean(props.icons), // Helper: Show icons or not
       home: HomeIcon,
       "bananas.me:list": AccountCircleIcon,
-      ...icons,
+      ...props.icons,
     };
 
-    this.state = {
+    return {
+      ...state,
       isDrawerVariant,
       isAppBarVariant,
       permanent,
       collapsed,
+      icons,
     };
   }
 
   toggle = () => {
-    const collapsed = !this.state.collapsed;
-    this.setState({ collapsed });
-    window.localStorage.setItem("collapsed", collapsed);
+    this.context.admin.configure({ collapsed: !this.props.collapsed });
   };
 
   renderChildren() {
@@ -168,8 +152,11 @@ class NavBar extends React.Component {
       isAppBarVariant,
       collapsed,
       permanent,
+      icons,
     } = this.state;
-    const routes = this.context.router.navigationRoutes;
+
+    const { router } = this.context;
+    const routes = router.navigationRoutes;
 
     return (
       <>
@@ -206,7 +193,7 @@ class NavBar extends React.Component {
               horizontal={isAppBarVariant}
               collapsed={collapsed}
               dense={dense}
-              icons={this.icons}
+              icons={icons}
               routes={routes}
             />
           </div>
@@ -219,7 +206,7 @@ class NavBar extends React.Component {
           <User
             variant={variant}
             collapsed={collapsed}
-            icon={this.icons["bananas.me:list"]}
+            icon={icons["bananas.me:list"]}
           />
         </div>
       </>
@@ -273,6 +260,7 @@ NavBar.propTypes = {
   variant: PropTypes.string,
   dense: PropTypes.bool,
   permanent: PropTypes.bool,
+  collapsed: PropTypes.bool,
 
   title: PropTypes.string,
   branding: PropTypes.string,
@@ -285,6 +273,7 @@ NavBar.defaultProps = {
   variant: "drawer", // drawer|appbar
   dense: false,
   permanent: false,
+  collapsed: false,
 
   title: "",
   branding: "",
