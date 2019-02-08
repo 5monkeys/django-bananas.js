@@ -1,16 +1,10 @@
-import {
-  Avatar,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-} from "@material-ui/core";
+import { List, ListSubheader } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
+import MenuItem from "./MenuItem";
 import AdminContext from "./context";
 
 const styles = theme => ({
@@ -21,21 +15,38 @@ const styles = theme => ({
       borderTopColor: theme.palette.action.selected,
     },
   },
-  list: {},
+  list: {
+    "&:first-child": {
+      paddingTop: 0,
+    },
+    "&:last-child": {
+      paddingBottom: 0,
+    },
+  },
   dense: {
     paddingTop: theme.spacing.unit * 1.5,
     paddingBottom: theme.spacing.unit * 1.5,
   },
+  multiple: {},
   horizontal: {
     display: "flex",
     flexDirection: "row",
+    width: "100%",
+  },
+  vertical: {
+    "&multiple": {
+      paddingTop: theme.spacing.unit,
+      paddingBottom: theme.spacing.unit,
+    },
   },
   subheader: {
     backgroundColor: theme.palette.background.paper,
     textTransform: "uppercase",
     fontSize: `${0.75}rem`,
     overflow: "hidden",
-    height: 48,
+    height: 32,
+    display: "flex",
+    alignItems: "center",
   },
   collapsed: {
     height: 0,
@@ -70,7 +81,12 @@ class Navigation extends React.Component {
       return nav;
     }, {});
 
-    const apps = Object.keys(groupedRoutes).sort((a, b) => a < b);
+    let apps = Object.keys(groupedRoutes).sort((a, b) => a < b);
+    apps = apps.concat(apps);
+    apps = apps.concat(apps);
+    apps = apps.concat(apps);
+
+    const multipleApps = apps.length > 2;
 
     return (
       <div
@@ -85,13 +101,15 @@ class Navigation extends React.Component {
               key={app}
               className={classNames(classes.list, {
                 [classes.horizontal]: horizontal,
+                [classes.vertical]: !horizontal,
                 [classes.dense]: horizontal && dense,
+                [classes.multiple]: multipleApps,
               })}
               dense={horizontal}
               disablePadding
               subheader={
                 app &&
-                apps.length > 2 &&
+                multipleApps &&
                 !horizontal && (
                   <ListSubheader
                     className={classNames(classes.subheader, {
@@ -104,27 +122,32 @@ class Navigation extends React.Component {
                 )
               }
             >
-              {appRoutes.map(
-                ({ id, path, title }) =>
-                  // Only show "Dashboard" item in vertical+icon mode
-                  ((!horizontal &&
-                    (icons.enabled || (!icons.enabled && id !== "home"))) ||
-                    (horizontal && id !== "home")) && (
-                    <NavigationItem
-                      key={id}
-                      route={id}
-                      icon={icons.enabled ? icons[id] : null}
-                      title={title}
-                      horizontal={horizontal}
-                      collapsed={collapsed}
-                      selected={
-                        path.length > 1
-                          ? currentUrl.startsWith(path)
-                          : currentUrl === path
-                      }
-                    />
-                  )
-              )}
+              {appRoutes
+                .concat(appRoutes)
+                .concat(appRoutes)
+                .concat(appRoutes)
+                .map(
+                  ({ id, path, title }) =>
+                    // Only show "Dashboard" item in vertical+icon mode
+                    ((!horizontal &&
+                      (icons.enabled || (!icons.enabled && id !== "home"))) ||
+                      (horizontal && id !== "home")) && (
+                      <MenuItem
+                        key={id}
+                        route={id}
+                        variant={horizontal ? "appbar" : "drawer"}
+                        title={title}
+                        icon={icons.enabled ? icons[id] : null}
+                        dense={dense}
+                        selected={
+                          path.length > 1
+                            ? currentUrl.startsWith(path)
+                            : currentUrl === path
+                        }
+                        collapsed={collapsed}
+                      />
+                    )
+                )}
             </List>
           );
         })}
@@ -132,89 +155,6 @@ class Navigation extends React.Component {
     );
   }
 }
-
-const itemStyles = theme => ({
-  root: {},
-  dense: {
-    padding: 0,
-  },
-  collapsed: {
-    paddingLeft: theme.spacing.unit,
-    transition: theme.transitions.create("padding", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  expanded: {
-    paddingLeft: theme.spacing.unit * 2,
-    transition: theme.transitions.create("padding", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  avatar: {
-    width: 24,
-    height: 24,
-    fontSize: "0.8em",
-    backgroundColor: theme.palette.action.selected,
-    color: "inherit",
-    opacity: 0.5,
-    marginRight: theme.spacing.unit * 2,
-  },
-  icon: {
-    color: "inherit",
-    opacity: 0.75,
-  },
-});
-
-const UnstyledNavigationItem = ({
-  classes,
-  route,
-  title,
-  selected,
-  horizontal,
-  icon,
-}) => {
-  const CustomIcon = icon;
-  return (
-    <AdminContext.Consumer>
-      {context => (
-        <ListItem
-          className={classes.root}
-          dense={horizontal}
-          button
-          selected={selected}
-          onClick={e => {
-            e.preventDefault();
-            context.router.route({ id: route });
-          }}
-        >
-          {icon !== null &&
-            (icon === undefined ? (
-              <Avatar className={classes.avatar}>
-                {title.substring(0, 1)}
-              </Avatar>
-            ) : (
-              <ListItemIcon className={classes.icon}>
-                <CustomIcon
-                  color={!horizontal && !selected ? "inherit" : undefined}
-                />
-              </ListItemIcon>
-            ))}
-
-          <ListItemText
-            primaryTypographyProps={{
-              color: "inherit",
-            }}
-            className={classes.dense}
-            primary={title}
-          />
-        </ListItem>
-      )}
-    </AdminContext.Consumer>
-  );
-};
-const NavigationItem = withStyles(itemStyles)(UnstyledNavigationItem);
 
 Navigation.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -229,21 +169,6 @@ Navigation.defaultProps = {
   horizontal: false,
   dense: true,
   icons: undefined,
-};
-
-UnstyledNavigationItem.propTypes = {
-  classes: PropTypes.object.isRequired,
-  route: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  selected: PropTypes.bool,
-  horizontal: PropTypes.bool,
-  icon: PropTypes.func,
-};
-
-UnstyledNavigationItem.defaultProps = {
-  selected: false,
-  horizontal: false,
-  icon: undefined,
 };
 
 export default withStyles(styles)(Navigation);
