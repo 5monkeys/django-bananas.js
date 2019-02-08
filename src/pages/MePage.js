@@ -1,4 +1,4 @@
-import { Button, FormControl, Paper, TextField } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
@@ -6,106 +6,47 @@ import React from "react";
 import Settings from "../Settings";
 import AdminContext from "../context";
 import { Content, TitleBar } from "..";
+import ChangePasswordForm from "./ChangePasswordForm";
 
 const styles = theme => ({
   root: {
-    margin: "0 auto",
-    maxWidth: 350,
-    position: "relative",
-    "& > * + * ": {
-      marginTop: theme.spacing.unit * 2,
-    },
-  },
-  wrapper: {
-    // margin: "0 auto",
-    // maxWidth: 350,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  settings: {
-    // borderLeftWidth: 1,
-    // borderLeftStyle: "solid",
-    // borderLeftColor: theme.palette.action.selected,
+  paper: {
     padding: theme.spacing.unit * 3,
+    alignSelf: "flex-start",
   },
 });
 
 class MePage extends React.Component {
   static contextType = AdminContext;
 
-  state = {};
-
-  save = e => {
-    const s = { ...this.state };
-    s[e.target.name] = e.target.value;
-    this.setState({ ...s, touched: true });
-  };
-
   render() {
     const { admin } = this.context;
     const { data, classes } = this.props;
     const user = data.obj;
-    const { /* currentPassword, */ newPassword, newPasswordCheck } = this.state;
-
-    const passwordCheckError =
-      newPasswordCheck !== undefined && newPassword !== newPasswordCheck;
-
-    // const fieldEmpty = !newPassword || !newPasswordCheck || !currentPassword;
 
     return (
       <>
         <TitleBar title={user.full_name} />
-
         <Content>
-          <div className={classes.wrapper}>
-            <FormControl>
-              <form
-                onSubmit={() => {
-                  // TODO: Implement
-                }}
-              >
-                <div className={classes.root}>
-                  <TextField
-                    fullWidth
-                    label="Current password"
-                    name="currentPassword"
-                    type="password"
-                    onChange={this.save}
-                    required
-                  />
-                  <TextField
-                    fullWidth
-                    label="New password"
-                    name="newPassword"
-                    type="password"
-                    onChange={this.save}
-                    required
-                  />
-                  <TextField
-                    fullWidth
-                    error={passwordCheckError}
-                    label="New password (again)"
-                    name="newPasswordCheck"
-                    type="password"
-                    onKeyUp={this.save}
-                    required
-                  />
-
-                  <Button
-                    variant="outlined"
-                    type="submit"
-                    color="primary"
-                    // disabled={!touched || fieldEmpty || passwordCheckError}
-                  >
-                    change password
-                  </Button>
-                </div>
-              </form>
-            </FormControl>
+          <div className={classes.root}>
+            {/*
             <Paper
               classes={{
-                root: classes.settings,
+                root: classes.paper,
+              }}
+              elevation={1}
+              square
+            >
+              <ChangePasswordForm />
+            </Paper>
+            */}
+            <Paper
+              classes={{
+                root: classes.paper,
               }}
               elevation={1}
               square
