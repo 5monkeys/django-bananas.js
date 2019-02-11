@@ -5,6 +5,7 @@ import React from "react";
 
 import AdminContext from "../context";
 import { Content, TitleBar } from "..";
+import ChangePasswordForm from "./ChangePasswordForm";
 import SettingsForm from "./SettingsForm";
 
 const styles = theme => ({
@@ -32,7 +33,6 @@ class MePage extends React.Component {
         <TitleBar title={user.full_name} />
         <Content>
           <div className={classes.root}>
-            {/*
             <Paper
               classes={{
                 root: classes.paper,
@@ -42,7 +42,6 @@ class MePage extends React.Component {
             >
               <ChangePasswordForm />
             </Paper>
-            */}
             <Paper
               classes={{
                 root: classes.paper,

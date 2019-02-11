@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   Button,
   FormControl,
@@ -6,14 +7,20 @@ import {
   TextField,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
 import AdminContext from "../context";
 
+const logger = Logger.get("bananas");
+
 const styles = theme => ({
   root: {
     maxWidth: 280,
+  },
+  formGroup: {
+    marginTop: theme.spacing.unit * 2,
   },
   submitControl: {
     marginTop: theme.spacing.unit * 3,
@@ -23,7 +30,13 @@ const styles = theme => ({
 
 class ChangePasswordForm extends React.Component {
   static contextType = AdminContext;
-  state = {};
+  state = {
+    errors: null,
+    touched: false,
+    old_password: "",
+    new_password1: "",
+    new_password2: "",
+  };
 
   onChange = e => {
     this.setState({
@@ -35,48 +48,75 @@ class ChangePasswordForm extends React.Component {
 
   onSubmit = e => {
     e.preventDefault();
-    // const { api } = this.context;
+
+    const { api, admin } = this.context;
+    const { old_password, new_password1, new_password2 } = this.state;
+
+    api["bananas.change_password:create"]({
+      data: {
+        old_password,
+        new_password1,
+        new_password2,
+      },
+    }).then(
+      () => {
+        admin.success("Password changed");
+        this.setState({
+          touched: false,
+          errors: null,
+          old_password: "",
+          new_password1: "",
+          new_password2: "",
+        });
+      },
+      error => {
+        logger.error("Failed to change password", error.response);
+        admin.error("Failed to change password");
+        this.setState({ errors: error.response.obj, touched: false });
+      }
+    );
   };
 
   render() {
     const { classes } = this.props;
-    const { oldPassword, newPassword, newPasswordCheck } = this.state;
+    const { router } = this.context;
+
+    const route = router.getRoute("bananas.change_password:create");
+    const { schema } = route;
+
+    const {
+      errors,
+      touched,
+      old_password,
+      new_password1,
+      new_password2,
+    } = this.state;
+
     const passwordCheckError =
-      newPasswordCheck !== undefined && newPassword !== newPasswordCheck;
-    const filled = [oldPassword, newPassword, newPasswordCheck].every(
-      value => value !== undefined
+      new_password2 !== "" && new_password2 !== new_password1;
+    const filled = [old_password, new_password1, new_password2].every(
+      value => value.length > 0
     );
 
     return (
       <form onSubmit={this.onSubmit} className={classes.root}>
-        <FormLabel component="legend">Change Password</FormLabel>
+        <FormLabel component="legend">{route.title}</FormLabel>
         <FormControl fullWidth component="fieldset">
-          <FormGroup>
-            <TextField
-              fullWidth
-              label="Current password"
-              name="currentPassword"
-              type="password"
-              onChange={this.onChange}
-              required
-            />
-            <TextField
-              fullWidth
-              label="New password"
-              name="newPassword"
-              type="password"
-              onChange={this.onChange}
-              required
-            />
-            <TextField
-              fullWidth
-              error={passwordCheckError}
-              label="New password (again)"
-              name="newPasswordCheck"
-              type="password"
-              onKeyUp={this.onChange}
-              required
-            />
+          <FormGroup classes={{ root: classes.formGroup }}>
+            {["old_password", "new_password1", "new_password2"].map(field => (
+              <TextField
+                key={field}
+                label={schema[field].title}
+                error={Boolean(errors && errors[field])}
+                helperText={Boolean(errors && errors[field]) && errors[field]}
+                name={field}
+                value={this.state[field]}
+                type="password"
+                onChange={this.onChange}
+                fullWidth
+                required
+              />
+            ))}
           </FormGroup>
         </FormControl>
 
@@ -90,9 +130,11 @@ class ChangePasswordForm extends React.Component {
             variant="outlined"
             type="submit"
             color="primary"
-            disabled={!filled || passwordCheckError}
+            disabled={
+              (Boolean(errors) && !touched) || !filled || passwordCheckError
+            }
           >
-            change password
+            {route.title}
           </Button>
         </FormControl>
       </form>
