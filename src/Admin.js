@@ -69,9 +69,9 @@ class Admin extends React.Component {
     const propSettings = {
       horizontal: props.layout === "horizontal",
       icons: props.icons !== null,
-      collapsable: !(props.navigationProps.permanent || false),
-      collapsed: props.navigationProps.collapsed || false,
-      dense: props.navigationProps.dense || false,
+      collapsable: !(props.permanent || false),
+      collapsed: props.collapsed || false,
+      dense: props.dense || false,
     };
 
     // Initialize GUI settings
@@ -515,6 +515,8 @@ App.propTypes = {
   logLevel: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 
   layout: PropTypes.string,
+  permanent: PropTypes.bool,
+  dense: PropTypes.bool,
 
   title: PropTypes.string,
   branding: PropTypes.string,
@@ -524,17 +526,16 @@ App.propTypes = {
 
   theme: PropTypes.object,
   pageTheme: PropTypes.object,
-
-  navigationProps: PropTypes.shape({
-    dense: PropTypes.bool,
-    permanent: PropTypes.bool,
-  }),
+  loginForm: PropTypes.func,
 };
 
 App.defaultProps = {
   prefix: "",
-  layout: "horizontal", // horizontal|vertical
   logLevel: "WARN",
+
+  layout: "horizontal", // horizontal|vertical
+  dense: false,
+  permanent: false,
 
   title: "Bananas",
   branding: "Bananas",
@@ -545,11 +546,6 @@ App.defaultProps = {
   theme: themes.default,
   pageTheme: undefined,
   loginForm: undefined,
-
-  navigationProps: {
-    dense: false,
-    permanent: false,
-  },
 };
 
 export default App;

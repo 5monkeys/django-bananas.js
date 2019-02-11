@@ -63,12 +63,9 @@ ReactDOM.render(
     // branding="Admin"
     // version="v0.1"
     // logo={true} // true|URL|node
-    navigationProps={
-      {
-        // permanent: true,
-        // dense: true,
-      }
-    }
+    // permanent: true,
+    // collapsed: false,
+    // dense: true,
     // icons={null}
     icons={{
       // home: DashboardIcon,
