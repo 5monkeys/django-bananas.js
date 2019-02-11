@@ -282,17 +282,18 @@ class Admin extends React.Component {
       Page = await this.loadPageComponent(template);
     }
 
-    const needsNewData =
-      !referer ||
-      location.pathname !== referer.location.pathname ||
-      !location.search ||
-      location.search !== referer.location.search;
+    const reuseData =
+      referer &&
+      location.hash &&
+      referer.location.pathname === location.pathname &&
+      referer.location.search === location.search;
 
     // Load page data, but only if path or query changed
-    if (needsNewData) {
-      pageProps.data = await this.loadPageData(id, params, query);
-    } else if (["list", "read"].includes(route.action)) {
+    if (reuseData) {
+      logger.debug("Re-using page data...");
       pageProps.data = this.state.pageProps.data;
+    } else if (["list", "read"].includes(route.action)) {
+      pageProps.data = await this.loadPageData(id, params, query);
     }
 
     return { Page, pageProps };
