@@ -95,6 +95,8 @@ const styles = theme => ({
       ...theme.mixins.toolbar,
     },
     "&$dense": {
+      minHeight: 36,
+
       "&$leftAligned": {
         // Outermost edge padding
         paddingLeft: theme.spacing.unit * 1.5,

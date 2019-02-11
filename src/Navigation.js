@@ -9,12 +9,30 @@ import AdminContext from "./context";
 
 const styles = theme => ({
   root: {
-    "& > $list + $list": {
+    "&$verticalRoot > $list + $list": {
       borderTopWidth: 1,
       borderTopStyle: "solid",
       borderTopColor: theme.palette.action.selected,
     },
+    "&$horizontalRoot": {
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      "& $list:first-child": {
+        marginLeft: "auto",
+      },
+      "& $list:last-child": {
+        marginRight: "auto",
+      },
+    },
   },
+  verticalRoot: {},
+  horizontalRoot: {},
+
+  // List
   list: {
     "&:first-child": {
       paddingTop: 0,
@@ -23,15 +41,9 @@ const styles = theme => ({
       paddingBottom: 0,
     },
   },
-  dense: {
-    paddingTop: theme.spacing.unit * 1.5,
-    paddingBottom: theme.spacing.unit * 1.5,
-  },
-  multiple: {},
   horizontal: {
     display: "flex",
     flexDirection: "row",
-    width: "100%",
   },
   vertical: {
     "&multiple": {
@@ -39,6 +51,10 @@ const styles = theme => ({
       paddingBottom: theme.spacing.unit,
     },
   },
+  dense: {},
+  multiple: {},
+
+  // Subheader
   subheader: {
     backgroundColor: theme.palette.background.paper,
     textTransform: "uppercase",
@@ -48,14 +64,14 @@ const styles = theme => ({
     display: "flex",
     alignItems: "center",
   },
-  collapsed: {
+  subheaderCollapsed: {
     height: 0,
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  expanded: {
+  subheaderExpanded: {
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -81,17 +97,14 @@ class Navigation extends React.Component {
       return nav;
     }, {});
 
-    let apps = Object.keys(groupedRoutes).sort((a, b) => a < b);
-    apps = apps.concat(apps);
-    apps = apps.concat(apps);
-    apps = apps.concat(apps);
-
+    const apps = Object.keys(groupedRoutes).sort((a, b) => a < b);
     const multipleApps = apps.length > 2;
 
     return (
       <div
         className={classNames(classes.root, {
-          [classes.horizontal]: horizontal,
+          [classes.verticalRoot]: !horizontal,
+          [classes.horizontalRoot]: horizontal,
         })}
       >
         {apps.map(app => {
@@ -99,22 +112,21 @@ class Navigation extends React.Component {
           return (
             <List
               key={app}
+              disablePadding
               className={classNames(classes.list, {
                 [classes.horizontal]: horizontal,
                 [classes.vertical]: !horizontal,
                 [classes.dense]: horizontal && dense,
                 [classes.multiple]: multipleApps,
               })}
-              dense={horizontal}
-              disablePadding
               subheader={
                 app &&
                 multipleApps &&
                 !horizontal && (
                   <ListSubheader
                     className={classNames(classes.subheader, {
-                      [classes.collapsed]: collapsed,
-                      [classes.expanded]: !collapsed,
+                      [classes.subheaderCollapsed]: collapsed,
+                      [classes.subheaderExpanded]: !collapsed,
                     })}
                   >
                     {app}
@@ -122,32 +134,28 @@ class Navigation extends React.Component {
                 )
               }
             >
-              {appRoutes
-                .concat(appRoutes)
-                .concat(appRoutes)
-                .concat(appRoutes)
-                .map(
-                  ({ id, path, title }) =>
-                    // Only show "Dashboard" item in vertical+icon mode
-                    ((!horizontal &&
-                      (icons.enabled || (!icons.enabled && id !== "home"))) ||
-                      (horizontal && id !== "home")) && (
-                      <MenuItem
-                        key={id}
-                        route={id}
-                        variant={horizontal ? "appbar" : "drawer"}
-                        title={title}
-                        icon={icons.enabled ? icons[id] : null}
-                        dense={dense}
-                        selected={
-                          path.length > 1
-                            ? currentUrl.startsWith(path)
-                            : currentUrl === path
-                        }
-                        collapsed={collapsed}
-                      />
-                    )
-                )}
+              {appRoutes.map(
+                ({ id, path, title }) =>
+                  // Only show "Dashboard" item in vertical+icon mode
+                  ((!horizontal &&
+                    (icons.enabled || (!icons.enabled && id !== "home"))) ||
+                    (horizontal && id !== "home")) && (
+                    <MenuItem
+                      key={id}
+                      route={id}
+                      variant={horizontal ? "appbar" : "drawer"}
+                      title={title}
+                      icon={icons.enabled ? icons[id] : null}
+                      dense={dense}
+                      selected={
+                        path.length > 1
+                          ? currentUrl.startsWith(path)
+                          : currentUrl === path
+                      }
+                      collapsed={collapsed}
+                    />
+                  )
+              )}
             </List>
           );
         })}
