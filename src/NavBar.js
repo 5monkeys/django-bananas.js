@@ -133,7 +133,7 @@ class NavBar extends React.Component {
   }
 
   toggle = () => {
-    this.context.admin.configure({ collapsed: !this.props.collapsed });
+    this.context.admin.settings.configure({ collapsed: !this.props.collapsed });
   };
 
   renderChildren() {
