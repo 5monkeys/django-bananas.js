@@ -59,6 +59,7 @@ export default class Router {
         const template = this.getTemplate(id, path, action);
         const app = this.getAppLabel(tags);
         const title = this.getTitle(summary, id);
+        const schema = this.getSchema(spec);
         const params = parameters.filter(
           param => param.required && param.in === "path"
         );
@@ -70,6 +71,7 @@ export default class Router {
           template,
           app,
           title,
+          schema,
           navigation: tags.includes("navigation"),
           parameters: {
             names: params.map(param => param.name) || null,
@@ -220,6 +222,23 @@ export default class Router {
         )) ||
       null
     );
+  }
+
+  getSchema(spec) {
+    const data = spec.parameters.filter(
+      param => param.required && param.in === "body" && param.name === "data"
+    )[0];
+
+    if (data) {
+      const { properties } = data.schema;
+      const required = data.schema.required || [];
+      for (const name of Object.keys(properties)) {
+        properties[name].required = required.includes(name);
+      }
+      return properties;
+    }
+
+    return null;
   }
 
   getRoute(id) {
