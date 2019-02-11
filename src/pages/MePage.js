@@ -5,7 +5,6 @@ import React from "react";
 
 import AdminContext from "../context";
 import { Content, TitleBar } from "..";
-import ChangePasswordForm from "./ChangePasswordForm";
 import SettingsForm from "./SettingsForm";
 
 const styles = theme => ({

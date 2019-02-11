@@ -259,6 +259,8 @@ NavBar.propTypes = {
 
   variant: PropTypes.string,
   dense: PropTypes.bool,
+  // Used in: getDerivedStateFromProps
+  // eslint-disable-next-line react/no-unused-prop-types
   permanent: PropTypes.bool,
   collapsed: PropTypes.bool,
 
@@ -266,7 +268,9 @@ NavBar.propTypes = {
   branding: PropTypes.string,
   version: PropTypes.string,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
-  icons: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+  // Used in: getDerivedStateFromProps
+  // eslint-disable-next-line react/no-unused-prop-types
+  icons: PropTypes.object,
 };
 
 NavBar.defaultProps = {
@@ -279,7 +283,7 @@ NavBar.defaultProps = {
   branding: "",
   version: "",
   logo: true,
-  icons: true,
+  icons: undefined,
 };
 
 export default withStyles(styles, { name: "BananasNavBar" })(NavBar);
