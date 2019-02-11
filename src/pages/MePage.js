@@ -55,6 +55,9 @@ class MePage extends React.Component {
                 onChange={(setting, value) => {
                   admin.settings.configure({ [setting]: value });
                 }}
+                onReset={() => {
+                  admin.settings.reset();
+                }}
               />
             </Paper>
           </div>

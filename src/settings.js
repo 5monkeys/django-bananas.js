@@ -58,7 +58,7 @@ class Settings {
     }
   }
 
-  delete() {
+  clear() {
     for (const setting of Object.keys(this.settings)) {
       window.localStorage.removeItem(setting);
     }
@@ -76,9 +76,10 @@ class Settings {
   }
 
   reset() {
+    this.clear();
     this.settings = this.defaults;
     this.clean();
-    this.delete();
+    this.callback(this.settings);
   }
 }
 

@@ -1,18 +1,35 @@
+import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormLabel from "@material-ui/core/FormLabel";
 import Switch from "@material-ui/core/Switch";
+import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
+const styles = theme => ({
+  reset: {
+    marginLeft: 48,
+    marginTop: theme.spacing.unit,
+  },
+});
+
 class SettingsForm extends React.Component {
   changeSetting = setting => event => {
-    this.props.onChange(setting, event.target.checked);
+    if (this.props.onChange) {
+      this.props.onChange(setting, event.target.checked);
+    }
+  };
+
+  resetSettings = () => {
+    if (this.props.onReset) {
+      this.props.onReset();
+    }
   };
 
   render() {
-    const { settings } = this.props;
+    const { classes, settings } = this.props;
     const labels = {
       horizontal: "Horizontal Layout",
       collapsable: "Collapsable Navigation",
@@ -51,6 +68,15 @@ class SettingsForm extends React.Component {
               )
             )}
           </FormGroup>
+          <Button
+            classes={{ root: classes.reset }}
+            variant="outlined"
+            size="small"
+            color="secondary"
+            onClick={this.resetSettings}
+          >
+            Reset
+          </Button>
         </FormControl>
       </>
     );
@@ -58,8 +84,15 @@ class SettingsForm extends React.Component {
 }
 
 SettingsForm.propTypes = {
+  classes: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+  onReset: PropTypes.func,
 };
 
-export default SettingsForm;
+SettingsForm.defaultProps = {
+  onChange: undefined,
+  onReset: undefined,
+};
+
+export default withStyles(styles)(SettingsForm);
