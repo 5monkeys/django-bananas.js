@@ -251,7 +251,11 @@ class Admin extends React.Component {
     }
 
     const { id, operationId, params, app, path, query, hash, template } = route;
-    logger.debug("Load Page:", path, route);
+    const referer = this.state.pageProps
+      ? this.state.pageProps.route || null
+      : null;
+
+    logger.debug("Load Page:", path, route, referer);
 
     // Initial page props
     let Page = null;
@@ -262,11 +266,12 @@ class Admin extends React.Component {
         path,
         query,
         hash,
+        location,
       },
       title: route.title,
       data: undefined,
-      referer: this.state.pageProps ? this.state.pageProps.route || null : null,
       logger: this.getLogger(app),
+      referer,
     };
 
     if (template === "Component") {
@@ -277,9 +282,17 @@ class Admin extends React.Component {
       Page = await this.loadPageComponent(template);
     }
 
-    // Load page data
-    if (["list", "read"].includes(route.action)) {
+    const needsNewData =
+      !referer ||
+      location.pathname !== referer.location.pathname ||
+      !location.search ||
+      location.search !== referer.location.search;
+
+    // Load page data, but only if path or query changed
+    if (needsNewData) {
       pageProps.data = await this.loadPageData(id, params, query);
+    } else if (["list", "read"].includes(route.action)) {
+      pageProps.data = this.state.pageProps.data;
     }
 
     return { Page, pageProps };
