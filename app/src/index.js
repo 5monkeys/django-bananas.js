@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PeopleIcon from "@material-ui/icons/People";
-import PersonIcon from "@material-ui/icons/Person";
+import SettingsIcon from "@material-ui/icons/Settings";
 import Bananas from "django-bananas";
 import themes from "django-bananas/themes";
 import React from "react";
@@ -69,11 +69,11 @@ ReactDOM.render(
         // dense: true,
       }
     }
-    // icons={false}
+    // icons={null}
     icons={{
-      "bananas.me:list": Gravatar,
-      // "bananas.me:list": PersonIcon,
       // home: DashboardIcon,
+      "bananas.me:list": Gravatar,
+      // "bananas.me:list": SettingsIcon,
       "example.user:list": PeopleIcon,
     }}
   />,
