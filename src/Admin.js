@@ -22,6 +22,7 @@ import ErrorPage from "./pages/ErrorPage";
 import LoginPage from "./pages/LoginPage";
 import LoginPageForm from "./pages/LoginPageForm";
 import Router from "./router";
+import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
 
 Logger.useDefaults();
@@ -73,20 +74,11 @@ class Admin extends React.Component {
       dense: props.navigationProps.dense || false,
     };
 
-    // Load User GUI settings from local storage
-    const userSettings = Object.keys(propSettings)
-      .map(setting => [
-        setting,
-        JSON.parse(window.localStorage.getItem(setting)),
-      ])
-      .filter(([_, value]) => ![null, undefined].includes(value))
-      .reduce(
-        (loaded, [setting, value]) => ({ ...loaded, [setting]: value }),
-        {}
-      );
-
-    // Merge and validate GUI settings
-    const settings = this.cleanSettings({ ...propSettings, ...userSettings });
+    // Initialize GUI settings
+    this.settings = new Settings(
+      propSettings,
+      this.settingsDidUpdate.bind(this)
+    );
 
     this.state = {
       booted: false,
@@ -95,7 +87,7 @@ class Admin extends React.Component {
       pageProps: undefined,
       messages: [],
       messageIndex: 0,
-      settings,
+      settings: this.settings.settings,
     };
 
     logger.setLevel(this.getLogLevel("bananas", "WARN"));
@@ -183,36 +175,6 @@ class Admin extends React.Component {
     this.setState({ booted: false, user }, this.boot.bind(this));
   }
 
-  configure(newSettings) {
-    const settings = this.cleanSettings({
-      ...this.state.settings,
-      ...newSettings,
-    });
-
-    this.setState({ settings });
-
-    // Save new settings (un-cleaned)
-    for (const setting of Object.keys(newSettings)) {
-      window.localStorage.setItem(setting, newSettings[setting]);
-      console.log("SAVING", setting, newSettings[setting]);
-    }
-  }
-
-  cleanSettings(settings) {
-    if (settings.collapsable && (!settings.horizontal || !settings.icons)) {
-      if (settings.horizontal) {
-        logger.error("No icons provided for collapsable navbar");
-      }
-      logger.warn("Forcing permanent navbar");
-      settings.collapsable = false;
-    }
-    if (settings.collapsed && !settings.collapsable) {
-      logger.warn("Expanding collapsed permanent navbar");
-      settings.collapsed = false;
-    }
-    return settings;
-  }
-
   authorize() {
     return new Promise((resolve, reject) => {
       const anonymous = new AnonymousUserError();
@@ -239,6 +201,10 @@ class Admin extends React.Component {
         }
       );
     });
+  }
+
+  settingsDidUpdate(settings) {
+    this.setState({ settings });
   }
 
   async routeDidUpdate(location, action) {

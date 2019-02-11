@@ -3,10 +3,10 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
-import Settings from "../Settings";
 import AdminContext from "../context";
 import { Content, TitleBar } from "..";
 import ChangePasswordForm from "./ChangePasswordForm";
+import SettingsForm from "./SettingsForm";
 
 const styles = theme => ({
   root: {
@@ -51,10 +51,10 @@ class MePage extends React.Component {
               elevation={1}
               square
             >
-              <Settings
+              <SettingsForm
                 settings={admin.state.settings}
                 onChange={(setting, value) => {
-                  admin.configure({ [setting]: value });
+                  admin.settings.configure({ [setting]: value });
                 }}
               />
             </Paper>

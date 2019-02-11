@@ -6,7 +6,7 @@ import Switch from "@material-ui/core/Switch";
 import PropTypes from "prop-types";
 import React from "react";
 
-class Settings extends React.Component {
+class SettingsForm extends React.Component {
   changeSetting = setting => event => {
     this.props.onChange(setting, event.target.checked);
   };
@@ -57,9 +57,9 @@ class Settings extends React.Component {
   }
 }
 
-Settings.propTypes = {
+SettingsForm.propTypes = {
   settings: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
-export default Settings;
+export default SettingsForm;
