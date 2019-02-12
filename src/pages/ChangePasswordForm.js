@@ -52,6 +52,8 @@ class ChangePasswordForm extends React.Component {
     const { api, admin } = this.context;
     const { old_password, new_password1, new_password2 } = this.state;
 
+    admin.dismissMessages();
+
     api["bananas.change_password:create"]({
       data: {
         old_password,
