@@ -17,14 +17,14 @@ const logger = Logger.get("bananas");
 
 const styles = theme => ({
   root: {
-    maxWidth: 280,
+    maxWidth: 350,
   },
-  formGroup: {
-    marginTop: theme.spacing.unit * 2,
-  },
-  submitControl: {
+  formControlNormal: {
     marginTop: theme.spacing.unit * 3,
     marginBottom: 0,
+  },
+  field: {
+    marginTop: theme.spacing.unit * 3,
   },
 });
 
@@ -102,10 +102,11 @@ class ChangePasswordForm extends React.Component {
       <form onSubmit={this.onSubmit} className={classes.root}>
         <FormLabel component="legend">{route.title}</FormLabel>
         <FormControl fullWidth component="fieldset">
-          <FormGroup classes={{ root: classes.formGroup }}>
+          <FormGroup>
             {["old_password", "new_password1", "new_password2"].map(field => (
               <TextField
                 key={field}
+                classes={{ root: classes.field }}
                 label={schema[field].title}
                 error={Boolean(errors && errors[field])}
                 helperText={Boolean(errors && errors[field]) && errors[field]}
@@ -123,13 +124,13 @@ class ChangePasswordForm extends React.Component {
         <FormControl
           fullWidth
           margin="normal"
-          classes={{ marginNormal: classes.submitControl }}
+          classes={{ marginNormal: classes.formControlNormal }}
         >
           <Button
-            fullWidth
             variant="outlined"
             type="submit"
             color="primary"
+            fullWidth
             disabled={
               (Boolean(errors) && !touched) || !filled || passwordCheckError
             }
