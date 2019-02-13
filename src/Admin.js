@@ -448,58 +448,60 @@ class Admin extends React.Component {
     };
 
     return (
-      <div
-        className={classNames(classes.root, {
-          [classes.admin]: booted && user,
-          [classes.horizontalRoot]: isHorizontalLayout,
-          [classes.verticalRoot]: isVerticalLayout,
-        })}
-      >
-        {booted ? (
-          <AdminContext.Provider value={context}>
-            {user ? (
-              <>
-                <NavBar
-                  variant={settings.horizontal ? "drawer" : "appbar"}
-                  dense={settings.dense}
-                  permanent={!settings.collapsable}
-                  collapsed={settings.collapsed}
-                  icons={settings.icons ? this.props.icons : null}
+      <>
+        <div
+          className={classNames(classes.root, {
+            [classes.admin]: booted && user,
+            [classes.horizontalRoot]: isHorizontalLayout,
+            [classes.verticalRoot]: isVerticalLayout,
+          })}
+        >
+          {booted ? (
+            <AdminContext.Provider value={context}>
+              {user ? (
+                <>
+                  <NavBar
+                    variant={settings.horizontal ? "drawer" : "appbar"}
+                    dense={settings.dense}
+                    permanent={!settings.collapsable}
+                    collapsed={settings.collapsed}
+                    icons={settings.icons ? this.props.icons : null}
+                    logo={this.props.logo}
+                    title={this.props.title}
+                    branding={this.props.branding}
+                    version={this.props.version}
+                  />
+                  <div className={classes.page}>
+                    {Page ? (
+                      <ErrorBoundary>
+                        {pageTheme ? (
+                          <MuiThemeProvider theme={pageTheme}>
+                            <Page {...pageProps} />
+                          </MuiThemeProvider>
+                        ) : (
+                          <Page {...pageProps} />
+                        )}
+                      </ErrorBoundary>
+                    ) : (
+                      <LoadingScreen color="primary" />
+                    )}
+                  </div>
+                </>
+              ) : (
+                <LoginPage
+                  form={LoginForm}
+                  logger={logger}
                   logo={this.props.logo}
                   title={this.props.title}
-                  branding={this.props.branding}
-                  version={this.props.version}
                 />
-                <div className={classes.page}>
-                  {Page ? (
-                    <ErrorBoundary>
-                      {pageTheme ? (
-                        <MuiThemeProvider theme={pageTheme}>
-                          <Page {...pageProps} />
-                        </MuiThemeProvider>
-                      ) : (
-                        <Page {...pageProps} />
-                      )}
-                    </ErrorBoundary>
-                  ) : (
-                    <LoadingScreen color="primary" />
-                  )}
-                </div>
-              </>
-            ) : (
-              <LoginPage
-                form={LoginForm}
-                logger={logger}
-                logo={this.props.logo}
-                title={this.props.title}
-              />
-            )}
-          </AdminContext.Provider>
-        ) : (
-          <LoadingScreen logo={this.props.logo} loading={loading} />
-        )}
+              )}
+            </AdminContext.Provider>
+          ) : (
+            <LoadingScreen logo={this.props.logo} loading={loading} />
+          )}
+        </div>
         <Messages messages={messages} />
-      </div>
+      </>
     );
   }
 }
