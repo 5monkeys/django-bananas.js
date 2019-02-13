@@ -56,7 +56,7 @@ export default class Link extends React.Component {
     let { hash } = this.props;
     let child = null;
     let isAnchor = false;
-    const props = {};
+    const props = rest;
 
     if (typeof children === "string") {
       child = <MuiLink {...rest}>{children}</MuiLink>;
