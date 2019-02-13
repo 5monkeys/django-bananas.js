@@ -7,21 +7,13 @@ const defaults = {
     useNextVariants: true,
   },
   overrides: {
+    /*
     BananasNavBar: {
       drawer: {
-        // width: 280,
-      },
-    },
-    Navigation: {
-      size: {
         width: 280,
       },
     },
-    MuiToolbar: {
-      root: {
-        minHeight: 64,
-      },
-    },
+    */
   },
 };
 

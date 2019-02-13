@@ -5,11 +5,16 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
+import Content from "../Content";
 import TitleBar from "../TitleBar";
 
-const styles = theme => ({
+const styles = () => ({
   root: {
-    height: `calc(100vh - ${theme.overrides.MuiToolbar.root.minHeight}px)`,
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -22,21 +27,23 @@ const styles = theme => ({
 const CardPage = ({ classes, children, title, subtitle }) => (
   <>
     <TitleBar title={title} />
-    <div className={classes.root}>
-      <Card elevation={5} className={classes.card}>
-        <CardContent>
-          <Typography variant="h6" component="h2">
-            {title}
-          </Typography>
-          {subtitle && (
-            <Typography variant="overline" gutterBottom>
-              {subtitle}
+    <Content>
+      <div className={classes.root}>
+        <Card elevation={5} className={classes.card}>
+          <CardContent>
+            <Typography variant="h6" component="h2">
+              {title}
             </Typography>
-          )}
-          {children}
-        </CardContent>
-      </Card>
-    </div>
+            {subtitle && (
+              <Typography variant="overline" gutterBottom>
+                {subtitle}
+              </Typography>
+            )}
+            {children}
+          </CardContent>
+        </Card>
+      </div>
+    </Content>
   </>
 );
 
