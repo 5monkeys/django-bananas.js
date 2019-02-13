@@ -4,6 +4,7 @@ import {
   MuiThemeProvider,
   createMuiTheme,
   withStyles,
+  withTheme,
 } from "@material-ui/core/styles";
 import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
 import classNames from "classnames";
@@ -52,8 +53,15 @@ const styles = theme => ({
   },
 });
 
-function createDarkerTheme(color) {
-  return theme => {
+class ToolBar extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const { color, theme } = props;
+    this.theme = this.initializeTheme(theme, color);
+  }
+
+  initializeTheme(theme, color) {
     const primary =
       color === "primary"
         ? {
@@ -86,88 +94,81 @@ function createDarkerTheme(color) {
           }
         : theme.palette.secondary;
 
-    return createMuiTheme({
-      ...theme,
-      palette: {
-        ...theme.palette,
-        primary,
-        secondary,
-      },
-      overrides: {
-        MuiButton: {
-          contained: {
-            // Disable drop shadow for contained buttons in ToolBar
+    const overrides = {
+      MuiButton: {
+        contained: {
+          // Disable drop shadow for contained buttons in ToolBar
+          boxShadow: "none",
+          "&:active, &:focus": {
             boxShadow: "none",
-            "&:active, &:focus": {
-              boxShadow: "none",
-            },
           },
-          outlined:
-            color === "primary"
-              ? {
-                  // Button[default] @ ToolBar[primary]
-                  color: primary.contrastText,
-                  borderColor: primary.light,
-                }
-              : color === "secondary"
-              ? {
-                  // Button[default] @ ToolBar[secondary]
-                  color: secondary.contrastText,
-                  borderColor: secondary.light,
-                }
-              : {
-                  // Button[default] @ ToolBar[paper]
-                },
-          outlinedPrimary:
-            color === "primary"
-              ? {
-                  // Button[primary] @ ToolBar[primary]
-                  color: "inherit",
-                  borderColor: primary.contrastText,
-                  "&:hover": {
-                    borderColor: primary.contrastText,
-                    backgroundColor: primary.main,
-                  },
-                }
-              : color === "secondary"
-              ? {
-                  // Button[primary] @ ToolBar[secondary]
-                  borderColor: primary.main,
-                }
-              : {
-                  // Button[primary] @ ToolBar[paper]
-                },
-          outlinedSecondary:
-            color === "primary"
-              ? {
-                  // Button[secondary] @ ToolBar[primary]
-                  borderColor: secondary.main,
-                }
-              : color === "secondary"
-              ? {
-                  // Button[secondary] @ ToolBar[secondary]
-                  color: secondary.contrastText,
-                  borderColor: secondary.contrastText,
-                  "&:hover": {
-                    borderColor: secondary.contrastText,
-                    backgroundColor: secondary.main,
-                  },
-                }
-              : {
-                  // Button[secondary] @ ToolBar[paper]
-                },
         },
+        outlined:
+          color === "primary"
+            ? {
+                // Button[default] @ ToolBar[primary]
+                color: primary.contrastText,
+                borderColor: primary.light,
+              }
+            : color === "secondary"
+            ? {
+                // Button[default] @ ToolBar[secondary]
+                color: secondary.contrastText,
+                borderColor: secondary.light,
+              }
+            : {
+                // Button[default] @ ToolBar[paper]
+              },
+        outlinedPrimary:
+          color === "primary"
+            ? {
+                // Button[primary] @ ToolBar[primary]
+                color: "inherit",
+                borderColor: primary.contrastText,
+                "&:hover": {
+                  borderColor: primary.contrastText,
+                  backgroundColor: primary.main,
+                },
+              }
+            : color === "secondary"
+            ? {
+                // Button[primary] @ ToolBar[secondary]
+                borderColor: primary.main,
+              }
+            : {
+                // Button[primary] @ ToolBar[paper]
+              },
+        outlinedSecondary:
+          color === "primary"
+            ? {
+                // Button[secondary] @ ToolBar[primary]
+                borderColor: secondary.main,
+              }
+            : color === "secondary"
+            ? {
+                // Button[secondary] @ ToolBar[secondary]
+                color: secondary.contrastText,
+                borderColor: secondary.contrastText,
+                "&:hover": {
+                  borderColor: secondary.contrastText,
+                  backgroundColor: secondary.main,
+                },
+              }
+            : {
+                // Button[secondary] @ ToolBar[paper]
+              },
       },
-    });
-  };
-}
+    };
 
-class ToolBar extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const { color } = props;
-    this.theme = createDarkerTheme(color);
+    return createMuiTheme(
+      theme.extend({
+        palette: {
+          primary,
+          secondary,
+        },
+        overrides,
+      })
+    );
   }
 
   render() {
@@ -222,6 +223,7 @@ class ToolBar extends React.Component {
 }
 
 ToolBar.propTypes = {
+  theme: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   overrides: PropTypes.object,
   children: PropTypes.node,
@@ -240,4 +242,6 @@ ToolBar.defaultProps = {
   justify: "end",
 };
 
-export default withStyles(styles, { name: "BananasToolBar" })(ToolBar);
+export default withStyles(styles, { name: "BananasToolBar" })(
+  withTheme()(ToolBar)
+);

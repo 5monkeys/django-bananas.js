@@ -41,6 +41,13 @@ const examplePageTheme = exampleAppTheme.extend({
       dark: "#993300",
     },
   },
+  overrides: {
+    MuiButton: {
+      outlined: {
+        textTransform: "none",
+      },
+    },
+  },
 });
 */
 
