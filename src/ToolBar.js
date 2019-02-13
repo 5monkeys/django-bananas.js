@@ -1,6 +1,11 @@
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import { withStyles } from "@material-ui/core/styles";
+import {
+  MuiThemeProvider,
+  createMuiTheme,
+  withStyles,
+} from "@material-ui/core/styles";
+import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -33,6 +38,8 @@ const styles = theme => ({
   },
   borderTop: {},
   borderBottom: {},
+  colorPrimary: {},
+  colorSecondary: {},
   colorPaper: {
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.getContrastText(theme.palette.background.paper),
@@ -45,49 +52,174 @@ const styles = theme => ({
   },
 });
 
-const ToolBar = ({
-  classes,
-  overrides,
-  children,
-  placement,
-  color,
-  border,
-  dense,
-  justify,
-  ...rest
-}) => {
-  return (
-    <AppBar
-      elevation={0}
-      position="relative"
-      color={color !== "paper" ? color : undefined}
-      className={classNames(classes.root, {
-        [classes.colorPaper]: color === "paper",
-      })}
-      {...rest}
-    >
-      <Container>
-        <Toolbar
-          variant={dense ? "dense" : "regular"}
-          className={classNames(classes.toolbar, {
-            [overrides.toolbar]: overrides.toolbar,
-            [classes.justifyStart]: justify === "start",
-            [classes.justifyCenter]: justify === "center",
-            [classes.justifyEnd]: justify === "end",
-            [classes.justifyBetween]: justify === "between",
-            [classes.justifyAround]: justify === "around",
-            [classes.justifyEvenly]: justify === "evenly",
-            [classes.borderTop]: border === "top",
-            [classes.borderBottom]: border === "bottom",
-          })}
-          classes={{ gutters: classes.toolbarGutters }}
-        >
-          {children}
-        </Toolbar>
-      </Container>
-    </AppBar>
-  );
-};
+function createDarkerTheme(color) {
+  return theme => {
+    const primary =
+      color === "primary"
+        ? {
+            contrastText: theme.palette.primary.contrastText,
+            main: theme.palette.primary.dark,
+            light: lighten(
+              theme.palette.primary.main,
+              theme.palette.tonalOffset * 2.0
+            ),
+            dark: darken(
+              theme.palette.primary.dark,
+              theme.palette.tonalOffset * 1.5
+            ),
+          }
+        : theme.palette.primary;
+
+    const secondary =
+      color === "secondary"
+        ? {
+            contrastText: theme.palette.secondary.contrastText,
+            main: theme.palette.secondary.dark,
+            light: lighten(
+              theme.palette.secondary.main,
+              theme.palette.tonalOffset * 2.0
+            ),
+            dark: darken(
+              theme.palette.secondary.dark,
+              theme.palette.tonalOffset * 1.5
+            ),
+          }
+        : theme.palette.secondary;
+
+    return createMuiTheme({
+      ...theme,
+      palette: {
+        ...theme.palette,
+        primary,
+        secondary,
+      },
+      overrides: {
+        MuiButton: {
+          contained: {
+            // Disable drop shadow for contained buttons in ToolBar
+            boxShadow: "none",
+            "&:active, &:focus": {
+              boxShadow: "none",
+            },
+          },
+          outlined:
+            color === "primary"
+              ? {
+                  // Button[default] @ ToolBar[primary]
+                  color: primary.contrastText,
+                  borderColor: primary.light,
+                }
+              : color === "secondary"
+              ? {
+                  // Button[default] @ ToolBar[secondary]
+                  color: secondary.contrastText,
+                  borderColor: secondary.light,
+                }
+              : {
+                  // Button[default] @ ToolBar[paper]
+                },
+          outlinedPrimary:
+            color === "primary"
+              ? {
+                  // Button[primary] @ ToolBar[primary]
+                  color: "inherit",
+                  borderColor: primary.contrastText,
+                  "&:hover": {
+                    borderColor: primary.contrastText,
+                    backgroundColor: primary.main,
+                  },
+                }
+              : color === "secondary"
+              ? {
+                  // Button[primary] @ ToolBar[secondary]
+                  borderColor: primary.main,
+                }
+              : {
+                  // Button[primary] @ ToolBar[paper]
+                },
+          outlinedSecondary:
+            color === "primary"
+              ? {
+                  // Button[secondary] @ ToolBar[primary]
+                  borderColor: secondary.main,
+                }
+              : color === "secondary"
+              ? {
+                  // Button[secondary] @ ToolBar[secondary]
+                  color: secondary.contrastText,
+                  borderColor: secondary.contrastText,
+                  "&:hover": {
+                    borderColor: secondary.contrastText,
+                    backgroundColor: secondary.main,
+                  },
+                }
+              : {
+                  // Button[secondary] @ ToolBar[paper]
+                },
+        },
+      },
+    });
+  };
+}
+
+class ToolBar extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const { color } = props;
+    this.theme = createDarkerTheme(color);
+  }
+
+  render() {
+    const {
+      classes,
+      overrides,
+      children,
+      placement,
+      color,
+      border,
+      dense,
+      justify,
+      ...rest
+    } = this.props;
+
+    return (
+      <AppBar
+        elevation={0}
+        position="relative"
+        color={color !== "paper" ? color : undefined}
+        className={classNames(classes.root, {
+          [classes.colorPrimary]: color === "primary",
+          [classes.colorSecondary]: color === "secondary",
+          [classes.colorPaper]: color === "paper",
+        })}
+        {...rest}
+      >
+        <Container>
+          <MuiThemeProvider theme={this.theme}>
+            <Toolbar
+              variant={dense ? "dense" : "regular"}
+              className={classNames(classes.toolbar, {
+                [overrides.toolbar]: overrides.toolbar,
+                [classes.justifyStart]: justify === "start",
+                [classes.justifyCenter]: justify === "center",
+                [classes.justifyEnd]: justify === "end",
+                [classes.justifyBetween]: justify === "between",
+                [classes.justifyAround]: justify === "around",
+                [classes.justifyEvenly]: justify === "evenly",
+                [classes.borderTop]: border === "top",
+                [classes.borderBottom]: border === "bottom",
+              })}
+              classes={{ gutters: classes.toolbarGutters }}
+            >
+              {children}
+            </Toolbar>
+          </MuiThemeProvider>
+        </Container>
+      </AppBar>
+    );
+  }
+}
 
 ToolBar.propTypes = {
   classes: PropTypes.object.isRequired,
