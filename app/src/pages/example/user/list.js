@@ -45,12 +45,6 @@ const styles = theme => ({
   userHover: {
     cursor: "pointer",
   },
-  toolBarButton: {
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
-    color: theme.palette.primary.contrastText,
-    backgroundColor: theme.palette.primary.dark,
-  },
   evenToolbar: {
     "& > *": {
       width: "33%",
@@ -65,11 +59,11 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
     <AdminContext.Consumer>
       {context => (
         <>
-          <TitleBar title={title}>
+          <TitleBar title={title} color="primary">
             <Tools>
               <Link route="example.user:create">
                 <Fab
-                  color="secondary"
+                  color="primary"
                   size="medium"
                   variant="extended"
                   className={classes.addButton}
@@ -161,16 +155,16 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
               </Table>
             </Paper>
           </Content>
-          <ToolBar color="primary" justify="center">
+          <ToolBar color="paper" justify="center">
             <Tools>
               <Link path="/">
-                <Button variant="text" className={classes.toolBarButton}>
+                <Button variant="contained" color="primary">
                   Dashboard
                 </Button>
               </Link>
               <Button
-                variant="text"
-                className={classes.toolBarButton}
+                variant="outlined"
+                color="primary"
                 onClick={() =>
                   context.router.route(
                     {
@@ -184,8 +178,8 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
               </Button>
 
               <Button
-                variant="text"
-                className={classes.toolBarButton}
+                variant="outlined"
+                color="secondary"
                 onClick={() =>
                   context.router.route({ hash: "olof" }, { patch: true })
                 }
@@ -194,8 +188,7 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
               </Button>
 
               <Button
-                variant="text"
-                className={classes.toolBarButton}
+                variant="outlined"
                 onClick={() =>
                   context.router.route({ query: { foo: "bar" }, hash: "#baz" })
                 }
@@ -204,18 +197,8 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
               </Button>
 
               <Button
-                variant="text"
-                className={classes.toolBarButton}
-                onClick={async () => {
-                  context.router.route("/foobar");
-                }}
-              >
-                404
-              </Button>
-
-              <Button
-                variant="text"
-                className={classes.toolBarButton}
+                variant="outlined"
+                color="inherit"
                 onClick={async () => {
                   const me = await context.api["bananas.me:list"]();
                   logger.info("ME", me);
@@ -223,6 +206,16 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
                 }}
               >
                 API call
+              </Button>
+
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={async () => {
+                  context.router.route("/foobar");
+                }}
+              >
+                404
               </Button>
             </Tools>
           </ToolBar>
