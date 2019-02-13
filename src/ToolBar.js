@@ -4,7 +4,6 @@ import {
   MuiThemeProvider,
   createMuiTheme,
   withStyles,
-  withTheme,
 } from "@material-ui/core/styles";
 import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
 import classNames from "classnames";
@@ -12,6 +11,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import Container from "./Container";
+import { extendTheme } from "./themes";
 
 const styles = theme => ({
   root: {
@@ -54,14 +54,17 @@ const styles = theme => ({
 });
 
 class ToolBar extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const { color, theme } = props;
-    this.theme = this.initializeTheme(theme, color);
+  getTheme() {
+    if (!this.theme) {
+      const { theme, color } = this.props;
+      return this.makeTheme(theme, color).bind(this);
+    }
+    return this.theme;
   }
 
-  initializeTheme(theme, color) {
+  makeTheme = (propTheme, color) => parentTheme => {
+    const theme = propTheme || parentTheme;
+
     const primary =
       color === "primary"
         ? {
@@ -160,8 +163,8 @@ class ToolBar extends React.Component {
       },
     };
 
-    return createMuiTheme(
-      theme.extend({
+    this.theme = createMuiTheme(
+      extendTheme(theme, {
         palette: {
           primary,
           secondary,
@@ -169,14 +172,17 @@ class ToolBar extends React.Component {
         overrides,
       })
     );
-  }
 
-  render() {
+    return this.theme;
+  };
+
+  renderAppBar() {
     const {
       classes,
+      theme,
+      autoStyle,
       overrides,
       children,
-      placement,
       color,
       border,
       dense,
@@ -197,34 +203,56 @@ class ToolBar extends React.Component {
         {...rest}
       >
         <Container>
-          <MuiThemeProvider theme={this.theme}>
-            <Toolbar
-              variant={dense ? "dense" : "regular"}
-              className={classNames(classes.toolbar, {
-                [overrides.toolbar]: overrides.toolbar,
-                [classes.justifyStart]: justify === "start",
-                [classes.justifyCenter]: justify === "center",
-                [classes.justifyEnd]: justify === "end",
-                [classes.justifyBetween]: justify === "between",
-                [classes.justifyAround]: justify === "around",
-                [classes.justifyEvenly]: justify === "evenly",
-                [classes.borderTop]: border === "top",
-                [classes.borderBottom]: border === "bottom",
-              })}
-              classes={{ gutters: classes.toolbarGutters }}
-            >
-              {children}
-            </Toolbar>
-          </MuiThemeProvider>
+          {autoStyle ? (
+            <MuiThemeProvider theme={this.getTheme()}>
+              {this.renderToolbar()}
+            </MuiThemeProvider>
+          ) : (
+            this.renderToolbar()
+          )}
         </Container>
       </AppBar>
+    );
+  }
+
+  renderToolbar() {
+    const { classes, overrides, children, border, dense, justify } = this.props;
+    return (
+      <Toolbar
+        variant={dense ? "dense" : "regular"}
+        className={classNames(classes.toolbar, {
+          [overrides.toolbar]: overrides.toolbar,
+          [classes.justifyStart]: justify === "start",
+          [classes.justifyCenter]: justify === "center",
+          [classes.justifyEnd]: justify === "end",
+          [classes.justifyBetween]: justify === "between",
+          [classes.justifyAround]: justify === "around",
+          [classes.justifyEvenly]: justify === "evenly",
+          [classes.borderTop]: border === "top",
+          [classes.borderBottom]: border === "bottom",
+        })}
+        classes={{ gutters: classes.toolbarGutters }}
+      >
+        {children}
+      </Toolbar>
+    );
+  }
+
+  render() {
+    const { theme } = this.props;
+
+    return theme ? (
+      <MuiThemeProvider theme={theme}>{this.renderAppBar()}</MuiThemeProvider>
+    ) : (
+      this.renderAppBar()
     );
   }
 }
 
 ToolBar.propTypes = {
-  theme: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
+  theme: PropTypes.object,
+  autoStyle: PropTypes.bool,
   overrides: PropTypes.object,
   children: PropTypes.node,
   color: PropTypes.string,
@@ -234,6 +262,8 @@ ToolBar.propTypes = {
 };
 
 ToolBar.defaultProps = {
+  theme: undefined,
+  autoStyle: true,
   overrides: {},
   children: null,
   color: "primary",
@@ -242,6 +272,4 @@ ToolBar.defaultProps = {
   justify: "end",
 };
 
-export default withStyles(styles, { name: "BananasToolBar" })(
-  withTheme()(ToolBar)
-);
+export default withStyles(styles, { name: "BananasToolBar" })(ToolBar);
