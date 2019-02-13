@@ -130,7 +130,8 @@ class Admin extends React.Component {
       });
     } catch (error) {
       logger.error("Critical Error: Failed to initialize API client!", error);
-      this.error("Failed to boot!");
+      const cause = error.response ? error.response.statusText : "Unreachable";
+      this.error(`Failed to boot: API ${cause}`);
       this.setState({ loading: false });
       return;
     }
