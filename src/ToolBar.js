@@ -5,7 +5,11 @@ import {
   createMuiTheme,
   withStyles,
 } from "@material-ui/core/styles";
-import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
+import {
+  darken,
+  getLuminance,
+  lighten,
+} from "@material-ui/core/styles/colorManipulator";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -65,10 +69,13 @@ class ToolBar extends React.Component {
   makeTheme = (propTheme, color) => parentTheme => {
     const theme = propTheme || parentTheme;
 
+    const primaryIsLight = getLuminance(theme.palette.primary.main) > 0.5;
+    const secondaryIsLight = getLuminance(theme.palette.secondary.main) > 0.5;
+
+    // Darker primary color
     const primary =
       color === "primary"
         ? {
-            contrastText: theme.palette.primary.contrastText,
             main: theme.palette.primary.dark,
             light: lighten(
               theme.palette.primary.main,
@@ -78,13 +85,17 @@ class ToolBar extends React.Component {
               theme.palette.primary.dark,
               theme.palette.tonalOffset * 1.5
             ),
+            contrastText:
+              getLuminance(theme.palette.primary.dark) > 0.5
+                ? theme.palette.text.primary
+                : theme.palette.common.white,
           }
         : theme.palette.primary;
 
+    // Darker secondary color
     const secondary =
       color === "secondary"
         ? {
-            contrastText: theme.palette.secondary.contrastText,
             main: theme.palette.secondary.dark,
             light: lighten(
               theme.palette.secondary.main,
@@ -94,71 +105,110 @@ class ToolBar extends React.Component {
               theme.palette.secondary.dark,
               theme.palette.tonalOffset * 1.5
             ),
+            contrastText:
+              getLuminance(theme.palette.secondary.dark) > 0.5
+                ? theme.palette.text.primary
+                : theme.palette.common.white,
           }
         : theme.palette.secondary;
 
     const overrides = {
       MuiButton: {
         contained: {
-          // Disable drop shadow for contained buttons in ToolBar
+          // Contained Button[default] @ ToolBar[any]
+          color: "inherit",
+          backgroundColor: theme.palette.action.hover,
+          "&:hover": {
+            backgroundColor: theme.palette.action.selected,
+          },
+
+          // Disable drop shadow for all contained buttons in ToolBar
           boxShadow: "none",
           "&:active, &:focus": {
             boxShadow: "none",
           },
         },
-        outlined:
+        containedPrimary:
           color === "primary"
             ? {
-                // Button[default] @ ToolBar[primary]
+                // Contained Button[primary] @ ToolBar[primary]
                 color: primary.contrastText,
-                borderColor: primary.light,
               }
             : color === "secondary"
             ? {
-                // Button[default] @ ToolBar[secondary]
-                color: secondary.contrastText,
-                borderColor: secondary.light,
+                // Contained Button[primary] @ ToolBar[secondary]
+                color: theme.palette.primary.contrastText,
               }
             : {
-                // Button[default] @ ToolBar[paper]
+                // Contained Button[primary] @ ToolBar[paper]
+              },
+        containedSecondary:
+          color === "primary"
+            ? {
+                // Contained Button[secondary] @ ToolBar[primary]
+                color: theme.palette.secondary.contrastText,
+              }
+            : color === "secondary"
+            ? {
+                // Contained Button[secondary] @ ToolBar[secondary]
+                color: secondary.contrastText,
+              }
+            : {
+                // Contained Button[secondary] @ ToolBar[paper]
+              },
+        outlined:
+          color === "primary"
+            ? {
+                // Outlined Button[default] @ ToolBar[primary]
+                color: "inherit", // primary.contrastText,
+                borderColor: primaryIsLight ? undefined : primary.light,
+              }
+            : color === "secondary"
+            ? {
+                // Outlined Button[default] @ ToolBar[secondary]
+                color: "inherit", // secondary.contrastText,
+                borderColor: secondaryIsLight ? undefined : secondary.light,
+              }
+            : {
+                // Outlined Button[default] @ ToolBar[paper]
               },
         outlinedPrimary:
           color === "primary"
             ? {
-                // Button[primary] @ ToolBar[primary]
+                // Outlined Button[primary] @ ToolBar[primary]
                 color: "inherit",
-                borderColor: primary.contrastText,
+                borderColor: theme.palette.primary.contrastText,
                 "&:hover": {
-                  borderColor: primary.contrastText,
-                  backgroundColor: primary.main,
+                  borderColor: theme.palette.primary.contrastText,
+                  backgroundColor: theme.palette.action.hover,
                 },
               }
             : color === "secondary"
             ? {
-                // Button[primary] @ ToolBar[secondary]
+                // Outlined Button[primary] @ ToolBar[secondary]
                 borderColor: primary.main,
               }
             : {
-                // Button[primary] @ ToolBar[paper]
+                // Outlined Button[primary] @ ToolBar[paper]
               },
         outlinedSecondary:
           color === "primary"
             ? {
-                // Button[secondary] @ ToolBar[primary]
+                // Outlined Button[secondary] @ ToolBar[primary]
                 borderColor: secondary.main,
               }
             : color === "secondary"
             ? {
-                // Button[secondary] @ ToolBar[secondary]
+                // Outlined Button[secondary] @ ToolBar[secondary]
                 color: secondary.contrastText,
-                borderColor: secondary.contrastText,
+                borderColor: theme.palette.secondary.contrastText,
                 "&:hover": {
-                  borderColor: secondary.contrastText,
-                  backgroundColor: secondary.main,
+                  borderColor: theme.palette.secondary.contrastText,
+                  backgroundColor: theme.palette.action.hover,
                 },
               }
             : {
-                // Button[secondary] @ ToolBar[paper]
+                // Outlined Button[secondary] @ ToolBar[paper]
               },
       },
     };
