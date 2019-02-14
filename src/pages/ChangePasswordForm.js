@@ -81,10 +81,10 @@ class ChangePasswordForm extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { router } = this.context;
+    const { api } = this.context;
 
-    const route = router.getRoute("bananas.change_password:create");
-    const { schema } = route;
+    const endpoint = api["bananas.change_password:create"];
+    const schema = endpoint.schema.data;
 
     const {
       errors,
@@ -102,12 +102,13 @@ class ChangePasswordForm extends React.Component {
 
     return (
       <form onSubmit={this.onSubmit} className={classes.root}>
-        <FormLabel component="legend">{route.title}</FormLabel>
+        <FormLabel component="legend">{endpoint.title}</FormLabel>
         <FormControl fullWidth component="fieldset">
           <FormGroup>
             {["old_password", "new_password1", "new_password2"].map(field => (
               <TextField
                 key={field}
+                autoComplete={field}
                 classes={{ root: classes.field }}
                 label={schema[field].title}
                 error={Boolean(errors && errors[field])}
@@ -137,7 +138,7 @@ class ChangePasswordForm extends React.Component {
               (Boolean(errors) && !touched) || !filled || passwordCheckError
             }
           >
-            {route.title}
+            {endpoint.title}
           </Button>
         </FormControl>
       </form>

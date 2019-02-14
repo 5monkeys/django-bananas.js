@@ -82,7 +82,7 @@ Swagger.makeApisTagOperation = client => {
         .reduce(
           (mapping, spec) => ({
             ...mapping,
-            [spec.operationId]: spec.__originalOperationId,
+            [spec.operationId]: spec,
           }),
           {}
         ),
@@ -101,18 +101,42 @@ Swagger.makeApisTagOperation = client => {
         // original operationId keys, i.e. foo.bar:read
         ...Object.entries(apis[app]).reduce(
           (originals, [operationId, call]) => {
+            const spec = operationIdMap[operationId];
+
+            // Shortcut for OPTIONS method call for this endpoint
             call.options = parameters =>
               call({ ...parameters, __method__: "OPTIONS" });
+
+            // Build schema spec for this endpoint
+            call.title = spec.summary;
+            call.schema = spec.parameters.reduce((parameters, parameter) => {
+              if (parameter.in === "body") {
+                const required = parameter.schema.required || [];
+                parameters[parameter.name] = Object.entries(
+                  parameter.schema.properties
+                ).reduce(
+                  (schema, [key, value]) => ({
+                    ...schema,
+                    [key]: { ...value, required: required.includes(key) },
+                  }),
+                  {}
+                );
+              } else if (parameter.in === "query") {
+                parameters[parameter.name] = parameter;
+              }
+              return parameters;
+            }, {});
+
             return {
               ...originals,
-              [operationIdMap[operationId]]: call,
+              [spec.__originalOperationId]: call,
             };
           },
           {}
         ),
       };
     }, {});
-  //
+
   // Add auth helper flag
   // Shema does NOT contain login endpoint -> User IS authenticated
   interfaces.isAuthenticated = !interfaces.operations["bananas.login:create"];
