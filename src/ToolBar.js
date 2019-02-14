@@ -195,11 +195,22 @@ class ToolBar extends React.Component {
         elevation={0}
         position="relative"
         color={color !== "paper" ? color : undefined}
-        className={classNames(classes.root, {
-          [classes.colorPrimary]: color === "primary",
-          [classes.colorSecondary]: color === "secondary",
-          [classes.colorPaper]: color === "paper",
-        })}
+        classes={{
+          root: classNames(
+            classes.root,
+            overrides.root,
+            {
+              [classes.colorPrimary]: color === "primary",
+              [classes.colorSecondary]: color === "secondary",
+              [classes.colorPaper]: color === "paper",
+            },
+            {
+              [overrides.colorPrimary]: overrides.colorPrimary,
+              [overrides.colorSecondary]: overrides.colorSecondary,
+              [overrides.colorPaper]: overrides.colorPaper,
+            }
+          ),
+        }}
         {...rest}
       >
         <Container>
@@ -220,18 +231,27 @@ class ToolBar extends React.Component {
     return (
       <Toolbar
         variant={dense ? "dense" : "regular"}
-        className={classNames(classes.toolbar, {
-          [overrides.toolbar]: overrides.toolbar,
-          [classes.justifyStart]: justify === "start",
-          [classes.justifyCenter]: justify === "center",
-          [classes.justifyEnd]: justify === "end",
-          [classes.justifyBetween]: justify === "between",
-          [classes.justifyAround]: justify === "around",
-          [classes.justifyEvenly]: justify === "evenly",
-          [classes.borderTop]: border === "top",
-          [classes.borderBottom]: border === "bottom",
-        })}
-        classes={{ gutters: classes.toolbarGutters }}
+        classes={{
+          gutters: classes.toolbarGutters,
+          root: classNames(
+            classes.toolbar,
+            overrides.toolbar,
+            {
+              [classes.justifyStart]: justify === "start",
+              [classes.justifyCenter]: justify === "center",
+              [classes.justifyEnd]: justify === "end",
+              [classes.justifyBetween]: justify === "between",
+              [classes.justifyAround]: justify === "around",
+              [classes.justifyEvenly]: justify === "evenly",
+              [classes.borderTop]: border === "top",
+              [classes.borderBottom]: border === "bottom",
+            },
+            {
+              [overrides.borderTop]: overrides.borderTop,
+              [overrides.borderBottom]: overrides.borderBottom,
+            }
+          ),
+        }}
       >
         {children}
       </Toolbar>
