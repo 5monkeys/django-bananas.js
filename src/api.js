@@ -10,6 +10,9 @@ class APIClient extends Swagger {
     if (!opts.errorHandler) {
       opts.errorHandler = logger.error;
     }
+    if (!opts.progressHandler) {
+      opts.progressHandler = logger.debug;
+    }
     super(url, opts);
   }
 
@@ -25,6 +28,8 @@ class APIClient extends Swagger {
   }
 
   execute(argHash) {
+    this.progressHandler({ done: false });
+
     return super
       .execute({
         ...argHash,
@@ -49,14 +54,18 @@ class APIClient extends Swagger {
                 : `API ${response.statusText}`;
 
             this.errorHandler(message);
+          } else {
+            this.progressHandler({ done: true });
           }
         },
       })
       .catch(error => {
         // Connection error
-        if (!error.response) {
-          logger.error("API Connection Error!", error);
-          this.errorHandler("API Connection Error!");
+        if (error.response) {
+          this.progressHandler({ done: true });
+        } else {
+          logger.error("API Connection Error", error);
+          this.errorHandler("API Unreachable");
         }
         throw error;
       });
