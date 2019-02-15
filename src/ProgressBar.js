@@ -10,6 +10,7 @@ const styles = () => ({
     width: "100%",
     backgroundColor: "transparent",
   },
+  bar: {},
 });
 
 const ProgressBar = ({ classes, color, loading }) => {
@@ -19,6 +20,7 @@ const ProgressBar = ({ classes, color, loading }) => {
         color={color}
         classes={{
           root: classes.root,
+          bar: classes.bar,
         }}
       />
     )
