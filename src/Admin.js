@@ -10,6 +10,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import LoadingScreen from "./LoadingScreen";
 import Messages from "./Messages";
 import NavBar from "./NavBar";
+import ProgressBar from "./ProgressBar";
 import APIClient from "./api";
 import AdminContext from "./context";
 import {
@@ -50,6 +51,7 @@ const styles = theme => {
       backgroundColor: theme.palette.background.default,
     },
     page: {
+      position: "relative",
       display: "flex",
       flexDirection: "column",
       flexGrow: 1,
@@ -82,7 +84,7 @@ class Admin extends React.Component {
 
     this.state = {
       booted: false,
-      loading: true,
+      loading: ["boot"],
       user: undefined,
       pageProps: undefined,
       messages: [],
@@ -126,13 +128,14 @@ class Admin extends React.Component {
     try {
       swagger = await new APIClient({
         url: apiUrl,
-        errorHandler: this.error.bind(this),
+        errorHandler: this.onAPIClientError.bind(this),
+        progressHandler: this.onAPIClientProgress.bind(this),
       });
     } catch (error) {
       logger.error("Critical Error: Failed to initialize API client!", error);
       const cause = error.response ? error.response.statusText : "Unreachable";
       this.error(`Failed to boot: API ${cause}`);
-      this.setState({ loading: false });
+      this.loading("boot", false);
       return;
     }
 
@@ -153,6 +156,9 @@ class Admin extends React.Component {
       this.router.listen(this.routeDidUpdate.bind(this));
     }
     this.router.initialize(swagger);
+
+    // Boot phase loading complete
+    this.loading("boot", false);
 
     // Route current window location if API is authenticatd
     if (swagger.isAuthenticated) {
@@ -205,6 +211,30 @@ class Admin extends React.Component {
     });
   }
 
+  loading(type, on = true) {
+    const isLoadingType = this.state.loading.includes(type);
+
+    if ((on && isLoadingType) || (!on && !isLoadingType)) {
+      return; // loading state already as wanted
+    }
+
+    const loading = [...this.state.loading.filter(t => t !== type)];
+    if (on) {
+      loading.push(type);
+    }
+
+    this.setState({ loading });
+  }
+
+  onAPIClientError(error) {
+    this.loading("api", false);
+    this.error(error);
+  }
+
+  onAPIClientProgress({ done }) {
+    this.loading("api", !done);
+  }
+
   settingsDidUpdate(settings) {
     this.setState({ settings });
   }
@@ -224,8 +254,7 @@ class Admin extends React.Component {
     const currentPage = this.state.pageProps;
     if (
       currentPage &&
-      currentPage.route &&
-      currentPage.route.path !== location.pathname
+      (!currentPage.route || currentPage.route.path !== location.pathname)
     ) {
       this.unmountPage();
     }
@@ -312,6 +341,7 @@ class Admin extends React.Component {
   loadPageData(operationId, params, filter) {
     if (this.api[operationId]) {
       logger.debug("Loading page data...", operationId, params, filter);
+      this.loading("data");
       return this.api[operationId]({ ...params, ...filter });
     }
 
@@ -325,6 +355,7 @@ class Admin extends React.Component {
     logger.info("Mount Page:", pageProps);
     this.Page = PageComponent;
     this.setState({ pageProps }, () => {
+      this.loading("data", false);
       this.setTitle(pageProps.title);
     });
   }
@@ -473,7 +504,13 @@ class Admin extends React.Component {
                     version={this.props.version}
                   />
                   <div className={classes.page}>
-                    {Page ? (
+                    <ProgressBar loading={loading.includes("api")} />
+                    <LoadingScreen
+                      loading={loading.includes("data")}
+                      color="default"
+                      backdrop
+                    />
+                    {Page && (
                       <ErrorBoundary>
                         {pageTheme ? (
                           <MuiThemeProvider theme={pageTheme}>
@@ -483,8 +520,6 @@ class Admin extends React.Component {
                           <Page {...pageProps} />
                         )}
                       </ErrorBoundary>
-                    ) : (
-                      <LoadingScreen color="primary" />
                     )}
                   </div>
                 </>
@@ -498,7 +533,10 @@ class Admin extends React.Component {
               )}
             </AdminContext.Provider>
           ) : (
-            <LoadingScreen logo={this.props.logo} loading={loading} />
+            <LoadingScreen
+              logo={this.props.logo}
+              loading={Boolean(loading.length)}
+            />
           )}
         </div>
         <Messages messages={messages} />
