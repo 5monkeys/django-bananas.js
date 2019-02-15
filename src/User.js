@@ -51,34 +51,36 @@ class User extends React.Component {
     const selected = route.path === router.history.location.pathname;
 
     return (
-      <List classes={{ root: classes.root }}>
-        <MenuItem
-          variant={variant}
-          direction={isAppBarVariant ? "rtl" : "ltr"}
-          route={route.id}
-          selected={selected}
-          collapsed={collapsed}
-          icon={UserIcon}
-          title={user.full_name}
-          subtitle={
-            <ButtonBase
-              classes={{
-                root: classes.logout,
-              }}
-              className={classNames(classes.link, {
-                [classes.drawerLink]: isDrawerVariant,
-                [classes.appbarLink]: isAppBarVariant,
-              })}
-              onClick={e => {
-                e.preventDefault();
-                this.context.admin.logout();
-              }}
-            >
-              <Typography color="inherit">{logoutText}</Typography>
-            </ButtonBase>
-          }
-        />
-      </List>
+      Boolean(user.id) && (
+        <List classes={{ root: classes.root }}>
+          <MenuItem
+            variant={variant}
+            direction={isAppBarVariant ? "rtl" : "ltr"}
+            route={route.id}
+            selected={selected}
+            collapsed={collapsed}
+            icon={UserIcon}
+            title={user.full_name}
+            subtitle={
+              <ButtonBase
+                classes={{
+                  root: classes.logout,
+                }}
+                className={classNames(classes.link, {
+                  [classes.drawerLink]: isDrawerVariant,
+                  [classes.appbarLink]: isAppBarVariant,
+                })}
+                onClick={e => {
+                  e.preventDefault();
+                  this.context.admin.logout();
+                }}
+              >
+                <Typography color="inherit">{logoutText}</Typography>
+              </ButtonBase>
+            }
+          />
+        </List>
+      )
     );
   }
 }

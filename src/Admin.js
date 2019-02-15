@@ -156,7 +156,8 @@ class Admin extends React.Component {
 
     // Route current window location if API is authenticatd
     if (swagger.isAuthenticated) {
-      await this.authorize(); // Authorize early to get user and not flash login
+      this.user = { pending: true }; // Temp user to not flash login page
+      this.setState({ user: this.user });
       this.router.reroute();
     }
 
