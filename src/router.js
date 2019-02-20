@@ -23,6 +23,8 @@ export default class Router {
     this.history = createHistory({
       basename,
     });
+
+    this.isMuted = false; // Mutes route notification events
   }
 
   initialize(swagger) {
@@ -164,8 +166,38 @@ export default class Router {
     );
   }
 
-  listen(handler) {
-    return this.history.listen(handler);
+  listen({ onRouteWillUpdate, onRouteDidUpdate }) {
+    // Register event listener for onRouteWillUpdate
+    if (typeof onRouteWillUpdate === "function") {
+      this.onRouteWillUpdate = onRouteWillUpdate;
+      window.addEventListener("beforeunload", () => {
+        logger.info("Leaving app...");
+        onRouteWillUpdate();
+      });
+    }
+
+    // Register event listener for onRouteDidUpdate
+    if (typeof onRouteDidUpdate === "function") {
+      this.history.listen((...args) => {
+        if (!this.isMuted) {
+          onRouteDidUpdate(...args);
+        }
+      });
+    }
+  }
+
+  updateState(state) {
+    /*
+     * Updates current history location's state without notifiying listeners
+     */
+    logger.debug("Router.updateState()", state);
+    this.isMuted = true;
+    const { location } = this.history;
+    this.history.replace({
+      ...location,
+      state: { ...location.state, ...state },
+    });
+    this.isMuted = false;
   }
 
   getBasePath(path) {
@@ -348,11 +380,7 @@ export default class Router {
      *
      *  Note: `id` + optional `params` OR `path`
      */
-    const current = {
-      pathname: this.history.location.pathname,
-      search: this.history.location.search,
-      hash: this.history.location.hash,
-    };
+    const current = this.history.location;
 
     const next =
       typeof to === "string"
@@ -395,17 +423,28 @@ export default class Router {
       route.hash = next.hash ? next.hash.substring(1) : null; // Strip leading #
     }
 
-    logger.debug("Router.route():", next, route);
-
     const locationChange =
       pageChange ||
       next.search !== current.search ||
       next.hash !== current.hash;
 
-    const navigate =
-      rewrite || !locationChange ? this.history.replace : this.history.push;
+    const replace = rewrite || !locationChange;
+    const navigate = replace ? this.history.replace : this.history.push;
+
+    // Set next location's state
+    next.state = {
+      route,
+      referer: pageChange ? current : referer,
+      scroll: replace ? current.state.scroll : 0,
+    };
+
+    // Notify listeners about route will update
+    if (typeof this.onRouteWillUpdate === "function") {
+      this.onRouteWillUpdate(next, replace ? "REPLACE" : "PUSH");
+    }
 
     // Change history
-    navigate(next, { route, referer: pageChange ? current : referer });
+    logger.debug("Router.route():", next);
+    navigate(next);
   }
 }

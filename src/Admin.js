@@ -153,7 +153,10 @@ class Admin extends React.Component {
     // Initialize Router
     if (!this.router) {
       this.router = new Router(this.props.prefix);
-      this.router.listen(this.routeDidUpdate.bind(this));
+      this.router.listen({
+        onRouteWillUpdate: this.routeWillUpdate.bind(this),
+        onRouteDidUpdate: this.routeDidUpdate.bind(this),
+      });
     }
     this.router.initialize(swagger);
 
@@ -237,6 +240,19 @@ class Admin extends React.Component {
 
   settingsDidUpdate(settings) {
     this.setState({ settings });
+  }
+
+  routeWillUpdate(location, action) {
+    if (action === "REPLACE") {
+      return;
+    }
+
+    // Save current location's scroll position before routing
+    const { scrollElement } = this;
+    if (scrollElement && scrollElement.scrollTop > 0) {
+      const { scrollTop } = scrollElement;
+      this.router.updateState({ scroll: scrollTop });
+    }
   }
 
   async routeDidUpdate(location, action) {
