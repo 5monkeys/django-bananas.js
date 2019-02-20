@@ -433,9 +433,9 @@ export default class Router {
 
     // Set next location's state
     next.state = {
+      ...(replace ? current.state : undefined),
       route,
       referer: pageChange ? current : referer,
-      scroll: replace ? current.state.scroll : 0,
     };
 
     // Notify listeners about route will update
