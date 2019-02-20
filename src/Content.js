@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import Container from "./Container";
+import AdminContext from "./context";
 
 const styles = theme => ({
   root: {
@@ -23,29 +24,64 @@ const styles = theme => ({
   },
 });
 
-const Content = ({ classes, children, disablePadding, contained, ...rest }) => (
-  <div className={classNames(classes.root, classes)}>
-    <div className={classes.scroll}>
-      {contained ? (
-        <Container>
-          <div
-            className={classNames({ [classes.padded]: !disablePadding })}
-            {...rest}
-          >
-            {children}
-          </div>
-        </Container>
-      ) : (
+class Content extends React.Component {
+  static contextType = AdminContext;
+
+  constructor(props) {
+    super(props);
+    this.scrollElement = React.createRef();
+  }
+
+  componentDidMount() {
+    if (this.context) {
+      this.context.admin.manageScrollRestoration(this.scrollElement.current);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.context) {
+      this.context.admin.restoreScroll();
+    }
+  }
+
+  render() {
+    const {
+      classes,
+      children,
+      disablePadding,
+      contained,
+      ...rest
+    } = this.props;
+
+    return (
+      <div className={classNames(classes.root)}>
         <div
-          className={classNames({ [classes.padded]: !disablePadding })}
-          {...rest}
+          ref={this.scrollElement}
+          id="bananas-content-scroll"
+          className={classes.scroll}
         >
-          {children}
+          {contained ? (
+            <Container>
+              <div
+                className={classNames({ [classes.padded]: !disablePadding })}
+                {...rest}
+              >
+                {children}
+              </div>
+            </Container>
+          ) : (
+            <div
+              className={classNames({ [classes.padded]: !disablePadding })}
+              {...rest}
+            >
+              {children}
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  </div>
-);
+      </div>
+    );
+  }
+}
 
 Content.propTypes = {
   classes: PropTypes.object.isRequired,

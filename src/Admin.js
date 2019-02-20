@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unused-state */
-import CssBaseline from "@material-ui/core/CssBaseline";
+/* eslint-disable react/no-unused-state */ import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import Logger from "js-logger";
@@ -369,6 +368,10 @@ class Admin extends React.Component {
 
   mountPage(PageComponent, pageProps) {
     logger.info("Mount Page:", pageProps);
+
+    // Temporary set scroll hint for when scrollable element is mounted/rendered
+    this.scrollHint = pageProps.route.location.state.scroll || 0;
+
     this.Page = PageComponent;
     this.setState({ pageProps }, () => {
       this.loading("data", false);
@@ -398,6 +401,17 @@ class Admin extends React.Component {
       document.title = `${title} | ${this.props.title}`;
     } else {
       document.title = this.props.title;
+    }
+  }
+
+  manageScrollRestoration(element) {
+    this.scrollElement = element;
+  }
+
+  restoreScroll() {
+    if (this.scrollElement && this.scrollHint != null) {
+      this.scrollElement.scrollTop = this.scrollHint;
+      this.scrollHint = null;
     }
   }
 
