@@ -83,7 +83,7 @@ class Admin extends React.Component {
 
     this.state = {
       booted: false,
-      loading: ["boot"],
+      loading: { boot: 1 },
       user: undefined,
       pageProps: undefined,
       messages: [],
@@ -211,18 +211,14 @@ class Admin extends React.Component {
   }
 
   loading(type, on = true) {
-    const isLoadingType = this.state.loading.includes(type);
+    const count = (this.state.loading[type] || (on ? 0 : 1)) + (on ? 1 : -1);
+    this.setState({ loading: { ...this.state.loading, [type]: count } });
+  }
 
-    if ((on && isLoadingType) || (!on && !isLoadingType)) {
-      return; // loading state already as wanted
-    }
-
-    const loading = [...this.state.loading.filter(t => t !== type)];
-    if (on) {
-      loading.push(type);
-    }
-
-    this.setState({ loading });
+  isLoading(type) {
+    return type
+      ? this.state.loading[type] > 0
+      : Object.keys(this.state.loading).some(t => this.isLoading(t));
   }
 
   onAPIClientError(error) {
@@ -467,7 +463,7 @@ class Admin extends React.Component {
   render() {
     const { Page, router, api } = this;
     const { classes, pageTheme, loginForm } = this.props;
-    const { booted, loading, user, pageProps, settings, messages } = this.state;
+    const { booted, user, pageProps, settings, messages } = this.state;
     const LoginForm = loginForm || LoginPageForm;
 
     const isHorizontalLayout = settings.horizontal;
@@ -506,9 +502,9 @@ class Admin extends React.Component {
                     version={this.props.version}
                   />
                   <div className={classes.page}>
-                    <ProgressBar loading={loading.includes("api")} />
+                    <ProgressBar loading={this.isLoading("api")} />
                     <LoadingScreen
-                      loading={loading.includes("data")}
+                      loading={this.isLoading("data")}
                       color="default"
                       backdrop
                     />
@@ -535,10 +531,7 @@ class Admin extends React.Component {
               )}
             </AdminContext.Provider>
           ) : (
-            <LoadingScreen
-              logo={this.props.logo}
-              loading={Boolean(loading.length)}
-            />
+            <LoadingScreen logo={this.props.logo} loading={this.isLoading()} />
           )}
         </div>
         <Messages messages={messages} />
