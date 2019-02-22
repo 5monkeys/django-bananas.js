@@ -397,7 +397,7 @@ export default class Router {
      *
      *  Note: `id` + optional `params` OR `path`
      */
-    const current = this.history.location;
+    let current = this.history.location;
 
     const next =
       typeof to === "string"
@@ -448,15 +448,19 @@ export default class Router {
     const replace = rewrite || !locationChange;
     const navigate = replace ? this.history.replace : this.history.push;
 
+    // Notify that route about to update
+    this.routeWillUpdate(next, replace ? "REPLACE" : "PUSH");
+
+    // Refresh current, event listeners may have modified state
+    current = this.history.location;
+
     // Set next location's state
     next.state = {
+      scroll: rewind ? referer.state.scroll : 0,
       ...(replace ? current.state : undefined),
       route,
       referer: pageChange ? current : referer,
     };
-
-    // Notify that route about to update
-    this.routeWillUpdate(next, replace ? "REPLACE" : "PUSH");
 
     // Change history
     logger.debug("Router.route():", next);
