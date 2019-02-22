@@ -10,15 +10,10 @@ import Link from "./Link";
 import ToolBar from "./ToolBar";
 
 const styles = theme => ({
-  root: {
-    flexGrow: 0,
-    flexShrink: 0,
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
+  root: {},
+  colorPrimary: {},
+  colorSecondary: {},
+  colorPaper: {},
   titleRoot: {
     display: "flex",
     flexDirection: "row",
@@ -47,6 +42,7 @@ const TitleBar = ({
   classes,
   overrides,
   children,
+  color,
   title,
   back,
   dense,
@@ -57,7 +53,25 @@ const TitleBar = ({
     back && back.indexOf(":") > 0 ? { route: back } : { path: back };
 
   return (
-    <ToolBar justify={justify} dense={dense} overrides={overrides} {...rest}>
+    <ToolBar
+      color={color}
+      justify={justify}
+      dense={dense}
+      overrides={{
+        ...overrides,
+        root: classNames(classes.root, overrides.root),
+        colorPrimary:
+          color === "primary" &&
+          classNames(classes.colorPrimary, overrides.colorPrimary),
+        colorSecondary:
+          color === "secondary" &&
+          classNames(classes.colorSecondary, overrides.colorSecondary),
+        colorPaper:
+          color === "paper" &&
+          classNames(classes.colorPaper, overrides.colorPaper),
+      }}
+      {...rest}
+    >
       <div className={classes.titleRoot}>
         {back && (
           <Link patch {...backLinkProps}>
