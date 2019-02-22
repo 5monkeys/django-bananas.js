@@ -1,10 +1,13 @@
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
 import Container from "./Container";
 import AdminContext from "./context";
+
+const logger = Logger.get("bananas");
 
 const styles = theme => ({
   root: {
@@ -33,14 +36,48 @@ class Content extends React.Component {
   }
 
   componentDidMount() {
-    if (this.context) {
-      this.context.admin.manageScrollRestoration(this.scrollElement.current);
+    const router = this.context ? this.context.router : null;
+
+    if (router) {
+      // Listen to routeWillUpdate event to persist current scroll position
+      this.unlisten = router.on(
+        "routeWillUpdate",
+        this.routeWillUpdate.bind(this)
+      );
+
+      // Restore scroll position from history state
+      const { scroll } = router.history.location.state;
+      const { current } = this.scrollElement;
+      if (current && scroll) {
+        logger.debug("Restoring scroll position:", scroll);
+        current.scrollTop = scroll;
+      }
     }
   }
 
-  componentDidUpdate() {
-    if (this.context) {
-      this.context.admin.restoreScroll();
+  componentWillUnmount() {
+    // Unlisten to routeWillUpdate event
+    if (this.unlisten) {
+      this.unlisten();
+    }
+  }
+
+  routeWillUpdate(location, action) {
+    /*
+     * Persist current scroll position, if element is scrolled.
+     */
+    const router = this.context ? this.context.router : null;
+
+    if (!router || action === "REPLACE") {
+      return;
+    }
+
+    const { current } = this.scrollElement;
+    const oldScroll = router.history.location.state.scroll;
+    if (current && (current.scrollTop > 0 || current.scrollTop !== oldScroll)) {
+      const { scrollTop } = current;
+      logger.debug("Updating history with scroll position:", scrollTop);
+      router.updateState({ scroll: scrollTop });
     }
   }
 

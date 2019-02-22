@@ -36,7 +36,11 @@ class ErrorBoundary extends React.Component {
       Fallback ? (
         <Fallback {...props} />
       ) : (
-        <ErrorPage title={error.message} data={{ statusCode: error.code }} />
+        <ErrorPage
+          key={error.code}
+          title={error.message}
+          data={{ statusCode: error.code }}
+        />
       )
     ) : (
       children

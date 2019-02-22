@@ -152,10 +152,7 @@ class Admin extends React.Component {
     // Initialize Router
     if (!this.router) {
       this.router = new Router(this.props.prefix);
-      this.router.listen({
-        onRouteWillUpdate: this.routeWillUpdate.bind(this),
-        onRouteDidUpdate: this.routeDidUpdate.bind(this),
-      });
+      this.router.on("routeDidUpdate", this.routeDidUpdate.bind(this));
     }
     this.router.initialize(swagger);
 
@@ -241,19 +238,6 @@ class Admin extends React.Component {
     this.setState({ settings });
   }
 
-  routeWillUpdate(location, action) {
-    if (action === "REPLACE") {
-      return;
-    }
-
-    // Save current location's scroll position before routing
-    const { scrollElement } = this;
-    if (scrollElement && scrollElement.scrollTop > 0) {
-      const { scrollTop } = scrollElement;
-      this.router.updateState({ scroll: scrollTop });
-    }
-  }
-
   async routeDidUpdate(location, action) {
     logger.info("App.routeDidUpdate()", action, location);
 
@@ -306,6 +290,7 @@ class Admin extends React.Component {
     // Initial page props
     let Page = null;
     const pageProps = {
+      key: `${id}:${location.search}`,
       route: {
         id,
         params,
@@ -368,10 +353,6 @@ class Admin extends React.Component {
 
   mountPage(PageComponent, pageProps) {
     logger.info("Mount Page:", pageProps);
-
-    // Temporary set scroll hint for when scrollable element is mounted/rendered
-    this.scrollHint = pageProps.route.location.state.scroll || 0;
-
     this.Page = PageComponent;
     this.setState({ pageProps }, () => {
       this.loading("data", false);
@@ -382,6 +363,7 @@ class Admin extends React.Component {
   mountErrorPage(title, statusCode) {
     logger.warn(title || "Page Not Found");
     this.mountPage(ErrorPage, {
+      key: statusCode || 500,
       title: title || "Error",
       data: { statusCode },
     });
@@ -401,17 +383,6 @@ class Admin extends React.Component {
       document.title = `${title} | ${this.props.title}`;
     } else {
       document.title = this.props.title;
-    }
-  }
-
-  manageScrollRestoration(element) {
-    this.scrollElement = element;
-  }
-
-  restoreScroll() {
-    if (this.scrollElement && this.scrollHint != null) {
-      this.scrollElement.scrollTop = this.scrollHint;
-      this.scrollHint = null;
     }
   }
 
@@ -502,6 +473,7 @@ class Admin extends React.Component {
     const isHorizontalLayout = settings.horizontal;
     const isVerticalLayout = !settings.horizontal;
 
+    // TODO: Don't build context here to prevent new object and children re-render
     const context = {
       admin: this,
       router,

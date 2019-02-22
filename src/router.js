@@ -24,7 +24,11 @@ export default class Router {
       basename,
     });
 
-    this.isMuted = false; // Mutes route notification events
+    // Disable muting of route notification events
+    this.isMuted = false;
+
+    // Listen on leaving admin or full page reload event
+    window.addEventListener("beforeunload", this.routeWillUpdate.bind(this));
   }
 
   initialize(swagger) {
@@ -166,23 +170,36 @@ export default class Router {
     );
   }
 
-  listen({ onRouteWillUpdate, onRouteDidUpdate }) {
-    // Register event listener for onRouteWillUpdate
-    if (typeof onRouteWillUpdate === "function") {
-      this.onRouteWillUpdate = onRouteWillUpdate;
-      window.addEventListener("beforeunload", () => {
-        logger.info("Leaving app...");
-        onRouteWillUpdate();
+  on(eventName, handler) {
+    if (typeof handler !== "function") {
+      logger.error("Invalid handler when subcribing on event:", handler);
+      return null;
+    }
+
+    if (eventName === "routeWillUpdate") {
+      this.onRouteWillUpdate = handler;
+      return () => {
+        // Unlisten
+        this.onRouteWillUpdate = undefined;
+      };
+    } else if (eventName === "routeDidUpdate") {
+      return this.history.listen((...args) => {
+        if (!this.isMuted) {
+          handler(...args);
+        }
       });
     }
 
-    // Register event listener for onRouteDidUpdate
-    if (typeof onRouteDidUpdate === "function") {
-      this.history.listen((...args) => {
-        if (!this.isMuted) {
-          onRouteDidUpdate(...args);
-        }
-      });
+    logger.error("Unknown router event name:", eventName);
+    return null;
+  }
+
+  routeWillUpdate(...args) {
+    /*
+     * Notify listeners of routeWillUpdate event
+     */
+    if (this.onRouteWillUpdate && !this.isMuted) {
+      this.onRouteWillUpdate(...args);
     }
   }
 
@@ -438,10 +455,8 @@ export default class Router {
       referer: pageChange ? current : referer,
     };
 
-    // Notify listeners about route will update
-    if (typeof this.onRouteWillUpdate === "function") {
-      this.onRouteWillUpdate(next, replace ? "REPLACE" : "PUSH");
-    }
+    // Notify that route about to update
+    this.routeWillUpdate(next, replace ? "REPLACE" : "PUSH");
 
     // Change history
     logger.debug("Router.route():", next);
