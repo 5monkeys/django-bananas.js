@@ -74,7 +74,6 @@ const styles = theme => ({
     }),
   },
   drawerCollapsed: {
-    // width: theme.spacing.unit * 7 + 1,
     width: 40 + theme.spacing.unit * 2 + 1,
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
@@ -82,7 +81,8 @@ const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  drawerBranding: {
+  drawerBranding: {},
+  permanentDrawerBrandingButton: {
     padding: 0,
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit * 2,
@@ -95,7 +95,8 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
   },
-  appbarBranding: {
+  appbarBranding: {},
+  permanentAppbarBrandingButton: {
     padding: 0,
     paddingLeft: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit * 2,
@@ -160,7 +161,14 @@ class NavBar extends React.Component {
 
     return (
       <>
-        <Toolbar className={classes.branding}>
+        <Toolbar
+          classes={{
+            root: classNames(classes.branding, {
+              [classes.drawerBranding]: isDrawerVariant,
+              [classes.appbarBranding]: isAppBarVariant,
+            }),
+          }}
+        >
           {isDrawerVariant && !permanent && (
             <Hamburger open={!collapsed} onToggle={this.toggle} />
           )}
@@ -170,8 +178,10 @@ class NavBar extends React.Component {
             subtitle={branding}
             version={version}
             className={classNames({
-              [classes.drawerBranding]: permanent && isDrawerVariant,
-              [classes.appbarBranding]: permanent && isAppBarVariant,
+              [classes.permanentDrawerBrandingButton]:
+                permanent && isDrawerVariant,
+              [classes.permanentAppbarBrandingButton]:
+                permanent && isAppBarVariant,
             })}
             onClick={() => {
               this.context.router.route({ id: "home" });
