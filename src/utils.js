@@ -28,7 +28,9 @@ export function fromQuery(query) {
     .split("&")
     .reduce((params, param) => {
       const [key, value] = param.split("=");
-      return { ...params, [key]: decodeURIComponent(value) };
+      return key === ""
+        ? params
+        : { ...params, [key]: decodeURIComponent(value) };
     }, {});
 }
 
