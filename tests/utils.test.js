@@ -4,9 +4,18 @@ import {
   ensureLeadingHash,
   ensureTrailingSlash,
   fromQuery,
+  getCookie,
   nthIndexOf,
   toQuery,
 } from "../src/utils";
+
+test("Get cookie value", () => {
+  Object.defineProperty(global.document, "cookie", {
+    value: "foo=bar;;ham=spam;",
+  });
+  expect(getCookie("foo")).toBe("bar");
+  expect(getCookie("ham")).toBe("spam");
+});
 
 test("Absolute path", () => {
   expect(absolutePath("")).toBe("");
