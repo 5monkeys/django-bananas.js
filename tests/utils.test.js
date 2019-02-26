@@ -6,6 +6,7 @@ import {
   fromQuery,
   getCookie,
   nthIndexOf,
+  t,
   toQuery,
 } from "../src/utils";
 
@@ -70,4 +71,8 @@ test("Find nth occurance of pattern in string", () => {
   expect(nthIndexOf("foo/bar/baz/", "/", 1, 4)).toBe(7);
   expect(nthIndexOf("foo/bar/baz/", "/", 2, 4)).toBe(11);
   expect(nthIndexOf("foo/bar/baz/", "/", 3, 4)).toBe(-1);
+});
+
+test("Translation not implemented", () => {
+  expect(() => t("Log in")).toThrow();
 });
