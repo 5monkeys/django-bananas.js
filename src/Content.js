@@ -92,11 +92,7 @@ class Content extends React.Component {
 
     return (
       <div className={classNames(classes.root)}>
-        <div
-          ref={this.scrollElement}
-          id="bananas-content-scroll"
-          className={classes.scroll}
-        >
+        <div ref={this.scrollElement} className={classes.scroll}>
           {contained ? (
             <Container>
               <div
