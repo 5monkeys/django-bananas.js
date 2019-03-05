@@ -73,6 +73,4 @@ test("Find nth occurance of pattern in string", () => {
   expect(nthIndexOf("foo/bar/baz/", "/", 3, 4)).toBe(-1);
 });
 
-test("Translation not implemented", () => {
-  expect(() => t("Log in")).toThrow();
-});
+test.todo("Can translate strings via API");
