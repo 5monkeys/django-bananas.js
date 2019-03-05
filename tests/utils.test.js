@@ -6,7 +6,6 @@ import {
   fromQuery,
   getCookie,
   nthIndexOf,
-  t,
   toQuery,
 } from "../src/utils";
 
