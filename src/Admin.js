@@ -191,7 +191,6 @@ class Admin extends React.Component {
         reject(anonymous);
         return;
       }
-
       endpoint().then(
         response => {
           this.user = { ...response.obj };
@@ -256,7 +255,9 @@ class Admin extends React.Component {
 
     // Authorize, load and mount page
     try {
-      await this.authorize();
+      if (!this.state.user || !this.state.user.id) {
+        await this.authorize();
+      }
       const { Page, pageProps } = await this.loadPage(location, route);
       this.mountPage(Page, pageProps);
     } catch (error) {
