@@ -6,7 +6,6 @@ import {
   absolutePath,
   capitalize,
   ensureLeadingHash,
-  ensureTrailingSlash,
   fromQuery,
   nthIndexOf,
   toQuery,
@@ -295,9 +294,7 @@ export default class Router {
   resolve(path) {
     // Resolve path to matching route
     const { location } = this.history;
-    const pathname = ensureTrailingSlash(
-      absolutePath(path.startsWith(".") ? location.pathname + path : path)
-    );
+    const pathname = absolutePath(path, location.pathname);
 
     for (const route of this.routes) {
       const match = route.pattern.exec(pathname);
@@ -400,7 +397,7 @@ export default class Router {
       typeof to === "string"
         ? { pathname: to, search: "", hash: "" }
         : {
-            pathname: ensureTrailingSlash(to.path || current.pathname),
+            pathname: to.path || current.pathname,
             search:
               typeof to.query === "object" ? toQuery(to.query) : to.query || "",
             hash: ensureLeadingHash(to.hash) || "",

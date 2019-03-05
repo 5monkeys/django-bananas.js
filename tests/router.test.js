@@ -151,16 +151,16 @@ test("Can reverse route", () => {
 test("Can route by path", () => {
   const router = getRouter();
 
-  const r1 = router.route("/example/user/3/");
+  const r1 = router.route("/example/user/");
   expect(r1.action).toBe("PUSH");
   expect(r1.location).toMatchObject({
-    pathname: "/example/user/3/",
+    pathname: "/example/user/",
     search: "",
     hash: "",
     state: {
       route: {
-        id: "example.user:read",
-        params: { id: 3 },
+        id: "example.user:list",
+        params: null,
         query: null,
         hash: null,
       },
@@ -168,23 +168,30 @@ test("Can route by path", () => {
   });
 
   const r2 = router.route({
-    path: "/example/user/4",
+    path: "/example/user/123",
     query: "?foo=bar",
     hash: "#baz",
   });
   expect(r2.action).toBe("PUSH");
   expect(r2.location).toMatchObject({
-    pathname: "/example/user/4/",
+    pathname: "/example/user/123/",
     search: "?foo=bar",
     hash: "#baz",
     state: {
       route: {
         id: "example.user:read",
-        params: { id: 4 },
+        params: { id: 123 },
         query: { foo: "bar" },
         hash: "baz",
       },
     },
+  });
+
+  const r3 = router.route("../../..");
+  expect(r3.action).toBe("PUSH");
+  expect(r3.location).toMatchObject({
+    pathname: "/",
+    state: { route: { id: "home" } },
   });
 });
 
@@ -346,7 +353,7 @@ test("Can patch location parts", () => {
   });
 });
 
-test("Can update state", () => {
+test("Can update current location's state", () => {
   const router = getRouter();
   const { history } = router;
 
@@ -366,19 +373,19 @@ test("Can update state", () => {
 test("Preserves scroll position when rewinding", () => {
   const router = getRouter();
 
-  router.route({ id: "home", hash: "#foo" });
+  router.route({ id: "example.user:list", hash: "#foo" });
   router.updateState({ scroll: 123 });
-  router.route({ id: "example.user:list" });
+  router.route({ id: "example.user:read", params: { id: 1 } });
 
-  const route = router.route({ id: "home" }, { patch: true });
+  const route = router.route({ path: ".." }, { patch: true });
   expect(route.location).toMatchObject({
-    pathname: "/",
+    pathname: "/example/user/",
     search: "",
     hash: "#foo",
     state: {
       scroll: 123,
       route: {
-        id: "home",
+        id: "example.user:list",
         query: null,
         hash: "foo",
       },
