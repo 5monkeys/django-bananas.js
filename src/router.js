@@ -372,7 +372,7 @@ export default class Router {
     logger.debug("Router.reroute()");
     const { location } = this.history;
     const { pathname, search, hash } = location;
-    this.route(
+    return this.route(
       to || {
         path: pathname,
         query: search,
@@ -432,7 +432,7 @@ export default class Router {
     const pageChange = next.pathname !== current.pathname;
     const rewind = pageChange && next.pathname === referer.pathname;
 
-    // Patch next location and keep parts from current/referer location
+    // Patch next location and keep parts from current or referer location
     if (patch && (!pageChange || rewind)) {
       const origin = next.pathname === referer.pathname ? referer : current;
       next.search = next.search ? next.search : origin.search;
@@ -451,10 +451,11 @@ export default class Router {
       next.hash !== current.hash;
 
     const replace = rewrite || !locationChange;
+    const action = replace ? "REPLACE" : "PUSH";
     const navigate = replace ? this.history.replace : this.history.push;
 
     // Notify that route about to update
-    this.routeWillUpdate(next, replace ? "REPLACE" : "PUSH");
+    this.routeWillUpdate(next, action);
 
     // Refresh current, event listeners may have modified state
     current = this.history.location;
@@ -470,5 +471,7 @@ export default class Router {
     // Change history
     logger.debug("Router.route():", next);
     navigate(next);
+
+    return { location: next, action };
   }
 }
