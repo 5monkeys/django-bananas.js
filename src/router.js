@@ -226,15 +226,6 @@ export default class Router {
     return path.substring(0, nthIndexOf(path, "/", 2, 1) + 1 || undefined);
   }
 
-  getReverseOperationId(id) {
-    /*
-     * Converts original operationId to normalized swagger client format
-     * foo.bar:read -> foo_bar_read
-     * TODO: Remove
-     * */
-    return id.replace(new RegExp(/[.:-]/, "g"), "_");
-  }
-
   getPath(endpoint, method, action) {
     return method === "get" ? endpoint : `${endpoint}${action}/`;
   }
