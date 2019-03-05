@@ -465,7 +465,16 @@ export default class Router {
       scroll: rewind ? referer.state.scroll : 0,
       ...(replace ? current.state : undefined),
       route,
-      referer: pageChange ? current : referer,
+      referer:
+        pageChange && !rewrite
+          ? {
+              ...current,
+              state: {
+                ...current.state,
+                referer: undefined, // Drop referer's referer to not endless nest
+              },
+            }
+          : referer,
     };
 
     // Change history
