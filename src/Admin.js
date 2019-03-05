@@ -261,11 +261,20 @@ class Admin extends React.Component {
       const { Page, pageProps } = await this.loadPage(location, route);
       this.mountPage(Page, pageProps);
     } catch (error) {
-      // TODO: Handle un-authorized data -> Mount 401/403 page
       if (error instanceof AnonymousUserError) {
         this.reboot();
       } else if (error instanceof PageError) {
         this.mountErrorPage(error.message, error.code);
+      } else if (error.response && [401, 403].includes(error.response.status)) {
+        try {
+          await this.authorize();
+        } catch (authorizeError) {
+          if (authorizeError instanceof AnonymousUserError) {
+            this.reboot();
+          } else {
+            throw error;
+          }
+        }
       } else {
         throw error;
       }
