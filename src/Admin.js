@@ -151,7 +151,7 @@ class Admin extends React.Component {
 
     // Initialize Router
     if (!this.router) {
-      this.router = new Router(this.props.prefix);
+      this.router = new Router({ prefix: this.props.prefix });
       this.router.on("routeDidUpdate", this.routeDidUpdate.bind(this));
     }
     this.router.initialize(swagger);

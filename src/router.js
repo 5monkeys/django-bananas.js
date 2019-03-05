@@ -15,14 +15,18 @@ import {
 const logger = Logger.get("bananas");
 
 export default class Router {
-  constructor(baseUrl) {
-    let basename = baseUrl || "";
+  constructor(options = {}) {
+    let basename = options.prefix || "";
     if (basename.endsWith("/")) {
       basename = basename.substring(0, basename.length - 1);
     }
-    this.history = createHistory({
-      basename,
-    });
+    this.history = options.history
+      ? typeof options.history === "function"
+        ? options.history({ basename })
+        : options.history
+      : createHistory({
+          basename,
+        });
 
     // Disable muting of route notification events
     this.isMuted = false;
@@ -226,6 +230,7 @@ export default class Router {
     /*
      * Converts original operationId to normalized swagger client format
      * foo.bar:read -> foo_bar_read
+     * TODO: Remove
      * */
     return id.replace(new RegExp(/[.:-]/, "g"), "_");
   }
