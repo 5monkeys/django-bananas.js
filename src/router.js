@@ -282,7 +282,8 @@ export default class Router {
   }
 
   getOperationTemplate(id) {
-    return this.getRoute(id).template;
+    const route = this.getRoute(id);
+    return route ? route.template : undefined;
   }
 
   ResolvedRoute(route, overrides) {

@@ -4,7 +4,7 @@ import Logger from "js-logger";
 import Router from "../src/router";
 import swagger from "./swagger.mock";
 
-Logger.get("bananas").setLevel(Logger.WARN);
+Logger.get("bananas").setLevel(Logger.OFF);
 const nofAPIRoutes = 11;
 const nofInternalRoutes = 1;
 
@@ -79,6 +79,13 @@ test("Can lookup route by id", () => {
     },
     pattern: /^\/example\/user\/$/,
   });
+});
+
+test("Can lookup template by route id", () => {
+  const router = getRouter();
+
+  expect(router.getOperationTemplate("foobar")).toBeUndefined();
+  expect(router.getOperationTemplate("home")).toBe("index.js");
 });
 
 test("Can resolve route", () => {
@@ -184,7 +191,7 @@ test("Can route by path", () => {
 test("Can route by id", () => {
   const router = getRouter();
 
-  const r1 = router.route("/example/user/3/");
+  const r1 = router.route({ id: "example.user:read", params: { id: 3 } });
   expect(r1.action).toBe("PUSH");
   expect(r1.location).toMatchObject({
     pathname: "/example/user/3/",
@@ -201,7 +208,8 @@ test("Can route by id", () => {
   });
 
   const r2 = router.route({
-    path: "/example/user/4",
+    id: "example.user:read",
+    params: { id: 4 },
     query: "?foo=bar",
     hash: "#baz",
   });
@@ -219,20 +227,46 @@ test("Can route by id", () => {
       },
     },
   });
+
+  const r3 = router.route({
+    id: "example.user:read",
+    params: { id: 4 },
+    hash: "ham",
+  });
+  expect(r3.action).toBe("PUSH");
+  expect(r3.location).toMatchObject({
+    pathname: "/example/user/4/",
+    search: "",
+    hash: "#ham",
+    state: {
+      route: {
+        id: "example.user:read",
+        params: { id: 4 },
+        query: null,
+        hash: "ham",
+      },
+    },
+  });
 });
 
 test("Can re-route", () => {
   const router = getRouter();
 
   router.route({ id: "home" });
-  router.route({ id: "example.user:list" });
+  router.route({ id: "example.user:list", query: "?foo=bar", hash: "#baz" });
 
   const r1 = router.reroute();
   expect(r1.action).toBe("REPLACE");
   expect(r1.location).toMatchObject({
     pathname: "/example/user/",
+    search: "?foo=bar",
+    hash: "#baz",
     state: {
-      route: { id: "example.user:list" },
+      route: {
+        id: "example.user:list",
+        query: { foo: "bar" },
+        hash: "baz",
+      },
       referer: { pathname: "/" },
     },
   });
@@ -285,8 +319,126 @@ test("Referer only nest once", () => {
   expect(route.location.state.referer.state.referer).toBeUndefined();
 });
 
-test.todo("Can patch location parts");
-test.todo("Can update state");
-test.todo("Preserves scroll position when rewinding");
-test.todo("Can subscribe to routeWillUpdate events");
-test.todo("Can subscribe to routeDidUpdate event");
+test("Can patch location parts", () => {
+  const router = getRouter();
+
+  router.route({ id: "home", query: { foo: "bar" }, hash: "baz" });
+
+  const r1 = router.route({ id: "home", hash: "ham" }, { patch: true });
+  expect(r1.location.state.route).toMatchObject({
+    query: { foo: "bar" },
+    hash: "ham",
+  });
+
+  const r2 = router.route({ id: "home", hash: "ham" }, { patch: true });
+  expect(r2.location.state.route).toMatchObject({
+    query: { foo: "bar" },
+    hash: "ham",
+  });
+
+  const r3 = router.route(
+    { id: "home", query: { bar: "baz" } },
+    { patch: true }
+  );
+  expect(r3.location.state.route).toMatchObject({
+    query: { bar: "baz" },
+    hash: "ham",
+  });
+});
+
+test("Can update state", () => {
+  const router = getRouter();
+  const { history } = router;
+
+  router.route({ id: "home" });
+  expect(history).toHaveLength(1);
+  expect(history.location).toMatchObject({
+    state: { scroll: 0 },
+  });
+
+  router.updateState({ scroll: 123 });
+  expect(history).toHaveLength(1);
+  expect(history.location).toMatchObject({
+    state: { scroll: 123 },
+  });
+});
+
+test("Preserves scroll position when rewinding", () => {
+  const router = getRouter();
+
+  router.route({ id: "home", hash: "#foo" });
+  router.updateState({ scroll: 123 });
+  router.route({ id: "example.user:list" });
+
+  const route = router.route({ id: "home" }, { patch: true });
+  expect(route.location).toMatchObject({
+    pathname: "/",
+    search: "",
+    hash: "#foo",
+    state: {
+      scroll: 123,
+      route: {
+        id: "home",
+        query: null,
+        hash: "foo",
+      },
+    },
+  });
+});
+
+test("Can subscribe to events", () => {
+  const router = getRouter();
+
+  let off = router.on("routeWillUpdate", "not a function");
+  expect(off).toBeNull();
+
+  off = router.on("invalidEventName", jest.fn());
+  expect(off).toBeNull();
+
+  off = router.on("routeWillUpdate", jest.fn());
+  expect(typeof off).toBe("function");
+});
+
+test("Can subscribe to routeWillUpdate event", () => {
+  const router = getRouter();
+  const willUpdate = jest.fn();
+
+  let off = router.on("routeWillUpdate", null);
+  expect(off).toBeNull();
+
+  off = router.on("invalidEventName", willUpdate);
+  expect(off).toBeNull();
+
+  off = router.on("routeWillUpdate", willUpdate);
+  expect(typeof off).toBe("function");
+
+  const route = router.route("/");
+  expect(willUpdate).toHaveBeenCalledTimes(1);
+  expect(willUpdate).toHaveBeenCalledWith(route.location, route.action);
+
+  router.route("/example/user");
+  expect(willUpdate).toHaveBeenCalledTimes(2);
+
+  off();
+  router.route("/example/user/1/");
+  expect(willUpdate).toHaveBeenCalledTimes(2);
+});
+
+test("Can subscribe to routeDidUpdate event", () => {
+  const router = getRouter();
+  const { history } = router;
+
+  const didUpdate = jest.fn();
+  const off = router.on("routeDidUpdate", didUpdate);
+
+  router.route("/");
+  expect(didUpdate).toHaveBeenCalledTimes(1);
+  expect(didUpdate).toHaveBeenCalledWith(history.location, history.action);
+
+  router.route("/example/user");
+  expect(didUpdate).toHaveBeenCalledTimes(2);
+
+  off();
+  router.route("/example/user/1/");
+  expect(didUpdate).toHaveBeenCalledTimes(2);
+});
