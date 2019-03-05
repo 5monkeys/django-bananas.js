@@ -17,12 +17,12 @@
     "react"
   ],
   "scripts": {
-    "watch": "jest --watchAll",
+    "watch": "jest --watchAll --verbose",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
     "prettier": "prettier --write \"*.md\"",
     "doctoc": "doctoc --maxlevel 3 README.md",
-    "jest": "jest",
+    "jest": "jest --verbose",
     "coverage": "jest --coverage",
     "buildwatch": "babel src --watch --out-dir dist",
     "build": "babel --delete-dir-on-start src --out-dir dist",
