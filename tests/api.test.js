@@ -2,6 +2,7 @@ import fetchMock from "fetch-mock";
 
 import getAPIClient from "./api.mock";
 
+const { Response } = fetchMock.config;
 const nofAPIEndpoints = 14;
 
 test("Client is NOT authenticated", async () => {
@@ -29,8 +30,11 @@ test("Has flattened operations", async () => {
 
 test("Operations has attached OPTIONS method call", async () => {
   const client = await getAPIClient();
-  const operation = client.operations["bananas.change_password:create"];
-  expect(typeof operation.options).toBe("function");
+  const operation = client.operations["example.user:list"];
+
+  fetchMock.once("http://foo.bar/api/v1.0/example/user/", "{}");
+
+  await expect(operation.options()).resolves.toMatchObject({ ok: true });
 });
 
 test("Operations has attached schema spec", async () => {
@@ -51,7 +55,10 @@ test("Can subscribe to progress events", async () => {
     progressHandler: progress,
   });
 
-  fetchMock.once("http://foo.bar/api/v1.0/bananas/logout/", "{}");
+  fetchMock.once(
+    "http://foo.bar/api/v1.0/bananas/logout/",
+    new Response("", { status: 204 })
+  );
 
   await client.operations["bananas.logout:create"]();
   expect(progress).toHaveBeenCalledTimes(2);
@@ -65,11 +72,29 @@ test("Can subscribe to error events", async () => {
     errorHandler: error,
   });
 
-  fetchMock.post("http://foo.bar/api/v1.0/bananas/logout/", 403);
+  fetchMock.post("http://foo.bar/api/v1.0/bananas/logout/", {
+    body: { detail: "Custom error message" },
+    status: 403,
+  });
 
   await expect(client.operations["bananas.logout:create"]()).rejects.toThrow(
     "Forbidden"
   );
 
   expect(error).toHaveBeenCalledTimes(1);
+  expect(error).toHaveBeenCalledWith("Custom error message");
+});
+
+test("Can handle unreachable endpoint", async () => {
+  const error = jest.fn();
+  const client = await getAPIClient({
+    errorHandler: error,
+  });
+
+  fetchMock.post("http://foo.bar/api/v1.0/bananas/logout/", 523);
+
+  await expect(client.operations["bananas.logout:create"]()).rejects.toThrow();
+
+  expect(error).toHaveBeenCalledTimes(1);
+  expect(error).toHaveBeenCalledWith("API Unreachable");
 });
