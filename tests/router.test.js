@@ -2,15 +2,16 @@ import createHistory from "history/createMemoryHistory";
 import Logger from "js-logger";
 
 import Router from "../src/router";
-import swagger from "./swagger.mock";
+import getAPIClient from "./api.mock";
 
 Logger.get("bananas").setLevel(Logger.OFF);
 const nofAPIRoutes = 11;
 const nofInternalRoutes = 1;
 
-const getRouter = () => {
+const getRouter = async ({ anonymous } = {}) => {
   const router = new Router({ history: createHistory() });
-  router.initialize(swagger);
+  const api = await getAPIClient({ anonymous });
+  router.initialize(api);
   return router;
 };
 
@@ -29,8 +30,19 @@ test("Can prefix location paths", () => {
   expect(history.createHref({ pathname: "/bar" })).toBe("/prefix/bar");
 });
 
-test("Has routes", () => {
-  const router = getRouter();
+test("Can handle logged out API schema", async () => {
+  const router = await getRouter({ anonymous: true });
+
+  expect(router.routes).toHaveLength(1);
+  expect(Object.keys(router.reverseRoutes)).toHaveLength(1 * 2);
+  expect(router.navigationRoutes).toHaveLength(0);
+  expect(router.routes[0]).toMatchObject({
+    id: "bananas.login:create",
+  });
+});
+
+test("Has routes", async () => {
+  const router = await getRouter();
 
   expect(router.routes).toHaveLength(nofAPIRoutes + nofInternalRoutes);
   expect(router.routes[router.routes.length - 1]).toMatchObject({
@@ -38,16 +50,16 @@ test("Has routes", () => {
   });
 });
 
-test("Has reverse routes", () => {
-  const router = getRouter();
+test("Has reverse routes", async () => {
+  const router = await getRouter();
 
   expect(Object.keys(router.reverseRoutes)).toHaveLength(
     nofAPIRoutes * 2 + nofInternalRoutes
   );
 });
 
-test("Has navigation routes", () => {
-  const router = getRouter();
+test("Has navigation routes", async () => {
+  const router = await getRouter();
 
   expect(router.navigationRoutes).toHaveLength(2);
 
@@ -60,8 +72,8 @@ test("Has navigation routes", () => {
   });
 });
 
-test("Can lookup route by id", () => {
-  const router = getRouter();
+test("Can lookup route by id", async () => {
+  const router = await getRouter();
 
   expect(router.getRoute("foobar")).toBeUndefined();
   expect(router.getRoute("example.user:list")).toEqual({
@@ -81,15 +93,15 @@ test("Can lookup route by id", () => {
   });
 });
 
-test("Can lookup template by route id", () => {
-  const router = getRouter();
+test("Can lookup template by route id", async () => {
+  const router = await getRouter();
 
   expect(router.getOperationTemplate("foobar")).toBeUndefined();
   expect(router.getOperationTemplate("home")).toBe("index.js");
 });
 
-test("Can resolve route", () => {
-  const router = getRouter();
+test("Can resolve route", async () => {
+  const router = await getRouter();
 
   expect(router.resolve("/foo/bar/")).toBeNull();
 
@@ -118,8 +130,8 @@ test("Can resolve route", () => {
   });
 });
 
-test("Can reverse route", () => {
-  const router = getRouter();
+test("Can reverse route", async () => {
+  const router = await getRouter();
 
   expect(router.reverse("foobar", {})).toBeNull();
 
@@ -148,8 +160,8 @@ test("Can reverse route", () => {
   });
 });
 
-test("Can route by path", () => {
-  const router = getRouter();
+test("Can route by path", async () => {
+  const router = await getRouter();
 
   const r1 = router.route("/example/user/");
   expect(r1.action).toBe("PUSH");
@@ -195,8 +207,8 @@ test("Can route by path", () => {
   });
 });
 
-test("Can route by id", () => {
-  const router = getRouter();
+test("Can route by id", async () => {
+  const router = await getRouter();
 
   const r1 = router.route({ id: "example.user:read", params: { id: 3 } });
   expect(r1.action).toBe("PUSH");
@@ -256,8 +268,8 @@ test("Can route by id", () => {
   });
 });
 
-test("Can re-route", () => {
-  const router = getRouter();
+test("Can re-route", async () => {
+  const router = await getRouter();
 
   router.route({ id: "home" });
   router.route({ id: "example.user:list", query: "?foo=bar", hash: "#baz" });
@@ -289,8 +301,8 @@ test("Can re-route", () => {
   });
 });
 
-test("Routes keep track of referral page", () => {
-  const router = getRouter();
+test("Routes keep track of referral page", async () => {
+  const router = await getRouter();
 
   const r1 = router.route({ id: "home" });
   expect(r1.location.state.referer).toMatchObject({});
@@ -316,8 +328,8 @@ test("Routes keep track of referral page", () => {
   });
 });
 
-test("Referer only nest once", () => {
-  const router = getRouter();
+test("Referer only nest once", async () => {
+  const router = await getRouter();
 
   router.route({ id: "home" });
   const route = router.route({ id: "example.user:list" });
@@ -326,8 +338,8 @@ test("Referer only nest once", () => {
   expect(route.location.state.referer.state.referer).toBeUndefined();
 });
 
-test("Can patch location parts", () => {
-  const router = getRouter();
+test("Can patch location parts", async () => {
+  const router = await getRouter();
 
   router.route({ id: "home", query: { foo: "bar" }, hash: "baz" });
 
@@ -353,8 +365,8 @@ test("Can patch location parts", () => {
   });
 });
 
-test("Can update current location's state", () => {
-  const router = getRouter();
+test("Can update current location's state", async () => {
+  const router = await getRouter();
   const { history } = router;
 
   router.route({ id: "home" });
@@ -370,8 +382,8 @@ test("Can update current location's state", () => {
   });
 });
 
-test("Preserves scroll position when rewinding", () => {
-  const router = getRouter();
+test("Preserves scroll position when rewinding", async () => {
+  const router = await getRouter();
 
   router.route({ id: "example.user:list", hash: "#foo" });
   router.updateState({ scroll: 123 });
@@ -393,8 +405,8 @@ test("Preserves scroll position when rewinding", () => {
   });
 });
 
-test("Can subscribe to events", () => {
-  const router = getRouter();
+test("Can subscribe to events", async () => {
+  const router = await getRouter();
 
   let off = router.on("routeWillUpdate", "not a function");
   expect(off).toBeNull();
@@ -406,8 +418,8 @@ test("Can subscribe to events", () => {
   expect(typeof off).toBe("function");
 });
 
-test("Can subscribe to routeWillUpdate event", () => {
-  const router = getRouter();
+test("Can subscribe to routeWillUpdate event", async () => {
+  const router = await getRouter();
   const willUpdate = jest.fn();
 
   let off = router.on("routeWillUpdate", null);
@@ -431,8 +443,8 @@ test("Can subscribe to routeWillUpdate event", () => {
   expect(willUpdate).toHaveBeenCalledTimes(2);
 });
 
-test("Can subscribe to routeDidUpdate event", () => {
-  const router = getRouter();
+test("Can subscribe to routeDidUpdate event", async () => {
+  const router = await getRouter();
   const { history } = router;
 
   const didUpdate = jest.fn();
