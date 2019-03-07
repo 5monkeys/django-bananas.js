@@ -21,6 +21,24 @@ test("Get a nested field from schema", () => {
   });
 });
 
+test("Get a non-existent field", () => {
+  expect(() => fieldFromSchema(nestedSchema, "artist.wrong_field")).toThrow(
+    'Encountered a non-existent key "wrong_field".'
+  );
+});
+
+test("Get an invalid nested field from schema", () => {
+  expect(() => fieldFromSchema(nestedSchema, "artist.name.dead_end")).toThrow(
+    'Encountered lookup "dead_end" on unsupported type "string".'
+  );
+});
+
+test("Use a non-numeric index on array", () => {
+  expect(() => fieldFromSchema(nestedSchema, "artist.members.two")).toThrow(
+    'Encountered a non-numeric index "two" access on an array.'
+  );
+});
+
 test("Get an array field from schema", () => {
   expect(fieldFromSchema(nestedSchema, "artist.members[0].first_name")).toEqual(
     {

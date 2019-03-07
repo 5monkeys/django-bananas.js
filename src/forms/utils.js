@@ -7,10 +7,12 @@ export function fieldFromSchema(schema, field) {
   const normalizedSchema = { type: "object", properties: schema };
   const normalizedPath = normalizePath(field);
   return normalizedPath.split(".").reduce((acc, key) => {
-    if (typeof acc === "undefined") {
-      throw new Error("Reached a dead end.");
-    } else if (acc.type === "object") {
-      return acc.properties[key];
+    if (acc.type === "object") {
+      const value = acc.properties[key];
+      if (typeof value === "undefined") {
+        throw new Error(`Encountered a non-existent key "${key}".`);
+      }
+      return value;
     } else if (acc.type === "array") {
       if (!key.match(/^\d+$/)) {
         throw new Error(
@@ -20,7 +22,7 @@ export function fieldFromSchema(schema, field) {
       return acc.items;
     }
     throw new Error(
-      `Encountered lookup "${key}" on unsupported type "${acc.type}"`
+      `Encountered lookup "${key}" on unsupported type "${acc.type}".`
     );
   }, normalizedSchema);
 }
