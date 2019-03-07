@@ -5,7 +5,7 @@ import Router from "../src/router";
 import getAPIClient from "./api.mock";
 
 Logger.get("bananas").setLevel(Logger.OFF);
-const nofAPIRoutes = 11;
+const nofAPIRoutes = 12;
 const nofInternalRoutes = 1;
 
 const getRouter = async ({ anonymous } = {}) => {

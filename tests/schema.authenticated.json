@@ -4,6 +4,41 @@
         "application/json"
     ],
     "definitions": {
+        "Form": {
+            "properties": {
+                "boolean": {
+                    "title": "Boolean",
+                    "type": "boolean"
+                },
+                "date": {
+                    "format": "date",
+                    "title": "Date",
+                    "type": "string"
+                },
+                "datetime": {
+                    "format": "date-time",
+                    "title": "Datetime",
+                    "type": "string"
+                },
+                "integer": {
+                    "title": "Integer",
+                    "type": "integer"
+                },
+                "text": {
+                    "minLength": 1,
+                    "title": "Text",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "text",
+                "integer",
+                "date",
+                "datetime",
+                "boolean"
+            ],
+            "type": "object"
+        },
         "PasswordChange": {
             "properties": {
                 "new_password1": {
@@ -294,6 +329,36 @@
                 ]
             },
             "parameters": []
+        },
+        "/example/user/form/": {
+            "parameters": [],
+            "post": {
+                "description": "",
+                "operationId": "example.user:form",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Form"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Form"
+                        }
+                    }
+                },
+                "summary": "Form",
+                "tags": [
+                    "app:example",
+                    "crud"
+                ]
+            }
         },
         "/example/user/{id}/": {
             "delete": {

@@ -217,6 +217,16 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
               >
                 404
               </Button>
+
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={async () => {
+                  context.router.route({ id: "example.user:form.read" });
+                }}
+              >
+                Form
+              </Button>
             </Tools>
           </ToolBar>
         </>

@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Can render field of type 'boolean' and variant 'checkbox' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <span
+    className="MuiButtonBase-root-17 MuiIconButton-root-11 MuiPrivateSwitchBase-root-7 MuiCheckbox-root-1 MuiCheckbox-colorSecondary-6"
+    helperText={false}
+    label="Boolean"
+    onBlur={[Function]}
+    onContextMenu={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    onMouseDown={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+    tabIndex={null}
+  >
+    <span
+      className="MuiIconButton-label-16"
+    >
+      <svg
+        aria-hidden="true"
+        className="MuiSvgIcon-root-20"
+        focusable="false"
+        role="presentation"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+        />
+      </svg>
+      <input
+        checked=""
+        className="MuiPrivateSwitchBase-input-10"
+        data-indeterminate={false}
+        name="boolean"
+        onChange={[Function]}
+        required={true}
+        type="checkbox"
+      />
+    </span>
+    <span
+      className="MuiTouchRipple-root-29"
+    />
+  </span>
+</form>
+`;
+
+exports[`Can render field of type 'boolean' and variant 'switch' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <span
+    className="MuiSwitch-root-36"
+  >
+    <span
+      className="MuiButtonBase-root-17 MuiIconButton-root-11 MuiPrivateSwitchBase-root-7 MuiSwitch-switchBase-39 MuiSwitch-colorSecondary-42"
+      helperText={false}
+      label="Boolean"
+      onBlur={[Function]}
+      onContextMenu={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={null}
+    >
+      <span
+        className="MuiIconButton-label-16"
+      >
+        <span
+          className="MuiSwitch-icon-37"
+        />
+        <input
+          checked=""
+          className="MuiPrivateSwitchBase-input-10"
+          name="boolean"
+          onChange={[Function]}
+          required={true}
+          type="checkbox"
+        />
+      </span>
+      <span
+        className="MuiTouchRipple-root-29"
+      />
+    </span>
+    <span
+      className="MuiSwitch-bar-44"
+    />
+  </span>
+</form>
+`;
+
+exports[`Can render field of type 'integer' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-45"
+  >
+    <label
+      className="MuiFormLabel-root-60 MuiFormLabel-required-65 MuiInputLabel-required-53 MuiInputLabel-root-49 MuiInputLabel-formControl-54 MuiInputLabel-animated-57"
+      data-shrink={false}
+    >
+      Integer
+      <span
+        className="MuiFormLabel-asterisk-66"
+      >
+         *
+      </span>
+    </label>
+    <div
+      className="MuiInputBase-root-80 MuiInput-root-67 MuiInput-underline-71 MuiInputBase-formControl-81 MuiInput-formControl-68"
+      onClick={[Function]}
+    >
+      <input
+        aria-invalid={false}
+        className="MuiInputBase-input-90 MuiInput-input-75"
+        disabled={false}
+        name="integer"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        required={true}
+        type="text"
+        value=""
+      />
+    </div>
+  </div>
+</form>
+`;
+
+exports[`Can render field of type 'text' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-45"
+  >
+    <label
+      className="MuiFormLabel-root-60 MuiFormLabel-required-65 MuiInputLabel-required-53 MuiInputLabel-root-49 MuiInputLabel-formControl-54 MuiInputLabel-animated-57"
+      data-shrink={false}
+    >
+      Text
+      <span
+        className="MuiFormLabel-asterisk-66"
+      >
+         *
+      </span>
+    </label>
+    <div
+      className="MuiInputBase-root-80 MuiInput-root-67 MuiInput-underline-71 MuiInputBase-formControl-81 MuiInput-formControl-68"
+      onClick={[Function]}
+    >
+      <input
+        aria-invalid={false}
+        className="MuiInputBase-input-90 MuiInput-input-75"
+        disabled={false}
+        name="text"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        required={true}
+        type="text"
+        value=""
+      />
+    </div>
+  </div>
+</form>
+`;

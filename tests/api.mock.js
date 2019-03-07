@@ -7,9 +7,12 @@ import authedSchema from "./schema.authenticated.json";
 const schemaUrl = "http://foo.bar/api/v1.0/schema.json";
 fetchMock.config.overwriteRoutes = true;
 
-export function mockAPI({ anonymous } = {}) {
+export function mockAPI({ anonymous, schema } = {}) {
   // Mock Schema
-  fetchMock.mock(schemaUrl, anonymous ? anonymSchema : authedSchema);
+  fetchMock.mock(
+    schemaUrl,
+    schema || (anonymous ? anonymSchema : authedSchema)
+  );
 
   // Mock Me
   const me = {
@@ -29,8 +32,8 @@ export function mockAPI({ anonymous } = {}) {
     });
 }
 
-const getAPIClient = ({ anonymous, ...handlers } = {}) => {
-  mockAPI({ anonymous });
+const getAPIClient = ({ anonymous, schema, ...handlers } = {}) => {
+  mockAPI({ anonymous, schema });
   return new APIClient({ url: schemaUrl, ...handlers });
 };
 
