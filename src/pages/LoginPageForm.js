@@ -28,6 +28,7 @@ const DialogActions = withStyles(theme => ({
 
 class LoginForm extends React.Component {
   static contextType = AdminContext;
+  state = {};
 
   onSubmit = e => {
     e.preventDefault();
@@ -57,18 +58,25 @@ class LoginForm extends React.Component {
             label="username"
             name="username"
             type="text"
-            onKeyUp={this.save}
+            onChange={this.save}
+            inputProps={{ "aria-label": "Username" }}
           />
           <TextField
             fullWidth
             label="password"
             name="password"
             type="password"
-            onKeyUp={this.save}
+            onChange={this.save}
+            inputProps={{ "aria-label": "Password" }}
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" type="submit" color="primary">
+          <Button
+            variant="outlined"
+            type="submit"
+            color="primary"
+            aria-label="login"
+          >
             Login
           </Button>
         </DialogActions>
