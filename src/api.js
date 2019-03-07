@@ -7,13 +7,17 @@ const logger = Logger.get("bananas");
 
 class APIClient extends Swagger {
   constructor(url, opts = {}) {
-    if (!opts.errorHandler) {
-      opts.errorHandler = logger.error;
+    const options =
+      typeof url === "object" ? { ...url, ...opts } : { url, ...opts };
+
+    if (!options.errorHandler) {
+      options.errorHandler = (...args) => logger.error(...args);
     }
-    if (!opts.progressHandler) {
-      opts.progressHandler = logger.debug;
+    if (!options.progressHandler) {
+      options.progressHandler = (...args) => logger.debug(...args);
     }
-    super(url, opts);
+
+    super(options);
   }
 
   http(request) {

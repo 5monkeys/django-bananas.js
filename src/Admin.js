@@ -98,9 +98,11 @@ class Admin extends React.Component {
 
   getLogLevel(namespace, logLevel) {
     const level =
-      typeof this.props.logLevel === "string"
-        ? logLevel || this.props.logLevel
-        : this.props.logLevel[namespace] || logLevel || "WARN";
+      (typeof this.props.logLevel === "string"
+        ? this.props.logLevel
+        : this.props.logLevel[namespace]) ||
+      logLevel ||
+      "WARN";
 
     return Logger[level];
   }
@@ -151,7 +153,7 @@ class Admin extends React.Component {
 
     // Initialize Router
     if (!this.router) {
-      this.router = new Router(this.props.prefix);
+      this.router = new Router({ prefix: this.props.prefix });
       this.router.on("routeDidUpdate", this.routeDidUpdate.bind(this));
     }
     this.router.initialize(swagger);

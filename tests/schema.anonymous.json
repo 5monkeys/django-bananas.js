@@ -1,0 +1,130 @@
+{
+    "basePath": "/api/v1.0",
+    "consumes": [
+        "application/json"
+    ],
+    "definitions": {
+        "Authentication": {
+            "properties": {
+                "password": {
+                    "minLength": 1,
+                    "title": "L\u00f6senord",
+                    "type": "string"
+                },
+                "username": {
+                    "minLength": 1,
+                    "title": "Anv\u00e4ndarnamn",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "username",
+                "password"
+            ],
+            "type": "object"
+        },
+        "User": {
+            "properties": {
+                "email": {
+                    "minLength": 1,
+                    "readOnly": true,
+                    "title": "Email",
+                    "type": "string"
+                },
+                "full_name": {
+                    "description": "Falls back to username, if not implemented or empty",
+                    "minLength": 1,
+                    "readOnly": true,
+                    "title": "Full name",
+                    "type": "string"
+                },
+                "groups": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "id": {
+                    "readOnly": true,
+                    "title": "ID",
+                    "type": "integer"
+                },
+                "is_superuser": {
+                    "readOnly": true,
+                    "title": "Is superuser",
+                    "type": "boolean"
+                },
+                "permissions": {
+                    "description": "Permissions that the user has, both through group and user permissions.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "readOnly": true,
+                    "type": "array"
+                },
+                "username": {
+                    "minLength": 1,
+                    "readOnly": true,
+                    "title": "Username",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "host": "foo.bar",
+    "info": {
+        "description": "API for django-bananas.js",
+        "title": "Django Bananas Admin API Schema",
+        "version": "v1.0"
+    },
+    "paths": {
+        "/bananas/login/": {
+            "parameters": [],
+            "post": {
+                "description": "Log in django staff user",
+                "operationId": "bananas.login:create",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Authentication"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                },
+                "summary": "Logga in",
+                "tags": [
+                    "app:bananas"
+                ]
+            }
+        }
+    },
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "http"
+    ],
+    "security": [
+        {
+            "Basic": []
+        }
+    ],
+    "securityDefinitions": {
+        "Basic": {
+            "type": "basic"
+        }
+    },
+    "swagger": "2.0"
+}

@@ -35,31 +35,47 @@ export function fromQuery(query) {
 }
 
 export function ensureTrailingSlash(path) {
-  if (path && !path.endsWith("/")) {
+  if (path != null && !path.endsWith("/")) {
     return `${path}/`;
   }
   return path;
 }
 
 export function ensureLeadingHash(hash) {
-  if (hash && !hash.startsWith("#")) {
+  if (hash != null && !hash.startsWith("#")) {
     return `#${hash}`;
   }
   return hash;
 }
 
-export function absolutePath(path) {
-  const stack = [];
-  for (const part of path.split("/")) {
-    if (part === ".") {
-      continue;
-    } else if (part === ".." && stack.length > 0) {
-      stack.pop();
-    } else {
-      stack.push(part);
-    }
+export function absolutePath(path, basename = "/") {
+  if (!path) {
+    return path;
   }
-  return stack.join("/");
+
+  let pathname = path;
+
+  // Make relative path absolute to basename
+  if (!pathname.startsWith("/")) {
+    pathname = ensureTrailingSlash(basename) + pathname;
+  }
+
+  // Expand path
+  if (pathname.indexOf(".") >= 0) {
+    const stack = [];
+    for (const part of pathname.split("/")) {
+      if (part === ".") {
+        continue;
+      } else if (part === ".." && stack.length > 0) {
+        stack.pop();
+      } else {
+        stack.push(part);
+      }
+    }
+    pathname = stack.join("/");
+  }
+
+  return ensureTrailingSlash(pathname);
 }
 
 export function nthIndexOf(str, pattern, n, start) {
