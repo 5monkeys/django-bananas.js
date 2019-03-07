@@ -1,6 +1,8 @@
-import { TextField } from "@material-ui/core";
+import { TextField as MUITextField } from "@material-ui/core";
 import React from "react";
 
-export default ({ input, fieldProps }) => {
-  return <TextField {...input} {...fieldProps} />;
+const TextField = ({ input, fieldProps }) => {
+  return <MUITextField {...input} {...fieldProps} />;
 };
+
+export default TextField;

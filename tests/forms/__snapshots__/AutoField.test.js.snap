@@ -102,6 +102,94 @@ exports[`Can render field of type 'boolean' and variant 'switch' 1`] = `
 </form>
 `;
 
+exports[`Can render field of type 'date' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-45"
+    onClick={[Function]}
+    onKeyPress={[Function]}
+  >
+    <label
+      className="MuiFormLabel-root-60 MuiFormLabel-filled-64 MuiFormLabel-required-65 MuiInputLabel-required-53 MuiInputLabel-root-49 MuiInputLabel-formControl-54 MuiInputLabel-animated-57 MuiInputLabel-shrink-56"
+      data-shrink={true}
+    >
+      Date
+      <span
+        className="MuiFormLabel-asterisk-66"
+      >
+         *
+      </span>
+    </label>
+    <div
+      className="MuiInputBase-root-80 MuiInput-root-67 MuiInput-underline-71 MuiInputBase-formControl-81 MuiInput-formControl-68"
+      onClick={[Function]}
+    >
+      <input
+        aria-invalid={false}
+        className="MuiInputBase-input-90 MuiInput-input-75"
+        disabled={false}
+        mask={null}
+        name="date"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        pipe={null}
+        readOnly={true}
+        required={true}
+        type="text"
+        value="Unknown"
+      />
+    </div>
+  </div>
+</form>
+`;
+
+exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-45"
+    onClick={[Function]}
+    onKeyPress={[Function]}
+  >
+    <label
+      className="MuiFormLabel-root-60 MuiFormLabel-filled-64 MuiFormLabel-required-65 MuiInputLabel-required-53 MuiInputLabel-root-49 MuiInputLabel-formControl-54 MuiInputLabel-animated-57 MuiInputLabel-shrink-56"
+      data-shrink={true}
+    >
+      Datetime
+      <span
+        className="MuiFormLabel-asterisk-66"
+      >
+         *
+      </span>
+    </label>
+    <div
+      className="MuiInputBase-root-80 MuiInput-root-67 MuiInput-underline-71 MuiInputBase-formControl-81 MuiInput-formControl-68"
+      onClick={[Function]}
+    >
+      <input
+        aria-invalid={false}
+        className="MuiInputBase-input-90 MuiInput-input-75"
+        disabled={false}
+        mask={null}
+        name="datetime"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        pipe={null}
+        readOnly={true}
+        required={true}
+        type="text"
+        value="Unknown"
+      />
+    </div>
+  </div>
+</form>
+`;
+
 exports[`Can render field of type 'integer' and variant 'default' 1`] = `
 <form
   onSubmit={[Function]}

@@ -2,6 +2,11 @@ import PropTypes from "prop-types";
 import React from "react";
 import renderer from "react-test-renderer";
 
+import BooleanField from "../../src/forms/fields/BooleanField";
+import DateField from "../../src/forms/fields/DateField";
+import DateTimeField from "../../src/forms/fields/DateTimeField";
+import TextField from "../../src/forms/fields/TextField";
+
 import AdminContext from "../../src/context";
 import { AutoField, Form } from "../../src/forms";
 import getAPIClient from "../api.mock";
@@ -51,20 +56,24 @@ test("Get a friendly reminder about FormContext, if missing", () => {
 });
 
 test.each([
-  ["boolean", "checkbox"],
-  ["boolean", "switch"],
-  ["integer", "default"],
-  ["text", "default"],
-])("Can render field of type '%s' and variant '%s'", async (name, variant) => {
-  const api = await getAPIClient();
-  const tree = renderer
-    .create(
+  ["boolean", "checkbox", BooleanField],
+  ["boolean", "switch", BooleanField],
+  ["integer", "default", TextField],
+  ["text", "default", TextField],
+  ["date", "default", DateField],
+  ["datetime", "default", DateTimeField],
+])(
+  "Can render field of type '%s' and variant '%s'",
+  async (name, variant, fieldComponent) => {
+    const api = await getAPIClient();
+    const tree = renderer.create(
       <TestContext api={api}>
         <Form route="example.user:form">
           <AutoField name={name} variant={variant} />
         </Form>
       </TestContext>
-    )
-    .toJSON();
-  expect(tree).toMatchSnapshot();
-});
+    );
+    expect(tree.root.findByType(fieldComponent)).toBeTruthy();
+    expect(tree.toJSON()).toMatchSnapshot();
+  }
+);

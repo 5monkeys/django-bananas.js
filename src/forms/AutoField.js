@@ -43,7 +43,7 @@ class AutoField extends React.Component {
       <FField name={name} {...rest}>
         {({ meta, input }) => {
           const fields = fieldsByType[schema.type] || { default: TextField };
-          const field = fields[schema.format] || fields.default;
+          const Field = fields[schema.format] || fields.default;
           const fieldProps = schema
             ? {
                 label: schema.title,
@@ -52,12 +52,14 @@ class AutoField extends React.Component {
                 helperText: meta.touched && (meta.error || meta.submitError),
               }
             : {};
-          return field({
-            meta,
-            input,
-            variant,
-            fieldProps: { ...fieldProps, ...fieldPropsOverride },
-          });
+          return (
+            <Field
+              meta={meta}
+              input={input}
+              variant={variant}
+              fieldProps={{ ...fieldProps, ...fieldPropsOverride }}
+            />
+          );
         }}
       </FField>
     );
