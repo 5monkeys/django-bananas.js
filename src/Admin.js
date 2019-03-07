@@ -98,9 +98,11 @@ class Admin extends React.Component {
 
   getLogLevel(namespace, logLevel) {
     const level =
-      typeof this.props.logLevel === "string"
-        ? logLevel || this.props.logLevel
-        : this.props.logLevel[namespace] || logLevel || "WARN";
+      (typeof this.props.logLevel === "string"
+        ? this.props.logLevel
+        : this.props.logLevel[namespace]) ||
+      logLevel ||
+      "WARN";
 
     return Logger[level];
   }
