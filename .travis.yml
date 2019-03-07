@@ -3,4 +3,4 @@ node_js:
   - "node"
 install:
   - npm ci
-  - cd app && cp src/_bananas.settings src/bananas.settings && npm ci
+  - cd app && cp src/_bananas.settings.js src/bananas.settings.js && npm ci
