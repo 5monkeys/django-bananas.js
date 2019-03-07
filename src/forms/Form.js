@@ -22,13 +22,18 @@ class Form extends React.Component {
         return false;
       })
       .catch(({ response: { statusText, status, obj } }) => {
-        this.context.admin.error(`${status} : ${statusText}`);
+        const errorMessages = {
+          400: "Please correct the errors on this form.",
+        };
+        this.context.admin.error(
+          errorMessages[status] || `${status} : ${statusText}`
+        );
         return obj;
       });
   };
 
   render() {
-    const { operationId, children, onSubmit, ...props } = this.props;
+    const { operationId, children, onSubmit, formProps, ...props } = this.props;
     return (
       <FForm
         {...props}
@@ -36,7 +41,7 @@ class Form extends React.Component {
         onSubmit={onSubmit || this.handleSubmit}
       >
         {({ handleSubmit, ...childProps }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} {...formProps}>
             <FormContext.Provider
               value={{ schema: this.getSchema(operationId) }}
             >
@@ -60,10 +65,12 @@ Form.propTypes = {
   operationId: PropTypes.string.isRequired,
   operationParams: PropTypes.object.isRequired,
   onSubmit: PropTypes.func,
+  formProps: PropTypes.object,
 };
 
 Form.defaultProps = {
   onSubmit: undefined,
+  formProps: {},
 };
 
 export default Form;

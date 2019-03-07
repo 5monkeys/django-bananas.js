@@ -15,12 +15,10 @@ class SchemaField extends React.Component {
             schema,
             fieldProps: schema
               ? {
-                  label:
-                    (meta.error || meta.submitError) && meta.touched
-                      ? `${schema.title} (${meta.error || meta.submitError})`
-                      : schema.title,
+                  label: schema.title,
                   error: (meta.error || meta.submitError) && meta.touched,
                   required: schema.required,
+                  helperText: meta.touched && (meta.error || meta.submitError),
                 }
               : {},
           })
