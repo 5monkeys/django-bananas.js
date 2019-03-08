@@ -4,6 +4,7 @@ import renderer from "react-test-renderer";
 
 import { AutoField, Form } from "../../src/forms";
 import BooleanField from "../../src/forms/fields/BooleanField";
+import ChoiceField from "../../src/forms/fields/ChoiceField";
 import DateField from "../../src/forms/fields/DateField";
 import DateTimeField from "../../src/forms/fields/DateTimeField";
 import TextField from "../../src/forms/fields/TextField";
@@ -44,6 +45,7 @@ test("Get a friendly reminder about FormContext, if missing", () => {
 test.each([
   ["boolean", "checkbox", BooleanField],
   ["boolean", "switch", BooleanField],
+  ["choices", "default", ChoiceField],
   ["integer", "default", TextField],
   ["text", "default", TextField],
   ["date", "default", DateField],
@@ -54,7 +56,7 @@ test.each([
     const api = await getAPIClient();
     const tree = renderer.create(
       <TestContext api={api}>
-        <Form route="example.user:form">
+        <Form route="example.user:form.create">
           <AutoField name={name} variant={variant} />
         </Form>
       </TestContext>

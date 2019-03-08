@@ -54,6 +54,8 @@ class UserForm extends React.Component {
           <AutoField name="boolean" variant="switch" />
           <br />
           <AutoField name="integer" />
+          <br />
+          <AutoField name="choices" />
         </Content>
         <ToolBar color="paper" justify="end">
           <Tools>

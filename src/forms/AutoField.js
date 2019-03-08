@@ -4,6 +4,7 @@ import { Field as FField } from "react-final-form";
 
 import FormContext from "./FormContext";
 import BooleanField from "./fields/BooleanField";
+import ChoiceField from "./fields/ChoiceField";
 import DateField from "./fields/DateField";
 import DateTimeField from "./fields/DateTimeField";
 import TextField from "./fields/TextField";
@@ -17,6 +18,9 @@ const fieldsByType = {
   },
   boolean: {
     default: { component: BooleanField, type: "checkbox" },
+  },
+  enum: {
+    default: { component: ChoiceField },
   },
 };
 
@@ -38,7 +42,8 @@ class AutoField extends React.Component {
     if (typeof schema === "undefined") {
       throw new Error(`No schema found for field "${name}".`);
     }
-    const fields = fieldsByType[schema.type] || fieldsByType.string;
+    const fieldType = schema.enum ? "enum" : schema.type;
+    const fields = fieldsByType[fieldType] || fieldsByType.string;
     const { component: Field, type } = fields[schema.format] || fields.default;
 
     return (
@@ -56,6 +61,7 @@ class AutoField extends React.Component {
               meta={meta}
               input={input}
               variant={variant}
+              schema={schema}
               fieldProps={{ ...fieldProps, ...fieldPropsOverride }}
             />
           );

@@ -10,6 +10,16 @@
                     "title": "Boolean",
                     "type": "boolean"
                 },
+                "choices": {
+                    "enum": [
+                        "se",
+                        "no",
+                        "fi",
+                        "dk"
+                    ],
+                    "title": "Choices",
+                    "type": "string"
+                },
                 "date": {
                     "format": "date",
                     "title": "Date",
@@ -35,7 +45,8 @@
                 "integer",
                 "date",
                 "datetime",
-                "boolean"
+                "boolean",
+                "choices"
             ],
             "type": "object"
         },
@@ -331,10 +342,31 @@
             "parameters": []
         },
         "/example/user/form/": {
+            "get": {
+                "description": "",
+                "operationId": "example.user:form.read",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/Form"
+                            },
+                            "type": "array"
+                        }
+                    }
+                },
+                "summary": "Form",
+                "tags": [
+                    "app:example",
+                    "crud"
+                ]
+            },
             "parameters": [],
             "post": {
                 "description": "",
-                "operationId": "example.user:form",
+                "operationId": "example.user:form.create",
                 "parameters": [
                     {
                         "in": "body",
@@ -490,7 +522,7 @@
         "/example/user/{id}/baz/{x}/ham/{y}/": {
             "get": {
                 "description": "",
-                "operationId": "example.user:baz",
+                "operationId": "example.user:baz.baz",
                 "parameters": [],
                 "responses": {
                     "200": {

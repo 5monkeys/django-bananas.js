@@ -16,7 +16,7 @@ test("Ensure the default 'onSubmit' is firing a correct request", async () => {
   const success = jest.fn();
   const { getByText } = render(
     <TestContext api={api} admin={{ success }}>
-      <Form route="example.user:form" initialValues={{ text: "foo" }}>
+      <Form route="example.user:form.create" initialValues={{ text: "foo" }}>
         <AutoField name="text" />
         <button type="submit">Submit</button>
       </Form>
@@ -36,7 +36,7 @@ test("Ensure the default 'onSubmit' can handle errors", async () => {
   const error = jest.fn();
   const { getByText } = render(
     <TestContext api={api} admin={{ error }}>
-      <Form route="example.user:form" initialValues={{ text: "foo" }}>
+      <Form route="example.user:form.create" initialValues={{ text: "foo" }}>
         <AutoField name="text" />
         <button type="submit">Submit</button>
       </Form>
@@ -57,7 +57,7 @@ test("Ensure custom 'onSubmit' is called", async () => {
   const { getByText } = render(
     <TestContext api={api}>
       <Form
-        route="example.user:form"
+        route="example.user:form.create"
         initialValues={{ text: "foo" }}
         onSubmit={onSubmit}
       >
