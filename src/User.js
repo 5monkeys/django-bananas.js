@@ -14,7 +14,7 @@ const styles = theme => ({
     padding: 0,
     borderTopWidth: 1,
     borderTopStyle: "solid",
-    borderTopColor: theme.palette.action.selected,
+    borderTopColor: theme.palette.divider,
     ...theme.mixins.toolbar,
   },
   link: {

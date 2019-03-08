@@ -21,7 +21,7 @@ const typeIcon = {
 
 const styles = theme => ({
   success: {
-    backgroundColor: green[600],
+    backgroundColor: green[500],
   },
   error: {
     backgroundColor: theme.palette.error.dark,

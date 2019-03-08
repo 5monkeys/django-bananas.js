@@ -65,7 +65,7 @@ const styles = theme => ({
   drawerBorder: {
     borderRightWidth: 1,
     borderRightStyle: "solid",
-    borderRightColor: theme.palette.action.selected,
+    borderRightColor: theme.palette.divider,
   },
   drawerExpanded: {
     transition: theme.transitions.create("width", {
@@ -95,7 +95,9 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
   },
-  appbarBranding: {},
+  appbarBranding: {
+    background: "transparent",
+  },
   permanentAppbarBrandingButton: {
     padding: 0,
     paddingLeft: theme.spacing.unit * 3,
@@ -104,6 +106,7 @@ const styles = theme => ({
   pageOffset: {
     ...theme.mixins.toolbar,
   },
+  header: {}, // Put last for easier overriding .branding and .appbar
 });
 
 class NavBar extends React.Component {
@@ -163,7 +166,7 @@ class NavBar extends React.Component {
       <>
         <Toolbar
           classes={{
-            root: classNames(classes.branding, {
+            root: classNames(classes.branding, classes.header, {
               [classes.drawerBranding]: isDrawerVariant,
               [classes.appbarBranding]: isAppBarVariant,
             }),
@@ -252,7 +255,7 @@ class NavBar extends React.Component {
           position={"fixed"}
           elevation={0}
           classes={{
-            root: classes.appbar,
+            root: classNames(classes.appbar, classes.header),
           }}
         >
           <Container className={classes.appbarContainer}>
