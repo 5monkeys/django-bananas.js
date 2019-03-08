@@ -1,30 +1,16 @@
-import PropTypes from "prop-types";
+import Logger from "js-logger";
 import React from "react";
 import renderer from "react-test-renderer";
 
+import { AutoField, Form } from "../../src/forms";
 import BooleanField from "../../src/forms/fields/BooleanField";
 import DateField from "../../src/forms/fields/DateField";
 import DateTimeField from "../../src/forms/fields/DateTimeField";
 import TextField from "../../src/forms/fields/TextField";
-
-import AdminContext from "../../src/context";
-import { AutoField, Form } from "../../src/forms";
 import getAPIClient from "../api.mock";
+import { TestContext } from "./utils";
 
-const TestContext = ({ api, children }) => (
-  <AdminContext.Provider value={{ api: api.operations }}>
-    {children}
-  </AdminContext.Provider>
-);
-
-TestContext.propTypes = {
-  api: PropTypes.object.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string,
-    PropTypes.array,
-  ]).isRequired,
-};
+Logger.get("bananas").setLevel(Logger.OFF);
 
 class Boundary extends React.Component {
   state = {};

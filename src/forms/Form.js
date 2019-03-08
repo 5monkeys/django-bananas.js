@@ -17,9 +17,15 @@ class Form extends React.Component {
   }
 
   handleSubmit = values => {
-    const { route, params } = this.props;
-    return this.context.api[route]({ ...params, data: values })
+    const { route, params, onSubmit } = this.props;
+    const endpoint = data =>
+      this.context.api[route]({ ...params, data: data || values });
+    if (onSubmit) {
+      return onSubmit({ endpoint, values });
+    }
+    return endpoint()
       .then(() => {
+        // TODO: store data from server in the form
         this.context.admin.success("Changes have been saved!");
         return false;
       })
@@ -35,13 +41,13 @@ class Form extends React.Component {
   };
 
   render() {
-    const { route, children, onSubmit, formProps, ...props } = this.props;
+    const { route, children, formProps, ...props } = this.props;
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <FForm
           {...props}
           mutators={{ ...arrayMutators }}
-          onSubmit={onSubmit || this.handleSubmit}
+          onSubmit={this.handleSubmit}
         >
           {({ handleSubmit, ...childProps }) => (
             <form onSubmit={handleSubmit} {...formProps}>
