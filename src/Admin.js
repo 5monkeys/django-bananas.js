@@ -5,6 +5,7 @@ import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
+import Alert from "./Alert";
 import ErrorBoundary from "./ErrorBoundary";
 import LoadingScreen from "./LoadingScreen";
 import Messages from "./Messages";
@@ -88,6 +89,7 @@ class Admin extends React.Component {
       pageProps: undefined,
       messages: [],
       messageIndex: 0,
+      alert: { open: false },
       settings: this.settings.settings,
     };
 
@@ -462,10 +464,21 @@ class Admin extends React.Component {
     });
   }
 
+  alert(props) {
+    const alert =
+      typeof props === "string" ? { message: props, dismiss: false } : props;
+
+    this.setState({ alert: { ...alert, open: true } });
+  }
+
+  dismissAlert() {
+    this.setState({ alert: { ...this.state.alert, open: false } });
+  }
+
   render() {
     const { Page, router, api } = this;
     const { classes, pageTheme, loginForm } = this.props;
-    const { booted, user, pageProps, settings, messages } = this.state;
+    const { booted, user, pageProps, settings, messages, alert } = this.state;
     const LoginForm = loginForm || LoginPageForm;
 
     const isHorizontalLayout = settings.horizontal;
@@ -537,6 +550,7 @@ class Admin extends React.Component {
           )}
         </div>
         <Messages messages={messages} />
+        <Alert {...alert} onClose={this.dismissAlert.bind(this)} />
       </>
     );
   }

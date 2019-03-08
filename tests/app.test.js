@@ -124,7 +124,7 @@ test("Can render dashboard and navigate using menu", async () => {
   expect(queryAllByText(app.user.full_name)).toHaveLength(2);
 });
 
-test("Can trigger and render messages", async () => {
+test("Can show messages", async () => {
   const { app, container, getByText, queryByText } = await renderApp();
 
   // Expect no messages showing
@@ -141,4 +141,51 @@ test("Can trigger and render messages", async () => {
 
   app.error("ERROR_MSG");
   await waitForElement(() => getByText("ERROR_MSG"), { container });
+});
+
+test("Can show simple alert", async () => {
+  const { app, container, getByText } = await renderApp();
+
+  app.alert("AlertMessageOnly");
+  await waitForElement(() => getByText("AlertMessageOnly"), { container });
+});
+
+test("Can show configured alert", async () => {
+  const { app, container, getByText } = await renderApp();
+
+  const agreed = jest.fn();
+  const dismissed = jest.fn();
+
+  const alert = {
+    title: "AlertTitle",
+    message: "AlertMessage",
+    agree: "AlertAgree",
+    dismiss: "AlertDismiss",
+    onAgree: agreed,
+    onDismiss: dismissed,
+  };
+
+  // Show and wait for alert
+  app.alert(alert);
+  await waitForElement(() => getByText("AlertTitle"), { container });
+
+  const agreeButton = getByText("AlertAgree");
+  const dismissButton = getByText("AlertDismiss");
+  expect(getByText("AlertMessage")).toBeTruthy();
+  expect(agreeButton).toBeTruthy();
+  expect(dismissButton).toBeTruthy();
+
+  // Click dismiss button and expect onDismiss callback to been called
+  fireEvent.click(dismissButton);
+  await wait(() => !app.state.alert.open);
+  expect(dismissed).toHaveBeenCalledTimes(1);
+
+  // Show and wait for another alert
+  app.alert(alert);
+  await waitForElement(() => getByText("AlertTitle"), { container });
+
+  // Click agree button and expect onAgree callback to been called
+  fireEvent.click(getByText("AlertAgree"));
+  await wait(() => !app.state.alert.open);
+  expect(agreed).toHaveBeenCalledTimes(1);
 });
