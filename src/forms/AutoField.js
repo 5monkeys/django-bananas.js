@@ -11,12 +11,12 @@ import { fieldFromSchema } from "./utils";
 
 const fieldsByType = {
   string: {
-    default: TextField,
-    date: DateField,
-    "date-time": DateTimeField,
+    default: { component: TextField },
+    date: { component: DateField },
+    "date-time": { component: DateTimeField },
   },
   boolean: {
-    default: BooleanField,
+    default: { component: BooleanField, type: "checkbox" },
   },
 };
 
@@ -38,17 +38,16 @@ class AutoField extends React.Component {
     if (typeof schema === "undefined") {
       throw new Error(`No schema found for field "${name}".`);
     }
+    const fields = fieldsByType[schema.type] || fieldsByType.string;
+    const { component: Field, type } = fields[schema.format] || fields.default;
 
     return (
-      <FField name={name} {...rest}>
+      <FField name={name} type={type} {...rest} novalidate>
         {({ meta, input }) => {
-          const fields = fieldsByType[schema.type] || { default: TextField };
-          const Field = fields[schema.format] || fields.default;
           const fieldProps = schema
             ? {
-                label: schema.title,
+                label: schema.title + (schema.required ? " *" : ""),
                 error: (meta.error || meta.submitError) && meta.touched,
-                required: schema.required,
                 helperText: meta.touched && (meta.error || meta.submitError),
               }
             : {};

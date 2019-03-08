@@ -4,51 +4,66 @@ exports[`Can render field of type 'boolean' and variant 'checkbox' 1`] = `
 <form
   onSubmit={[Function]}
 >
-  <span
-    className="MuiButtonBase-root-17 MuiIconButton-root-11 MuiPrivateSwitchBase-root-7 MuiCheckbox-root-1 MuiCheckbox-colorSecondary-6"
-    helperText={false}
-    label="Boolean"
-    onBlur={[Function]}
-    onContextMenu={[Function]}
-    onFocus={[Function]}
-    onKeyDown={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseLeave={[Function]}
-    onMouseUp={[Function]}
-    onTouchEnd={[Function]}
-    onTouchMove={[Function]}
-    onTouchStart={[Function]}
-    tabIndex={null}
+  <div
+    className="MuiFormControl-root-1"
   >
-    <span
-      className="MuiIconButton-label-16"
+    <div
+      className="MuiFormGroup-root-5"
     >
-      <svg
-        aria-hidden="true"
-        className="MuiSvgIcon-root-20"
-        focusable="false"
-        role="presentation"
-        viewBox="0 0 24 24"
+      <label
+        className="MuiFormControlLabel-root-7"
       >
-        <path
-          d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-        />
-      </svg>
-      <input
-        checked=""
-        className="MuiPrivateSwitchBase-input-10"
-        data-indeterminate={false}
-        name="boolean"
-        onChange={[Function]}
-        required={true}
-        type="checkbox"
-      />
-    </span>
-    <span
-      className="MuiTouchRipple-root-29"
-    />
-  </span>
+        <span
+          className="MuiButtonBase-root-29 MuiIconButton-root-23 MuiPrivateSwitchBase-root-19 MuiCheckbox-root-13 MuiCheckbox-colorSecondary-18"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchEnd={[Function]}
+          onTouchMove={[Function]}
+          onTouchStart={[Function]}
+          tabIndex={null}
+        >
+          <span
+            className="MuiIconButton-label-28"
+          >
+            <svg
+              aria-hidden="true"
+              className="MuiSvgIcon-root-32"
+              focusable="false"
+              role="presentation"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+              />
+            </svg>
+            <input
+              checked={false}
+              className="MuiPrivateSwitchBase-input-22"
+              data-indeterminate={false}
+              disabled={false}
+              name="boolean"
+              onChange={[Function]}
+              type="checkbox"
+            />
+          </span>
+          <span
+            className="MuiTouchRipple-root-77"
+          />
+        </span>
+        <span
+          className="MuiTypography-root-41 MuiTypography-body1-50 MuiFormControlLabel-label-12"
+        >
+          Boolean *
+        </span>
+      </label>
+    </div>
+  </div>
 </form>
 `;
 
@@ -56,49 +71,64 @@ exports[`Can render field of type 'boolean' and variant 'switch' 1`] = `
 <form
   onSubmit={[Function]}
 >
-  <span
-    className="MuiSwitch-root-36"
+  <div
+    className="MuiFormControl-root-1"
   >
-    <span
-      className="MuiButtonBase-root-17 MuiIconButton-root-11 MuiPrivateSwitchBase-root-7 MuiSwitch-switchBase-39 MuiSwitch-colorSecondary-42"
-      helperText={false}
-      label="Boolean"
-      onBlur={[Function]}
-      onContextMenu={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={null}
+    <div
+      className="MuiFormGroup-root-5"
     >
-      <span
-        className="MuiIconButton-label-16"
+      <label
+        className="MuiFormControlLabel-root-7"
       >
         <span
-          className="MuiSwitch-icon-37"
-        />
-        <input
-          checked=""
-          className="MuiPrivateSwitchBase-input-10"
-          name="boolean"
-          onChange={[Function]}
-          required={true}
-          type="checkbox"
-        />
-      </span>
-      <span
-        className="MuiTouchRipple-root-29"
-      />
-    </span>
-    <span
-      className="MuiSwitch-bar-44"
-    />
-  </span>
+          className="MuiSwitch-root-84"
+        >
+          <span
+            className="MuiButtonBase-root-29 MuiIconButton-root-23 MuiPrivateSwitchBase-root-19 MuiSwitch-switchBase-87 MuiSwitch-colorSecondary-90"
+            onBlur={[Function]}
+            onContextMenu={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={null}
+          >
+            <span
+              className="MuiIconButton-label-28"
+            >
+              <span
+                className="MuiSwitch-icon-85"
+              />
+              <input
+                checked={false}
+                className="MuiPrivateSwitchBase-input-22"
+                disabled={false}
+                name="boolean"
+                onChange={[Function]}
+                type="checkbox"
+              />
+            </span>
+            <span
+              className="MuiTouchRipple-root-77"
+            />
+          </span>
+          <span
+            className="MuiSwitch-bar-92"
+          />
+        </span>
+        <span
+          className="MuiTypography-root-41 MuiTypography-body1-50 MuiFormControlLabel-label-12"
+        >
+          Boolean *
+        </span>
+      </label>
+    </div>
+  </div>
 </form>
 `;
 
@@ -107,28 +137,23 @@ exports[`Can render field of type 'date' and variant 'default' 1`] = `
   onSubmit={[Function]}
 >
   <div
-    className="MuiFormControl-root-45"
+    className="MuiFormControl-root-1"
     onClick={[Function]}
     onKeyPress={[Function]}
   >
     <label
-      className="MuiFormLabel-root-60 MuiFormLabel-filled-64 MuiFormLabel-required-65 MuiInputLabel-required-53 MuiInputLabel-root-49 MuiInputLabel-formControl-54 MuiInputLabel-animated-57 MuiInputLabel-shrink-56"
+      className="MuiFormLabel-root-104 MuiFormLabel-filled-108 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101 MuiInputLabel-shrink-100"
       data-shrink={true}
     >
-      Date
-      <span
-        className="MuiFormLabel-asterisk-66"
-      >
-         *
-      </span>
+      Date *
     </label>
     <div
-      className="MuiInputBase-root-80 MuiInput-root-67 MuiInput-underline-71 MuiInputBase-formControl-81 MuiInput-formControl-68"
+      className="MuiInputBase-root-124 MuiInput-root-111 MuiInput-underline-115 MuiInputBase-formControl-125 MuiInput-formControl-112"
       onClick={[Function]}
     >
       <input
         aria-invalid={false}
-        className="MuiInputBase-input-90 MuiInput-input-75"
+        className="MuiInputBase-input-134 MuiInput-input-119"
         disabled={false}
         mask={null}
         name="date"
@@ -137,7 +162,7 @@ exports[`Can render field of type 'date' and variant 'default' 1`] = `
         onFocus={[Function]}
         pipe={null}
         readOnly={true}
-        required={true}
+        required={false}
         type="text"
         value="Unknown"
       />
@@ -151,28 +176,23 @@ exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
   onSubmit={[Function]}
 >
   <div
-    className="MuiFormControl-root-45"
+    className="MuiFormControl-root-1"
     onClick={[Function]}
     onKeyPress={[Function]}
   >
     <label
-      className="MuiFormLabel-root-60 MuiFormLabel-filled-64 MuiFormLabel-required-65 MuiInputLabel-required-53 MuiInputLabel-root-49 MuiInputLabel-formControl-54 MuiInputLabel-animated-57 MuiInputLabel-shrink-56"
+      className="MuiFormLabel-root-104 MuiFormLabel-filled-108 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101 MuiInputLabel-shrink-100"
       data-shrink={true}
     >
-      Datetime
-      <span
-        className="MuiFormLabel-asterisk-66"
-      >
-         *
-      </span>
+      Datetime *
     </label>
     <div
-      className="MuiInputBase-root-80 MuiInput-root-67 MuiInput-underline-71 MuiInputBase-formControl-81 MuiInput-formControl-68"
+      className="MuiInputBase-root-124 MuiInput-root-111 MuiInput-underline-115 MuiInputBase-formControl-125 MuiInput-formControl-112"
       onClick={[Function]}
     >
       <input
         aria-invalid={false}
-        className="MuiInputBase-input-90 MuiInput-input-75"
+        className="MuiInputBase-input-134 MuiInput-input-119"
         disabled={false}
         mask={null}
         name="datetime"
@@ -181,7 +201,7 @@ exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
         onFocus={[Function]}
         pipe={null}
         readOnly={true}
-        required={true}
+        required={false}
         type="text"
         value="Unknown"
       />
@@ -195,32 +215,27 @@ exports[`Can render field of type 'integer' and variant 'default' 1`] = `
   onSubmit={[Function]}
 >
   <div
-    className="MuiFormControl-root-45"
+    className="MuiFormControl-root-1"
   >
     <label
-      className="MuiFormLabel-root-60 MuiFormLabel-required-65 MuiInputLabel-required-53 MuiInputLabel-root-49 MuiInputLabel-formControl-54 MuiInputLabel-animated-57"
+      className="MuiFormLabel-root-104 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101"
       data-shrink={false}
     >
-      Integer
-      <span
-        className="MuiFormLabel-asterisk-66"
-      >
-         *
-      </span>
+      Integer *
     </label>
     <div
-      className="MuiInputBase-root-80 MuiInput-root-67 MuiInput-underline-71 MuiInputBase-formControl-81 MuiInput-formControl-68"
+      className="MuiInputBase-root-124 MuiInput-root-111 MuiInput-underline-115 MuiInputBase-formControl-125 MuiInput-formControl-112"
       onClick={[Function]}
     >
       <input
         aria-invalid={false}
-        className="MuiInputBase-input-90 MuiInput-input-75"
+        className="MuiInputBase-input-134 MuiInput-input-119"
         disabled={false}
         name="integer"
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
-        required={true}
+        required={false}
         type="text"
         value=""
       />
@@ -234,32 +249,27 @@ exports[`Can render field of type 'text' and variant 'default' 1`] = `
   onSubmit={[Function]}
 >
   <div
-    className="MuiFormControl-root-45"
+    className="MuiFormControl-root-1"
   >
     <label
-      className="MuiFormLabel-root-60 MuiFormLabel-required-65 MuiInputLabel-required-53 MuiInputLabel-root-49 MuiInputLabel-formControl-54 MuiInputLabel-animated-57"
+      className="MuiFormLabel-root-104 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101"
       data-shrink={false}
     >
-      Text
-      <span
-        className="MuiFormLabel-asterisk-66"
-      >
-         *
-      </span>
+      Text *
     </label>
     <div
-      className="MuiInputBase-root-80 MuiInput-root-67 MuiInput-underline-71 MuiInputBase-formControl-81 MuiInput-formControl-68"
+      className="MuiInputBase-root-124 MuiInput-root-111 MuiInput-underline-115 MuiInputBase-formControl-125 MuiInput-formControl-112"
       onClick={[Function]}
     >
       <input
         aria-invalid={false}
-        className="MuiInputBase-input-90 MuiInput-input-75"
+        className="MuiInputBase-input-134 MuiInput-input-119"
         disabled={false}
         name="text"
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
-        required={true}
+        required={false}
         type="text"
         value=""
       />
