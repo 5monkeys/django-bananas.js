@@ -2,6 +2,8 @@ import { amber } from "@material-ui/core/colors";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { cloneDeep, merge } from "lodash";
 
+import { django } from "./colors";
+
 const defaults = {
   bananas: true,
   typography: {
@@ -38,7 +40,7 @@ export function extendTheme(source, overrides) {
 const defaultTheme = {
   palette: {
     primary: {
-      main: "#34A77B", // Django Green'ish
+      main: django[500],
     },
     secondary: {
       main: amber[700],
@@ -53,13 +55,8 @@ const defaultTheme = {
 const darkTheme = {
   palette: {
     type: "dark",
-    primary: {
-      main: "#34A77B", // Django Green'ish
-    },
-    secondary: {
-      main: amber[700],
-      contrastText: "#fff",
-    },
+    primary: defaultTheme.palette.primary,
+    secondary: defaultTheme.palette.secondary,
     background: {
       paper: "#303030",
       default: "#222",
