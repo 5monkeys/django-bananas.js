@@ -65,7 +65,7 @@ const styles = theme => ({
   drawerBorder: {
     borderRightWidth: 1,
     borderRightStyle: "solid",
-    borderRightColor: theme.palette.action.selected,
+    borderRightColor: theme.palette.divider,
   },
   drawerExpanded: {
     transition: theme.transitions.create("width", {

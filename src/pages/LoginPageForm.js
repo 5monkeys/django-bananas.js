@@ -72,7 +72,7 @@ class LoginForm extends React.Component {
         </DialogContent>
         <DialogActions>
           <Button
-            variant="outlined"
+            variant="contained"
             type="submit"
             color="primary"
             aria-label="login"

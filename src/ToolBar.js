@@ -49,10 +49,10 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.getContrastText(theme.palette.background.paper),
     "& $borderTop": {
-      borderTop: "1px solid rgba(0, 0, 0, 0.14)",
+      borderTop: `1px solid ${theme.palette.divider}`,
     },
     "& $borderBottom": {
-      borderBottom: "1px solid rgba(0, 0, 0, 0.14)",
+      borderBottom: `1px solid ${theme.palette.divider}`,
     },
   },
 });
