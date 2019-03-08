@@ -17,6 +17,8 @@ class APIClient extends Swagger {
       options.progressHandler = (...args) => logger.debug(...args);
     }
 
+    logger.debug("Initializing Swagger Client...", options);
+
     super(options);
   }
 
