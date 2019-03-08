@@ -34,6 +34,18 @@
                     "title": "Integer",
                     "type": "integer"
                 },
+                "multiple_choices": {
+                    "items": {
+                        "enum": [
+                            "se",
+                            "no",
+                            "fi",
+                            "dk"
+                        ],
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
                 "text": {
                     "minLength": 1,
                     "title": "Text",
@@ -46,7 +58,8 @@
                 "date",
                 "datetime",
                 "boolean",
-                "choices"
+                "choices",
+                "multiple_choices"
             ],
             "type": "object"
         },

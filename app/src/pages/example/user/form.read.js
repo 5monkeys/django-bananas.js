@@ -56,6 +56,8 @@ class UserForm extends React.Component {
           <AutoField name="integer" />
           <br />
           <AutoField name="choices" />
+          <br />
+          <AutoField name="multiple_choices" />
         </Content>
         <ToolBar color="paper" justify="end">
           <Tools>

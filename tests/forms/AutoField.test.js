@@ -7,6 +7,7 @@ import BooleanField from "../../src/forms/fields/BooleanField";
 import ChoiceField from "../../src/forms/fields/ChoiceField";
 import DateField from "../../src/forms/fields/DateField";
 import DateTimeField from "../../src/forms/fields/DateTimeField";
+import MultipleChoiceField from "../../src/forms/fields/MultipleChoiceField";
 import TextField from "../../src/forms/fields/TextField";
 import getAPIClient from "../api.mock";
 import { TestContext } from "./utils";
@@ -46,10 +47,11 @@ test.each([
   ["boolean", "checkbox", BooleanField],
   ["boolean", "switch", BooleanField],
   ["choices", "default", ChoiceField],
-  ["integer", "default", TextField],
-  ["text", "default", TextField],
   ["date", "default", DateField],
   ["datetime", "default", DateTimeField],
+  ["integer", "default", TextField],
+  ["multiple_choices", "default", MultipleChoiceField],
+  ["text", "default", TextField],
 ])(
   "Can render field of type '%s' and variant '%s'",
   async (name, variant, fieldComponent) => {

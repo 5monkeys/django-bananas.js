@@ -7,16 +7,26 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
-const ChoiceField = ({ input, schema, fieldProps }) => (
+const MultipleChoiceField = ({ input, schema, fieldProps }) => (
   <FormControl error={fieldProps.error}>
     <InputLabel htmlFor="name-error">{fieldProps.label}</InputLabel>
-    <Select {...input} value={input.value || []}>
+    <Select
+      {...input}
+      value={
+        input.value instanceof Array
+          ? input.value
+          : input.value
+          ? [input.value]
+          : []
+      }
+      multiple
+    >
       {!schema.required && (
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
       )}
-      {schema.enum.map(value => (
+      {schema.items.enum.map(value => (
         <MenuItem value={value} key={value}>
           {value}
         </MenuItem>
@@ -28,4 +38,4 @@ const ChoiceField = ({ input, schema, fieldProps }) => (
   </FormControl>
 );
 
-export default ChoiceField;
+export default MultipleChoiceField;

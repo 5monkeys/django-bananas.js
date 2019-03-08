@@ -7,6 +7,7 @@ import BooleanField from "./fields/BooleanField";
 import ChoiceField from "./fields/ChoiceField";
 import DateField from "./fields/DateField";
 import DateTimeField from "./fields/DateTimeField";
+import MultipleChoiceField from "./fields/MultipleChoiceField";
 import TextField from "./fields/TextField";
 import { fieldFromSchema } from "./utils";
 
@@ -20,7 +21,10 @@ const fieldsByType = {
     default: { component: BooleanField, type: "checkbox" },
   },
   enum: {
-    default: { component: ChoiceField },
+    default: { component: ChoiceField, type: "select" },
+  },
+  array: {
+    default: { component: MultipleChoiceField, type: "select" },
   },
 };
 
