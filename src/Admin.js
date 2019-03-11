@@ -272,7 +272,7 @@ class Admin extends React.Component {
       if (error instanceof AnonymousUserError) {
         this.reboot();
       } else if (error instanceof PageError) {
-        this.mountErrorPage(error.message, error.code);
+        this.mountErrorPage(t(error.message), error.code);
       } else {
         throw error;
       }

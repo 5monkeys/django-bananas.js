@@ -1,6 +1,6 @@
 export class PageError extends Error {}
 export class PageNotFoundError extends PageError {
-  message = "Page Not Found";
+  message = "Page not found";
   code = 404;
 }
 export class InternalPageError extends PageError {
