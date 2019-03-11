@@ -30,9 +30,12 @@ const renderApp = async ({ anonymous } = {}) => {
 
   await wait(() => window.bananas);
   const app = window.bananas;
+  const { container, getByText, getByLabelText } = helpers;
 
-  if (!anonymous) {
-    const { container, getByText } = helpers;
+  if (anonymous) {
+    const loginSubmitButton = () => getByLabelText("login");
+    await waitForElement(loginSubmitButton, { container });
+  } else {
     const profileMenuItem = () => getByText(app.user.full_name);
     await waitForElement(profileMenuItem, { container });
   }
@@ -52,15 +55,14 @@ test("Can boot and login", async () => {
     anonymous: true,
   });
 
-  // Wait for login form to be rendered
-  const loginSubmitButton = () => getByLabelText("login");
-  await waitForElement(loginSubmitButton, { container });
-
-  // Fill login form and click login submit button
+  // Fill login form and
   const username = getByLabelText("Username", { selector: "input" });
   const password = getByLabelText("Password", { selector: "input" });
   fireEvent.change(username, { target: { value: "admin" } });
   fireEvent.change(password, { target: { value: "test" } });
+
+  // Click login submit button
+  const loginSubmitButton = () => getByLabelText("login");
   fireEvent.click(loginSubmitButton());
 
   // Wait for logged in username to be rendered, i.e. NavBar is rendered
@@ -194,7 +196,7 @@ test("Can show simple confirm", async () => {
   const { app, container, getByText } = await renderApp();
 
   app.confirm("ConfirmMessageOnly");
-  await waitForElement(() => getByText("Are you sure?"), { container });
+  await waitForElement(() => getByText("Är du säker?"), { container });
   expect(getByText("ConfirmMessageOnly")).toBeTruthy();
 });
 
@@ -202,7 +204,7 @@ test("Can show configured confirm", async () => {
   const { app, container, getByText } = await renderApp();
 
   app.confirm({ message: "ConfirmMessageOnly", agree: "ConfirmAgree" });
-  await waitForElement(() => getByText("Are you sure?"), { container });
+  await waitForElement(() => getByText("Är du säker?"), { container });
   expect(getByText("ConfirmMessageOnly")).toBeTruthy();
   expect(getByText("ConfirmAgree")).toBeTruthy();
 });

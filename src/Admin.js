@@ -25,6 +25,7 @@ import LoginPageForm from "./pages/LoginPageForm";
 import Router from "./router";
 import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
+import { t } from "./utils";
 
 Logger.useDefaults();
 const logger = Logger.get("bananas");
@@ -149,9 +150,13 @@ class Admin extends React.Component {
       swagger
     );
 
-    const api = swagger.operations;
-    this.api = api;
     this.swagger = swagger;
+    this.api = swagger.operations;
+
+    // Load translations
+    this.api["bananas.i18n:list"]().then(data => {
+      window.i18n = data.obj.catalog;
+    });
 
     // Initialize Router
     if (!this.router) {
@@ -222,7 +227,7 @@ class Admin extends React.Component {
   isLoading(type) {
     return type
       ? this.state.loading[type] > 0
-      : Object.keys(this.state.loading).some(t => this.isLoading(t));
+      : Object.keys(this.state.loading).some(tp => this.isLoading(tp));
   }
 
   onAPIClientError(error) {
@@ -474,9 +479,9 @@ class Admin extends React.Component {
   confirm(props) {
     /* Texts from Django admin translation messages, please don't change */
     const confirm = {
-      title: "Are you sure?",
-      agree: "Yes, I'm sure",
-      dismiss: "No, take me back",
+      title: t("Are you sure?"),
+      agree: t("Yes, I'm sure"),
+      dismiss: t("No, take me back"),
       ...(typeof props === "string" ? { message: props } : props),
     };
 

@@ -11,7 +11,18 @@ export function mockAPI({ anonymous } = {}) {
   // Mock Schema
   fetchMock.mock(schemaUrl, anonymous ? anonymSchema : authedSchema);
 
-  // Mock Me
+  const translations = {
+    catalog: {
+      "Are you sure?": "Är du säker?",
+      "Yes, I'm sure": "Ja, jag är säker",
+      "No, take me back": "Nej, ta mig tillbaka",
+    },
+    formats: {
+      DATETIME_FORMAT: "j F Y H:i",
+    },
+    plural: "(n != 1)",
+  };
+
   const me = {
     id: 1,
     username: "admin",
@@ -21,7 +32,10 @@ export function mockAPI({ anonymous } = {}) {
     permissions: [],
     groups: [],
   };
+
+  // Mock i18n, me and login
   fetchMock
+    .get("http://foo.bar/api/v1.0/bananas/i18n/", { body: translations })
     .get("http://foo.bar/api/v1.0/bananas/me/", { body: me })
     .post("http://foo.bar/api/v1.0/bananas/login/", () => {
       mockAPI(); // Re-mock API as authenticated

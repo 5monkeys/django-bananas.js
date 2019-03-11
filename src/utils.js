@@ -1,3 +1,7 @@
+import Logger from "js-logger";
+
+const logger = Logger.get("bananas");
+
 export function getCookie(name) {
   const prefix = `${name}=`;
   const cookies = document.cookie.split(/\s*;\s*/);
@@ -94,6 +98,13 @@ export function capitalize(string) {
 }
 
 export function t(key) {
-  // TODO: Implement
-  throw new Error("Translation not implemented", key);
+  if (!window.i18n) {
+    logger.warn(
+      "Bananas i18n tranlations not initialized. Failed to translate:",
+      key
+    );
+    return key;
+  }
+
+  return window.i18n[key] || key;
 }

@@ -33,10 +33,13 @@ test("Can prefix location paths", () => {
 test("Can handle logged out API schema", async () => {
   const router = await getRouter({ anonymous: true });
 
-  expect(router.routes).toHaveLength(1);
-  expect(Object.keys(router.reverseRoutes)).toHaveLength(1 * 2);
+  expect(router.routes).toHaveLength(2);
+  expect(Object.keys(router.reverseRoutes)).toHaveLength(2 * 2);
   expect(router.navigationRoutes).toHaveLength(0);
   expect(router.routes[0]).toMatchObject({
+    id: "bananas.i18n:list",
+  });
+  expect(router.routes[1]).toMatchObject({
     id: "bananas.login:create",
   });
 });

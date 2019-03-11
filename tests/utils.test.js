@@ -1,3 +1,6 @@
+import Logger from "js-logger";
+
+import { t } from "../src";
 import {
   absolutePath,
   capitalize,
@@ -8,6 +11,8 @@ import {
   nthIndexOf,
   toQuery,
 } from "../src/utils";
+
+Logger.get("bananas").setLevel(Logger.OFF);
 
 test("Get cookie value", () => {
   Object.defineProperty(global.document, "cookie", {
@@ -78,4 +83,11 @@ test("Find nth occurance of pattern in string", () => {
   expect(nthIndexOf("foo/bar/baz/", "/", 3, 4)).toBe(-1);
 });
 
-test.todo("Can translate strings via API");
+test("Can translate strings via API", () => {
+  expect(t("foo")).toBe("foo");
+  expect(t("baz")).toBe("baz");
+
+  window.i18n = { foo: "bar" };
+  expect(t("foo")).toBe("bar");
+  expect(t("baz")).toBe("baz");
+});

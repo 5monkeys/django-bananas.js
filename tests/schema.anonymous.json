@@ -80,6 +80,23 @@
         "version": "v1.0"
     },
     "paths": {
+        "/bananas/i18n/": {
+            "get": {
+                "description": "Retrieve the translation catalog.",
+                "operationId": "bananas.i18n:list",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "summary": "Translation catalog",
+                "tags": [
+                    "app:bananas"
+                ]
+            },
+            "parameters": []
+        },
         "/bananas/login/": {
             "parameters": [],
             "post": {
