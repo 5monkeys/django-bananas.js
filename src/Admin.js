@@ -471,6 +471,18 @@ class Admin extends React.Component {
     this.setState({ alert: { ...alert, open: true } });
   }
 
+  confirm(props) {
+    /* Texts from Django admin translation messages, please don't change */
+    const confirm = {
+      title: "Are you sure?",
+      agree: "Yes, I'm sure",
+      dismiss: "No, take me back",
+      ...(typeof props === "string" ? { message: props } : props),
+    };
+
+    this.alert(confirm);
+  }
+
   dismissAlert() {
     this.setState({ alert: { ...this.state.alert, open: false } });
   }

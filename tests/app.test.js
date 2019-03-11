@@ -189,3 +189,20 @@ test("Can show configured alert", async () => {
   await wait(() => !app.state.alert.open);
   expect(agreed).toHaveBeenCalledTimes(1);
 });
+
+test("Can show simple confirm", async () => {
+  const { app, container, getByText } = await renderApp();
+
+  app.confirm("ConfirmMessageOnly");
+  await waitForElement(() => getByText("Are you sure?"), { container });
+  expect(getByText("ConfirmMessageOnly")).toBeTruthy();
+});
+
+test("Can show configured confirm", async () => {
+  const { app, container, getByText } = await renderApp();
+
+  app.confirm({ message: "ConfirmMessageOnly", agree: "ConfirmAgree" });
+  await waitForElement(() => getByText("Are you sure?"), { container });
+  expect(getByText("ConfirmMessageOnly")).toBeTruthy();
+  expect(getByText("ConfirmAgree")).toBeTruthy();
+});
