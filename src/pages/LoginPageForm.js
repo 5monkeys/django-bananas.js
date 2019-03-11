@@ -9,6 +9,10 @@ import React from "react";
 import AdminContext from "../context";
 import { t } from "..";
 
+const styles = () => ({
+  submit: { boxShadow: "none" },
+});
+
 const DialogContent = withStyles(theme => ({
   root: {
     margin: 0,
@@ -52,6 +56,7 @@ class LoginForm extends React.Component {
   };
 
   render() {
+    const { classes } = this.props;
     const { api } = this.context;
 
     const endpoint = api["bananas.login:create"];
@@ -84,6 +89,7 @@ class LoginForm extends React.Component {
             type="submit"
             color="primary"
             aria-label="login"
+            classes={{ contained: classes.submit }}
           >
             {t("Log in")}
           </Button>
@@ -94,7 +100,8 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.propTypes = {
+  classes: PropTypes.node.isRequired,
   logger: PropTypes.object.isRequired,
 };
 
-export default LoginForm;
+export default withStyles(styles, { name: "BananasLoginForm" })(LoginForm);
