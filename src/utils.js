@@ -1,4 +1,7 @@
+import { Typography } from "@material-ui/core";
 import Logger from "js-logger";
+import PropTypes from "prop-types";
+import React from "react";
 
 const logger = Logger.get("bananas");
 
@@ -108,3 +111,11 @@ export function t(key) {
 
   return window.i18n[key] || key;
 }
+
+export const Translate = ({ children }) => (
+  <Typography>{t(children)}</Typography>
+);
+
+Translate.propTypes = {
+  children: PropTypes.node.isRequired,
+};

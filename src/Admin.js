@@ -25,7 +25,7 @@ import LoginPageForm from "./pages/LoginPageForm";
 import Router from "./router";
 import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
-import { t } from "./utils";
+import { t } from ".";
 
 Logger.useDefaults();
 const logger = Logger.get("bananas");

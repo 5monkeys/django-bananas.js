@@ -8,7 +8,7 @@ export { default as Content } from "./Content";
 export { default as Container } from "./Container";
 export { default as Link } from "./Link";
 export { default as LoginForm } from "./pages/LoginPageForm";
-export { t } from "./utils";
+export { t, Translate } from "./utils";
 
 const Bananas = {
   App,
