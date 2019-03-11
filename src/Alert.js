@@ -11,6 +11,7 @@ import React from "react";
 
 const styles = theme => ({
   root: {},
+  agree: {},
   dismiss: {
     color: theme.palette.error.main,
     "&:hover": {
@@ -87,7 +88,13 @@ class Alert extends React.Component {
             </Button>
           )}
           {agree && (
-            <Button onClick={this.onAgree} color="primary">
+            <Button
+              onClick={this.onAgree}
+              color="primary"
+              classes={{
+                textPrimary: classes.agree,
+              }}
+            >
               {typeof agree === "boolean" ? "Ok" : agree}
             </Button>
           )}
