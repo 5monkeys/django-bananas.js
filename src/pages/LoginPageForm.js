@@ -100,7 +100,7 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.propTypes = {
-  classes: PropTypes.node.isRequired,
+  classes: PropTypes.object.isRequired,
   logger: PropTypes.object.isRequired,
 };
 
