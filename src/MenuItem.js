@@ -127,6 +127,18 @@ const styles = theme => ({
       // Outermost left edge padding when icons disabled
       paddingLeft: 0,
     },
+    "& $label": {
+      color: theme.palette.primary.contrastText,
+    },
+    "& $subtitle": {
+      color: theme.palette.primary.contrastText,
+      "& > *": {
+        opacity: 0.54,
+      },
+    },
+    "& $icon": {
+      color: theme.palette.primary.contrastText,
+    },
     "& $avatar": {
       color: theme.palette.primary.contrastText,
     },
@@ -159,11 +171,13 @@ const styles = theme => ({
   },
   label: {
     // Text label Typography element
+    color: theme.palette.text.primary,
     transition: theme.transitions.create(["font-size"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  subtitle: { color: theme.palette.text.secondary },
   labelInset: {}, // Class for inset padding when icons disabled
 
   avatar: {
@@ -275,6 +289,7 @@ const MenuItem = ({
           classes={{
             root: classes.labelItem,
             primary: classes.label,
+            secondary: classes.subtitle,
             inset: classes.labelInset,
           }}
           inset={!showIcon}
