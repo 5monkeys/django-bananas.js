@@ -154,9 +154,8 @@ class Admin extends React.Component {
     this.api = swagger.operations;
 
     // Load translations
-    this.api["bananas.i18n:list"]().then(data => {
-      window.i18n = data.obj.catalog;
-    });
+    const i18n = await this.api["bananas.i18n:list"]();
+    window.i18n = i18n.obj.catalog;
 
     // Initialize Router
     if (!this.router) {
