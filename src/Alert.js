@@ -9,7 +9,15 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
-const styles = () => ({});
+const styles = theme => ({
+  root: {},
+  dismiss: {
+    color: theme.palette.error.main,
+    "&:hover": {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+});
 
 const Transition = props => <Slide direction="down" {...props} />;
 
@@ -35,7 +43,15 @@ class Alert extends React.Component {
   };
 
   render() {
-    const { open, title, message, agree, dismiss, keepMounted } = this.props;
+    const {
+      classes,
+      open,
+      title,
+      message,
+      agree,
+      dismiss,
+      keepMounted,
+    } = this.props;
 
     return (
       <Dialog
@@ -46,6 +62,7 @@ class Alert extends React.Component {
         onClose={this.onDismiss}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
+        classes={{ root: classes.root }}
       >
         {title && (
           <DialogTitle id="alert-dialog-slide-title">{title}</DialogTitle>
@@ -59,7 +76,13 @@ class Alert extends React.Component {
         )}
         <DialogActions>
           {dismiss && (
-            <Button onClick={this.onDismiss} color="primary">
+            <Button
+              onClick={this.onDismiss}
+              color="secondary"
+              classes={{
+                textSecondary: classes.dismiss,
+              }}
+            >
               {typeof dismiss === "boolean" ? "Cancel" : dismiss}
             </Button>
           )}
@@ -75,6 +98,7 @@ class Alert extends React.Component {
 }
 
 Alert.propTypes = {
+  classes: PropTypes.object.isRequired,
   open: PropTypes.bool,
   title: PropTypes.string,
   message: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
