@@ -174,7 +174,7 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
                   )
                 }
               >
-                Add Query Param
+                Query Param
               </Button>
 
               <Button
@@ -184,7 +184,7 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
                   context.router.route({ hash: "olof" }, { patch: true })
                 }
               >
-                Add Hash
+                Hash
               </Button>
 
               <Button
@@ -193,12 +193,11 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
                   context.router.route({ query: { foo: "bar" }, hash: "#baz" })
                 }
               >
-                Add Query and Hash
+                Query and Hash
               </Button>
 
               <Button
                 variant="outlined"
-                color="inherit"
                 onClick={async () => {
                   const me = await context.api["bananas.me:list"]();
                   logger.info("ME", me);
@@ -207,6 +206,41 @@ const UsersPage = ({ route, data, title, logger, classes }) => {
               >
                 API call
               </Button>
+
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  context.admin.alert({
+                    title: "Do you want to do this?",
+                    message: (
+                      <React.Fragment>
+                        Will do something that can not be undone.
+                        <NotificationsIcon fontSize="small" color="secondary" />
+                      </React.Fragment>
+                    ),
+                    agree: "Okidokey!",
+                    dismiss: "Nope",
+                    onDismiss: () => context.admin.warning("Dismissed!"),
+                    onAgree: () => context.admin.success("Agreed!"),
+                  });
+                }}
+              >
+                Alert
+              </Button>
+
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  context.admin.confirm({
+                    onDismiss: () => context.admin.warning("Dismissed!"),
+                    onAgree: () => context.admin.success("Agreed!"),
+                  });
+                }}
+              >
+                Confirm
+              </Button>
+
+              <Button variant="contained">Default</Button>
 
               <Button
                 variant="contained"
