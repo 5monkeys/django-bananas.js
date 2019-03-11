@@ -399,7 +399,7 @@ class Admin extends React.Component {
           resolve(user);
           this.dismissMessages();
           this.reboot(user);
-          this.success(`Välkommen ${user.full_name}`);
+          this.success(`${t("Welcome,")} ${user.full_name}`);
         },
         error => {
           reject(error);
