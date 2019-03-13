@@ -114,9 +114,7 @@ test("Can render dashboard and navigate using menu", async () => {
 
   // Click one of the users and expect page template not to implemented
   fireEvent.click(user1Link);
-  await waitForElement(() => getByText("Page Not Implemented"), {
-    container,
-  });
+  await waitForElement(() => getByText("Status: 501"), { container });
 
   // Click profile menu item
   const profileMenuItem = () => getByText(app.user.full_name);
