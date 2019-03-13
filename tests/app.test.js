@@ -70,6 +70,14 @@ test("Can boot and login", async () => {
   await waitForElement(profileMenuItem, { container });
 });
 
+test("Can shutdown", async () => {
+  const { app, queryByTestId } = await renderApp({ anonymous: true });
+  expect(queryByTestId("bootscreen")).toBeFalsy();
+
+  await app.shutdown();
+  expect(queryByTestId("bootscreen")).toBeTruthy();
+});
+
 test("Can render dashboard and navigate using menu", async () => {
   const { app, container, getByText, queryAllByText } = await renderApp();
 
