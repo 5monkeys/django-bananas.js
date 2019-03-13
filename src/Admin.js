@@ -483,11 +483,15 @@ class Admin extends React.Component {
   }
 
   dismissMessages() {
-    this.setState({
-      messages: this.state.messages.map(message => {
-        return { ...message, open: false };
-      }),
-    });
+    const openMessages = this.state.messages.filter(message => message.open);
+
+    if (openMessages.length) {
+      this.setState({
+        messages: this.state.messages.map(message =>
+          message.open ? { ...message, open: false } : message
+        ),
+      });
+    }
   }
 
   alert(props) {
