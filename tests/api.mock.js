@@ -7,6 +7,16 @@ import authedSchema from "./schema.authenticated.json";
 const schemaUrl = "http://foo.bar/api/v1.0/schema.json";
 fetchMock.config.overwriteRoutes = true;
 
+export const user = {
+  id: 1,
+  username: "admin",
+  full_name: "Monkey Kong",
+  email: "jonas@5monkeys.se",
+  is_superuser: true,
+  permissions: [],
+  groups: [],
+};
+
 export function mockAPI({ anonymous } = {}) {
   // Mock Schema
   fetchMock.mock(schemaUrl, anonymous ? anonymSchema : authedSchema);
@@ -23,23 +33,13 @@ export function mockAPI({ anonymous } = {}) {
     plural: "(n != 1)",
   };
 
-  const me = {
-    id: 1,
-    username: "admin",
-    full_name: "Monkey Kong",
-    email: "jonas@5monkeys.se",
-    is_superuser: true,
-    permissions: [],
-    groups: [],
-  };
-
   // Mock i18n, me and login
   fetchMock
     .get("http://foo.bar/api/v1.0/bananas/i18n/", { body: translations })
-    .get("http://foo.bar/api/v1.0/bananas/me/", { body: me })
+    .get("http://foo.bar/api/v1.0/bananas/me/", { body: user })
     .post("http://foo.bar/api/v1.0/bananas/login/", () => {
       mockAPI(); // Re-mock API as authenticated
-      return { body: me };
+      return { body: user };
     });
 }
 

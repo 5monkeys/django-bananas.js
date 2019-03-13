@@ -10,7 +10,7 @@ import {
 } from "react-testing-library";
 
 import Bananas from "../src";
-import { mockAPI } from "./api.mock";
+import { mockAPI, user } from "./api.mock";
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
@@ -36,7 +36,7 @@ const renderApp = async ({ anonymous } = {}) => {
     const loginSubmitButton = () => getByLabelText("login");
     await waitForElement(loginSubmitButton, { container });
   } else {
-    const profileMenuItem = () => getByText(app.user.full_name);
+    const profileMenuItem = () => getByText(user.full_name);
     await waitForElement(profileMenuItem, { container });
   }
 
@@ -51,7 +51,7 @@ test("Has App", () => {
 });
 
 test("Can boot and login", async () => {
-  const { app, container, getByText, getByLabelText } = await renderApp({
+  const { container, getByText, getByLabelText } = await renderApp({
     anonymous: true,
   });
 
@@ -66,7 +66,7 @@ test("Can boot and login", async () => {
   fireEvent.click(loginSubmitButton());
 
   // Wait for logged in username to be rendered, i.e. NavBar is rendered
-  const profileMenuItem = () => getByText(app.user.full_name);
+  const profileMenuItem = () => getByText(user.full_name);
   await waitForElement(profileMenuItem, { container });
 });
 
@@ -117,7 +117,7 @@ test("Can render dashboard and navigate using menu", async () => {
   await waitForElement(() => getByText("Status: 501"), { container });
 
   // Click profile menu item
-  const profileMenuItem = () => getByText(app.user.full_name);
+  const profileMenuItem = () => getByText(user.full_name);
   fireEvent.click(profileMenuItem());
 
   // Wait for password form and therefore profile page to be rendered
@@ -129,7 +129,7 @@ test("Can render dashboard and navigate using menu", async () => {
   });
 
   // Expect logged in username to rendered twice (menu and page title)
-  expect(queryAllByText(app.user.full_name)).toHaveLength(2);
+  expect(queryAllByText(user.full_name)).toHaveLength(2);
 });
 
 test("Handles 404", async () => {

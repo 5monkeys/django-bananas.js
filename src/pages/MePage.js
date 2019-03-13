@@ -50,7 +50,7 @@ class MePage extends React.Component {
               square
             >
               <SettingsForm
-                settings={admin.state.settings}
+                settings={admin.settings.settings}
                 onChange={(setting, value) => {
                   admin.settings.configure({ [setting]: value });
                 }}

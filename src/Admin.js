@@ -92,6 +92,7 @@ class Admin extends React.Component {
       messageIndex: 0,
       alert: { open: false },
       settings: this.settings.settings,
+      context: this.makeContext(),
     };
 
     logger.setLevel(this.getLogLevel("bananas", "WARN"));
@@ -115,6 +116,51 @@ class Admin extends React.Component {
     const level = this.getLogLevel(namespace);
     log.setLevel(level);
     return log;
+  }
+
+  makeContext(context) {
+    return {
+      admin: [
+        "loading",
+        "isLoading",
+        "setTitle",
+        "error",
+        "warning",
+        "success",
+        "info",
+        "dismissMessages",
+        "alert",
+        "confirm",
+        "login",
+        "logout",
+      ].reduce(
+        (shortcuts, shortcut) => ({
+          ...shortcuts,
+          [shortcut]: this[shortcut].bind(this),
+        }),
+        {
+          settings: this.settings,
+        }
+      ),
+      router: undefined,
+      api: undefined,
+      user: undefined,
+      ...context,
+    };
+  }
+
+  setContext(ctx, callback) {
+    const context = { ...this.state.context, ...ctx };
+    this.setState({ context }, () => {
+      logger.debug("Updated AdminContext:", context);
+      if (callback) {
+        callback(context);
+      }
+    });
+  }
+
+  resetContext(callback) {
+    this.setContext(this.makeContext(), callback);
   }
 
   componentDidMount() {
@@ -164,28 +210,29 @@ class Admin extends React.Component {
     }
     this.router.initialize(swagger);
 
-    // Boot phase loading complete
-    this.loading("boot", false);
+    // Update AdminContext
+    this.setContext({ api: this.api, router: this.router });
 
-    // Route current window location if API is authenticatd
+    // Route to current window location if API is authenticatd
     if (swagger.isAuthenticated) {
-      this.user = { pending: true }; // Temp user to not flash login page
-      this.setState({ user: this.user });
+      if (!this.state.context.user) {
+        this.setContext({ user: { pending: true } });
+      }
       this.router.reroute();
     }
 
     // Finalize boot
-    this.setState({ booted: true });
-
-    logger.info("Booted!");
+    this.loading("boot", false);
+    this.setState({ booted: true }, () => {
+      logger.info("Booted!");
+    });
   }
 
   async reboot(user) {
     await this.shutdown();
 
     if (user) {
-      this.user = user;
-      this.setState({ user });
+      this.setContext({ user });
     }
 
     this.boot();
@@ -195,11 +242,12 @@ class Admin extends React.Component {
     return new Promise(async resolve => {
       await this.unmountPage();
 
-      this.user = undefined;
-      this.api = undefined;
       this.swagger = undefined;
+      this.api = undefined;
 
-      this.setState({ booted: false, user: this.user }, resolve);
+      this.setState({ booted: false }, () => {
+        this.resetContext(resolve);
+      });
     });
   }
 
@@ -218,12 +266,12 @@ class Admin extends React.Component {
       endpoint().then(
         response => {
           const user = { ...response.obj };
-          if (JSON.stringify(user) !== JSON.stringify(this.user)) {
+          const current = this.state.context.user;
+          if (JSON.stringify(user) !== JSON.stringify(current)) {
             logger.info("Authorized User:", user);
-            this.user = user;
-            this.setState({ user });
+            this.setContext({ user });
           }
-          resolve(this.user);
+          resolve(user);
         },
         error => {
           if (error.message === "Forbidden") {
@@ -375,9 +423,9 @@ class Admin extends React.Component {
 
   mountPage(PageComponent, pageProps) {
     logger.info("Mount Page:", pageProps);
+    this.loading("data", false);
     this.Page = PageComponent;
     this.setState({ pageProps }, () => {
-      this.loading("data", false);
       this.setTitle(pageProps.title);
     });
   }
@@ -520,21 +568,21 @@ class Admin extends React.Component {
   }
 
   render() {
-    const { Page, router, api } = this;
+    const { Page } = this;
     const { classes, pageTheme, loginForm } = this.props;
-    const { booted, user, pageProps, settings, messages, alert } = this.state;
+    const {
+      booted,
+      context,
+      pageProps,
+      settings,
+      messages,
+      alert,
+    } = this.state;
+    const { user } = context;
     const LoginForm = loginForm || LoginPageForm;
 
     const isHorizontalLayout = settings.horizontal;
     const isVerticalLayout = !settings.horizontal;
-
-    // TODO: Don't build context here to prevent new object and children re-render
-    const context = {
-      admin: this,
-      router,
-      api,
-      user,
-    };
 
     return (
       <>
