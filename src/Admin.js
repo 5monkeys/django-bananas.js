@@ -180,14 +180,27 @@ class Admin extends React.Component {
     logger.info("Booted!");
   }
 
-  reboot(user) {
-    this.unmountPage();
+  async reboot(user) {
+    await this.shutdown();
 
-    this.user = user;
-    this.api = undefined;
-    this.swagger = undefined;
+    if (user) {
+      this.user = user;
+      this.setState({ user });
+    }
 
-    this.setState({ booted: false, user }, this.boot.bind(this));
+    this.boot();
+  }
+
+  shutdown() {
+    return new Promise(async resolve => {
+      await this.unmountPage();
+
+      this.user = undefined;
+      this.api = undefined;
+      this.swagger = undefined;
+
+      this.setState({ booted: false, user: this.user }, resolve);
+    });
   }
 
   authorize() {
@@ -259,7 +272,7 @@ class Admin extends React.Component {
       currentPage &&
       (!currentPage.route || currentPage.route.path !== location.pathname)
     ) {
-      this.unmountPage();
+      await this.unmountPage();
     }
 
     // Authorize, load and mount page
@@ -374,12 +387,16 @@ class Admin extends React.Component {
   }
 
   unmountPage() {
-    if (this.state.pageProps) {
-      logger.info("Un-mounting page...", this.state.pageProps);
-      this.Page = null;
-      this.setState({ pageProps: null });
-      this.dismissMessages();
-    }
+    return new Promise(resolve => {
+      if (this.state.pageProps) {
+        logger.info("Un-mounting page...", this.state.pageProps);
+        this.Page = null;
+        this.dismissMessages();
+        this.setState({ pageProps: null }, resolve);
+      } else {
+        resolve();
+      }
+    });
   }
 
   setTitle(title) {
