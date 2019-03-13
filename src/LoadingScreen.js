@@ -49,9 +49,18 @@ const styles = theme => ({
 
 class LoadingScreen extends React.Component {
   renderScreen() {
-    const { classes, loading, color, logo, backdrop, ...rest } = this.props;
+    const {
+      classes,
+      loading,
+      color,
+      logo,
+      backdrop,
+      role,
+      ...rest
+    } = this.props;
     return (
       <div
+        data-testid={role}
         className={classNames(classes.root, {
           [classes.backdrop]: backdrop,
           [classes.backdropPrimary]: backdrop && color === "primary",
@@ -98,6 +107,7 @@ LoadingScreen.propTypes = {
   color: PropTypes.string,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
   backdrop: PropTypes.bool,
+  role: PropTypes.string,
 };
 
 LoadingScreen.defaultProps = {
@@ -105,6 +115,7 @@ LoadingScreen.defaultProps = {
   color: undefined,
   logo: undefined,
   backdrop: false,
+  role: undefined,
 };
 
 export default withStyles(styles)(LoadingScreen);

@@ -561,6 +561,7 @@ class Admin extends React.Component {
                   <div className={classes.page}>
                     <ProgressBar loading={this.isLoading("api")} />
                     <LoadingScreen
+                      role="page"
                       loading={this.isLoading("data")}
                       color="default"
                       backdrop
@@ -590,7 +591,11 @@ class Admin extends React.Component {
               )}
             </AdminContext.Provider>
           ) : (
-            <LoadingScreen logo={this.props.logo} loading={this.isLoading()} />
+            <LoadingScreen
+              role="bootscreen"
+              logo={this.props.logo}
+              loading={this.isLoading()}
+            />
           )}
         </div>
         <Messages messages={messages} />
