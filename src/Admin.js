@@ -566,7 +566,9 @@ class Admin extends React.Component {
                       backdrop
                     />
                     {Page && (
-                      <ErrorBoundary>
+                      <ErrorBoundary
+                        key={pageProps ? pageProps.key : undefined}
+                      >
                         {pageTheme ? (
                           <MuiThemeProvider theme={pageTheme}>
                             <Page {...pageProps} />
