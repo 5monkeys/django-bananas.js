@@ -383,11 +383,13 @@ class Admin extends React.Component {
   }
 
   mountErrorPage(title, statusCode) {
-    logger.warn(title || "Page Not Found");
+    const _title = title || t("Server error");
+    const _statusCode = statusCode || 500;
+    logger.warn(_title, _statusCode);
     this.mountPage(ErrorPage, {
-      key: statusCode || 500,
-      title: title || "Error",
-      data: { statusCode },
+      key: _statusCode,
+      title: _title,
+      data: { statusCode: _statusCode },
     });
   }
 
