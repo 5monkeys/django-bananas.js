@@ -213,11 +213,16 @@ class Admin extends React.Component {
         return;
       }
 
+      logger.debug("Authorizing...");
+
       endpoint().then(
         response => {
-          this.user = { ...response.obj };
-          logger.info("Authorized User:", this.user);
-          this.setState({ user: this.user });
+          const user = { ...response.obj };
+          if (JSON.stringify(user) !== JSON.stringify(this.user)) {
+            logger.info("Authorized User:", user);
+            this.user = user;
+            this.setState({ user });
+          }
           resolve(this.user);
         },
         error => {
