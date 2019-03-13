@@ -117,8 +117,8 @@ test("Can render dashboard and navigate using menu", async () => {
   await waitForElement(() => getByText("Status: 501"), { container });
 
   // Click profile menu item
-  const profileMenuItem = () => getByText(user.full_name);
-  fireEvent.click(profileMenuItem());
+  const profileMenuItem = getByText(user.full_name);
+  fireEvent.click(profileMenuItem);
 
   // Wait for password form and therefore profile page to be rendered
   const changePasswordRoute = app.router.getRoute(
@@ -246,4 +246,37 @@ test("Can show configured confirm", async () => {
   await waitForElement(() => getByText("Är du säker?"), { container });
   expect(getByText("ConfirmMessageOnly")).toBeTruthy();
   expect(getByText("ConfirmAgree")).toBeTruthy();
+});
+
+test("Can change settings", async () => {
+  const {
+    getByTestId,
+    queryByTestId,
+    getByText,
+    getByLabelText,
+  } = await renderApp();
+
+  expect(getByTestId("navbar-drawer")).toBeTruthy();
+  expect(queryByTestId("navbar-appbar")).toBeFalsy();
+
+  // Click profile menu item
+  const profileMenuItem = getByText(user.full_name);
+  fireEvent.click(profileMenuItem);
+
+  // Wait for settings to be rendered and click one of them
+  await waitForElement(() => getByText("Settings"));
+  const horizontal = getByLabelText("Horizontal Layout");
+  fireEvent.click(horizontal);
+
+  // Expect layout to change
+  await waitForElement(() => getByTestId("navbar-appbar"));
+  expect(queryByTestId("navbar-drawer")).toBeFalsy();
+
+  // Click reset button
+  const resetButton = getByText("Reset");
+  fireEvent.click(resetButton);
+
+  // Expect layout to change back
+  await waitForElement(() => getByTestId("navbar-drawer"));
+  expect(queryByTestId("navbar-appbar")).toBeFalsy();
 });
