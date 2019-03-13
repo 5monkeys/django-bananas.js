@@ -132,6 +132,39 @@ test("Can render dashboard and navigate using menu", async () => {
   expect(queryAllByText(app.user.full_name)).toHaveLength(2);
 });
 
+test("Handles 404", async () => {
+  const { app, container, getByText } = await renderApp();
+  app.router.route("/foobar/");
+  await waitForElement(() => getByText("Status: 404"), { container });
+});
+
+test("Handles 501", async () => {
+  const { app, container, getByText } = await renderApp();
+  app.router.route({ id: "bananas.i18n:list" });
+  await waitForElement(() => getByText("Status: 501"), { container });
+});
+
+test("Handles 500", async () => {
+  // Mute console.error
+  const error = jest.spyOn(console, "error");
+  error.mockImplementation();
+
+  // Render app and route to a failing page
+  const { app, getByText } = await renderApp();
+  app.router.route({ id: "example.user:bar", params: { id: 1 } });
+
+  // Expect 500 error page to be shown and the error logged to console
+  await waitForElement(() => getByText("Status: 500"));
+  expect(error).toBeCalled();
+
+  // TODO: Currently needed to prevent real async console.error's after unmocked
+  app.router.route({ id: "home" });
+  await waitForElement(() => getByText("Dashboard Test Page"));
+
+  await app.shutdown();
+  error.mockRestore();
+});
+
 test("Can show messages", async () => {
   const { app, container, getByText, queryByText } = await renderApp();
 
