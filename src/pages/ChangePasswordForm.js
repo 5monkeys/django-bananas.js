@@ -105,7 +105,11 @@ class ChangePasswordForm extends React.Component {
     );
 
     return (
-      <form onSubmit={this.onSubmit} className={classes.root}>
+      <form
+        onSubmit={this.onSubmit}
+        className={classes.root}
+        data-testid="change-password-form"
+      >
         <FormLabel component="legend" classes={{ root: classes.formLabel }}>
           {endpoint.title}
         </FormLabel>
@@ -122,6 +126,7 @@ class ChangePasswordForm extends React.Component {
                 autoComplete={field}
                 classes={{ root: classes.field }}
                 label={schema[field].title}
+                inputProps={{ "aria-label": schema[field].title }}
                 error={Boolean(errors && errors[field])}
                 helperText={Boolean(errors && errors[field]) && errors[field]}
                 name={field}

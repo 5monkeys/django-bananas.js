@@ -62,8 +62,8 @@ test("Can boot and login", async () => {
   fireEvent.change(password, { target: { value: "test" } });
 
   // Click login submit button
-  const loginSubmitButton = () => getByLabelText("login");
-  fireEvent.click(loginSubmitButton());
+  const loginSubmitButton = getByLabelText("login");
+  fireEvent.click(loginSubmitButton);
 
   // Wait for logged in username to be rendered, i.e. NavBar is rendered
   const profileMenuItem = () => getByText(user.full_name);
@@ -279,4 +279,61 @@ test("Can change settings", async () => {
   // Expect layout to change back
   await waitForElement(() => getByTestId("navbar-drawer"));
   expect(queryByTestId("navbar-appbar")).toBeFalsy();
+});
+
+test("Can change password", async () => {
+  const {
+    container,
+    getByText,
+    getByLabelText,
+    getByTestId,
+  } = await renderApp();
+
+  // Click profile menu item
+  const profileMenuItem = getByText(user.full_name);
+  fireEvent.click(profileMenuItem);
+
+  // Wait for submit button and therefore change passsword form rendered
+  const submitButton = await waitForElement(
+    () => getByText("Change my password"),
+    { container }
+  );
+  expect(submitButton).toBeDisabled();
+
+  // Fill form
+  const form = getByTestId("change-password-form");
+  const old = getByLabelText("Gammalt l\u00f6senord", { selector: "input" });
+  const new1 = getByLabelText("Nytt l\u00f6senord", { selector: "input" });
+  const new2 = getByLabelText("Bekr\u00e4fta nytt l\u00f6senord", {
+    selector: "input",
+  });
+  fireEvent.change(old, { target: { value: "old" } });
+  fireEvent.change(new1, { target: { value: "new" } });
+  fireEvent.change(new2, { target: { value: "new" } });
+
+  // Wait for submit button to be enabled (valid filled fields)
+  await wait(() => expect(submitButton).toBeEnabled());
+
+  // Mock fail endpoint and click submit
+  fetchMock.post("http://foo.bar/api/v1.0/bananas/change_password/", {
+    status: 400,
+    body: {},
+  });
+  // TODO: Click button instead of submiting form; fireEvent.click(submitButton);
+  fireEvent.submit(form);
+
+  // Expect error message to show
+  await waitForElement(() =>
+    getByText("Incorrect authentication credentials.")
+  );
+
+  // Mock success endpoint and click submit, again
+  fetchMock.post("http://foo.bar/api/v1.0/bananas/change_password/", {
+    status: 204,
+    body: "",
+  });
+  fireEvent.submit(form);
+
+  // Expect success message to show
+  await waitForElement(() => getByText("Password changed successfully."));
 });
