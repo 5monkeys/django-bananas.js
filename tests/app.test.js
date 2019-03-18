@@ -50,6 +50,18 @@ test("Has App", () => {
   expect(typeof Bananas.App).toBe("function");
 });
 
+test("Can unmount", async () => {
+  const { app } = await renderApp({ anonymous: true });
+  expect(window.bananas).toBeDefined();
+
+  cleanup();
+
+  expect(window.bananas).toBeUndefined();
+  expect(app.router).toBeUndefined();
+  expect(app.swagger).toBeUndefined();
+  expect(app.api).toBeUndefined();
+});
+
 test("Can boot and login", async () => {
   const { container, getByText, getByLabelText } = await renderApp({
     anonymous: true,
