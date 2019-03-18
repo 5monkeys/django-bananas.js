@@ -167,6 +167,21 @@ class Admin extends React.Component {
     this.boot();
   }
 
+  componentWillUnmount() {
+    // Unlisten to router/history events
+    if (this.unlistenRouter) {
+      this.unlistenRouter();
+    }
+
+    // Undefine instances
+    this.router = undefined;
+    this.swagger = undefined;
+    this.api = undefined;
+
+    // Unbind app refernece on window
+    window.bananas = undefined;
+  }
+
   async boot() {
     logger.info("Booting...");
     this.setTitle();
@@ -206,7 +221,10 @@ class Admin extends React.Component {
     // Initialize Router
     if (!this.router) {
       this.router = new Router({ prefix: this.props.prefix });
-      this.router.on("routeDidUpdate", this.routeDidUpdate.bind(this));
+      this.unlistenRouter = this.router.on(
+        "routeDidUpdate",
+        this.routeDidUpdate.bind(this)
+      );
     }
     this.router.initialize(swagger);
 
