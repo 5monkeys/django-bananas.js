@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
+import { blue } from "@material-ui/core/colors";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PeopleIcon from "@material-ui/icons/People";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Bananas from "django-bananas";
+import { django } from "django-bananas/colors";
 import themes from "django-bananas/themes";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -12,15 +14,20 @@ import settings from "./bananas.settings";
 
 const exampleAppTheme = themes.default.extend({
   palette: {
-    /*
     primary: {
-      main: "#00b3a2",
-      dark: "#008e80",
-      contrastText: "#fff",
+      // main: blue[500],
     },
-    */
   },
   overrides: {
+    BananasNavBar: {
+      header: {
+        /* Example: Change NavBar header color */
+        //   background: "#181818",
+        /* Example: Make NavBar header striped */
+        //   backgroundColor: django[700],
+        //   background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12) 10px, transparent 10px, transparent 20px)",
+      },
+    },
     /*
     BananasContainer: {
       root: {
