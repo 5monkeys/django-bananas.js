@@ -332,6 +332,7 @@ class Admin extends React.Component {
       } else if (error instanceof PageError) {
         this.mountErrorPage(t(error.message), error.code);
       } else {
+        this.admin.loading(false);
         throw error;
       }
     }
@@ -410,11 +411,15 @@ class Admin extends React.Component {
     if (this.api[operationId]) {
       logger.debug("Loading page data...", operationId, params, filter);
 
-      this.admin.loading();
-      const data = await this.api[operationId]({ ...params, ...filter });
-      this.admin.loading(false);
-
-      return data;
+      try {
+        this.admin.loading();
+        const data = await this.api[operationId]({ ...params, ...filter });
+        this.admin.loading(false);
+        return data;
+      } catch (error) {
+        this.admin.loading(false);
+        throw error;
+      }
     }
 
     logger.debug(

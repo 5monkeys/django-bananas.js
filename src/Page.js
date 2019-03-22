@@ -78,13 +78,15 @@ class PageLoadController extends React.Component {
   }
 
   progress(on = true) {
-    this.meter.step(on, "progress");
+    const level = this.meter.step(on, "progress");
     this.forceUpdate();
+    return level;
   }
 
   loading(on = true) {
-    this.meter.step(on, "loading");
+    const level = this.meter.step(on, "loading");
     this.forceUpdate();
+    return level;
   }
 
   render() {
