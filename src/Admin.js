@@ -317,6 +317,7 @@ class Admin extends React.Component {
       (!currentPage.route || currentPage.route.path !== location.pathname)
     ) {
       await this.unmountPage();
+      this.admin.loading();
     }
 
     // Authorize, load and mount page
@@ -405,11 +406,15 @@ class Admin extends React.Component {
     return exports.default;
   }
 
-  loadPageData(operationId, params, filter) {
+  async loadPageData(operationId, params, filter) {
     if (this.api[operationId]) {
       logger.debug("Loading page data...", operationId, params, filter);
+
       this.admin.loading();
-      return this.api[operationId]({ ...params, ...filter });
+      const data = await this.api[operationId]({ ...params, ...filter });
+      this.admin.loading(false);
+
+      return data;
     }
 
     logger.debug(
