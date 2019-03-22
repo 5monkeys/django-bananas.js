@@ -18,10 +18,7 @@ import {
   PageNotFoundError,
   PageNotImplementedError,
 } from "./errors";
-// TODO: Add pages/index.js
-import ErrorPage from "./pages/ErrorPage";
-import LoginPage from "./pages/LoginPage";
-import LoginPageForm from "./pages/LoginPageForm";
+import { ErrorPage, LoginPage } from "./pages";
 import Router from "./router";
 import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
@@ -491,7 +488,6 @@ class Admin extends React.Component {
     const { classes, pageTheme, loginForm } = this.props;
     const { booting, booted, context, settings, pageProps } = this.state;
     const { user } = context;
-    const LoginForm = loginForm || LoginPageForm;
 
     const isHorizontalLayout = settings.horizontal;
     const isVerticalLayout = !settings.horizontal;
@@ -529,7 +525,7 @@ class Admin extends React.Component {
                 </>
               ) : (
                 <LoginPage
-                  form={LoginForm}
+                  form={loginForm}
                   logger={logger}
                   logo={this.props.logo}
                   title={this.props.title}

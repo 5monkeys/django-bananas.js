@@ -1,7 +1,7 @@
 import createHistory from "history/createBrowserHistory";
 import Logger from "js-logger";
 
-import MePage from "./pages/MePage";
+import { MePage } from "./pages";
 import {
   absolutePath,
   capitalize,

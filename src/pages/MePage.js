@@ -21,6 +21,11 @@ const styles = theme => ({
 });
 
 class MePage extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
+  };
+
   static contextType = AdminContext;
 
   render() {
@@ -65,10 +70,5 @@ class MePage extends React.Component {
     );
   }
 }
-
-MePage.propTypes = {
-  classes: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(MePage);
