@@ -192,11 +192,17 @@ test("Handles missing page file", async () => {
   );
 });
 
-test("Can show messages", async () => {
-  const { app, container, getByText, queryByText } = await renderApp();
+test("Can show and dismiss messages", async () => {
+  const {
+    app,
+    container,
+    getByText,
+    getByTestId,
+    queryByTestId,
+  } = await renderApp();
 
   // Expect no messages showing
-  expect(queryByText("client-snackbar")).toBeNull();
+  expect(queryByTestId("Message")).toBeNull();
 
   app.admin.success("SUCCESS_MSG");
   await waitForElement(() => getByText("SUCCESS_MSG"), { container });
@@ -209,6 +215,17 @@ test("Can show messages", async () => {
 
   app.admin.error("ERROR_MSG");
   await waitForElement(() => getByText("ERROR_MSG"), { container });
+
+  // Click X icon and expect message to go away
+  const closeButton = getByTestId("message-close-button");
+  fireEvent.click(closeButton);
+  await wait(
+    () =>
+      expect(
+        app.controllers.MessagesController.current.state.messages
+      ).toHaveLength(3) // non closed success, info and warning messages
+  );
+  expect(queryByTestId("ERROR_MSG")).toBeNull();
 });
 
 test("Can show simple alert", async () => {

@@ -82,6 +82,7 @@ class Message extends React.Component {
         onExited={remove}
         open={open}
         autoHideDuration={type !== "error" ? 6000 : undefined} // don't autohide errors.
+        data-testid="Message"
       >
         <SnackbarContent
           className={classes[type]}
@@ -99,6 +100,7 @@ class Message extends React.Component {
               color="inherit"
               className={classes.close}
               onClick={this.handleClose}
+              data-testid="message-close-button"
             >
               <CloseIcon className={classes.icon} />
             </IconButton>,
