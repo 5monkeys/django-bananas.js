@@ -10,6 +10,7 @@ import {
 } from "react-testing-library";
 
 import Bananas from "../src";
+import { PageNotFoundError, PageNotImplementedError } from "../src/errors";
 import { mockAPI, user } from "./api.mock";
 
 Logger.get("bananas").setLevel(Logger.OFF);
@@ -175,6 +176,20 @@ test("Handles 500", async () => {
 
   await app.shutdown();
   error.mockRestore();
+});
+
+test("Handles missing route", async () => {
+  const { app } = await renderApp({ anonymous: true });
+  expect(app.loadPage(document.location, null)).rejects.toThrow(
+    PageNotFoundError
+  );
+});
+
+test("Handles missing page file", async () => {
+  const { app } = await renderApp({ anonymous: true });
+  expect(app.loadPageComponent("foobar.js")).rejects.toThrow(
+    PageNotImplementedError
+  );
 });
 
 test("Can show messages", async () => {
