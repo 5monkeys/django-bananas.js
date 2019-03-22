@@ -19,9 +19,8 @@ const styles = theme => ({
   },
 });
 
-class Page extends React.Component {
+class ThemedPage extends React.Component {
   static propTypes = {
-    classes: PropTypes.object.isRequired,
     controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
     component: PropTypes.func,
     theme: PropTypes.object,
@@ -32,11 +31,34 @@ class Page extends React.Component {
     theme: undefined,
   };
 
+  render() {
+    const { theme, ...rest } = this.props;
+    return theme ? (
+      <MuiThemeProvider theme={theme}>
+        <BananasPage {...rest} />
+      </MuiThemeProvider>
+    ) : (
+      <BananasPage {...rest} />
+    );
+  }
+}
+
+class Page extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
+    component: PropTypes.func,
+  };
+
+  static defaultProps = {
+    component: undefined,
+  };
+
   constructor(props) {
     super(props);
 
     // Destruct named props to filter out props to pass over to page component
-    const { classes, component, controller, theme, ...pageProps } = props;
+    const { classes, component, controller, ...pageProps } = props;
 
     this.state = {
       PageComponent: component,
@@ -44,7 +66,7 @@ class Page extends React.Component {
     };
   }
 
-  renderPage() {
+  render() {
     const { classes, controller } = this.props;
     const { PageComponent, pageProps } = this.state;
     return (
@@ -56,15 +78,6 @@ class Page extends React.Component {
           </ErrorBoundary>
         )}
       </div>
-    );
-  }
-
-  render() {
-    const { theme } = this.props;
-    return theme ? (
-      <MuiThemeProvider theme={theme}>{this.renderPage()}</MuiThemeProvider>
-    ) : (
-      this.renderPage()
     );
   }
 }
@@ -105,5 +118,5 @@ class PageLoadController extends React.Component {
 }
 
 const BananasPage = withStyles(styles, { name: "BananasPage" })(Page);
-export default BananasPage;
-export { BananasPage as Page, PageLoadController };
+export default ThemedPage;
+export { ThemedPage as Page, PageLoadController };
