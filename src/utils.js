@@ -119,3 +119,49 @@ export const Translate = ({ children }) => (
 Translate.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+/**
+ * Helper for proxying exposed methods from one or more referenced components.
+ */
+export class ComponentProxy {
+  constructor() {
+    this.proxy = {};
+  }
+
+  add(Component, alias) {
+    const reference = React.createRef();
+
+    // Add exposed component actions to proxy
+    for (const action of Component.expose) {
+      this.proxy[action] = (...args) =>
+        reference.current ? reference.current[action](...args) : null;
+    }
+
+    // Remember reference under alias for later use
+    if (alias) {
+      this[alias] = reference;
+    }
+
+    return reference;
+  }
+}
+
+export class MultiMeter {
+  meters = {};
+
+  up = (name, step) => this.change(name, step ? Math.abs(step) : 1);
+  down = (name, step) => this.change(name, step ? -Math.abs(step) : -1);
+  step = (up, name) => (up ? this.up(name) : this.down(name));
+
+  change = (name, delta) => {
+    const n = name || "default";
+    this.meters[n] = Math.max((this.meters[n] || 0) + delta, 0);
+    return this.meters[n];
+  };
+
+  read = name => {
+    return name
+      ? this.meters[name] > 0
+      : Object.keys(this.meters).some(n => this.reads(n));
+  };
+}

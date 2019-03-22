@@ -48,6 +48,27 @@ const styles = theme => ({
 });
 
 class LoadingScreen extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    loading: PropTypes.bool,
+    color: PropTypes.string,
+    logo: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.string,
+      PropTypes.node,
+    ]),
+    backdrop: PropTypes.bool,
+    role: PropTypes.string,
+  };
+
+  static defaultProps = {
+    loading: true,
+    color: undefined,
+    logo: undefined,
+    backdrop: false,
+    role: undefined,
+  };
+
   renderScreen() {
     const {
       classes,
@@ -101,21 +122,7 @@ class LoadingScreen extends React.Component {
   }
 }
 
-LoadingScreen.propTypes = {
-  classes: PropTypes.object.isRequired,
-  loading: PropTypes.bool,
-  color: PropTypes.string,
-  logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
-  backdrop: PropTypes.bool,
-  role: PropTypes.string,
-};
-
-LoadingScreen.defaultProps = {
-  loading: true,
-  color: undefined,
-  logo: undefined,
-  backdrop: false,
-  role: undefined,
-};
-
-export default withStyles(styles)(LoadingScreen);
+const BananasLoadingScreen = withStyles(styles, {
+  name: "BananasLoadingScreen",
+})(LoadingScreen);
+export default BananasLoadingScreen;

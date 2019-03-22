@@ -9,6 +9,8 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
+import { t } from ".";
+
 const styles = theme => ({
   root: {},
   agree: {},
@@ -23,6 +25,31 @@ const styles = theme => ({
 const Transition = props => <Slide direction="down" {...props} />;
 
 class Alert extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    open: PropTypes.bool,
+    title: PropTypes.string,
+    message: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+    agree: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    dismiss: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    onAgree: PropTypes.func,
+    onDismiss: PropTypes.func,
+    onClose: PropTypes.func,
+    keepMounted: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    open: true,
+    title: null,
+    message: null,
+    agree: true,
+    dismiss: true,
+    onAgree: undefined,
+    onDismiss: undefined,
+    onClose: undefined,
+    keepMounted: true,
+  };
+
   onAgree = () => {
     const { onClose, onAgree } = this.props;
     if (onClose) {
@@ -104,29 +131,44 @@ class Alert extends React.Component {
   }
 }
 
-Alert.propTypes = {
-  classes: PropTypes.object.isRequired,
-  open: PropTypes.bool,
-  title: PropTypes.string,
-  message: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
-  agree: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  dismiss: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  onAgree: PropTypes.func,
-  onDismiss: PropTypes.func,
-  onClose: PropTypes.func,
-  keepMounted: PropTypes.bool,
-};
+const BananasAlert = withStyles(styles, { name: "BananasAlert" })(Alert);
 
-Alert.defaultProps = {
-  open: true,
-  title: null,
-  message: null,
-  agree: true,
-  dismiss: true,
-  onAgree: undefined,
-  onDismiss: undefined,
-  onClose: undefined,
-  keepMounted: true,
-};
+class AlertController extends React.Component {
+  state = {
+    open: false,
+  };
 
-export default withStyles(styles, { name: "BananasAlert" })(Alert);
+  static expose = ["alert", "confirm", "dismissModal"];
+
+  alert(props) {
+    const state =
+      typeof props === "string" ? { message: props, dismiss: false } : props;
+
+    this.setState({ ...state, open: true });
+  }
+
+  confirm(props) {
+    /* Texts from Django admin translation messages, please don't change */
+    const confirm = {
+      title: t("Are you sure?"),
+      agree: t("Yes, I'm sure"),
+      dismiss: t("No, take me back"),
+      ...(typeof props === "string" ? { message: props } : props),
+    };
+
+    this.alert(confirm);
+  }
+
+  dismissModal() {
+    this.setState({ ...this.state.alert, open: false });
+  }
+
+  render() {
+    return (
+      <BananasAlert {...this.state} onClose={this.dismissModal.bind(this)} />
+    );
+  }
+}
+
+export default BananasAlert;
+export { BananasAlert as Alert, AlertController };

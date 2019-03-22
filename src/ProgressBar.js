@@ -29,13 +29,16 @@ const ProgressBar = ({ classes, color, loading }) => {
 
 ProgressBar.propTypes = {
   classes: PropTypes.object.isRequired,
-  color: PropTypes.string,
   loading: PropTypes.bool,
+  color: PropTypes.string,
 };
 
 ProgressBar.defaultProps = {
-  color: "secondary",
   loading: true,
+  color: "secondary",
 };
 
-export default withStyles(styles, { name: "BananasProgressBar" })(ProgressBar);
+const BananasProgressBar = withStyles(styles, {
+  name: "BananasProgressBar",
+})(ProgressBar);
+export default BananasProgressBar;

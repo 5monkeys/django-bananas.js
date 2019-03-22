@@ -183,23 +183,23 @@ test("Can show messages", async () => {
   // Expect no messages showing
   expect(queryByText("client-snackbar")).toBeNull();
 
-  app.success("SUCCESS_MSG");
+  app.admin.success("SUCCESS_MSG");
   await waitForElement(() => getByText("SUCCESS_MSG"), { container });
 
-  app.info("INFO_MSG");
+  app.admin.info("INFO_MSG");
   await waitForElement(() => getByText("INFO_MSG"), { container });
 
-  app.warning("WARNING_MSG");
+  app.admin.warning("WARNING_MSG");
   await waitForElement(() => getByText("WARNING_MSG"), { container });
 
-  app.error("ERROR_MSG");
+  app.admin.error("ERROR_MSG");
   await waitForElement(() => getByText("ERROR_MSG"), { container });
 });
 
 test("Can show simple alert", async () => {
   const { app, container, getByText } = await renderApp();
 
-  app.alert("AlertMessageOnly");
+  app.admin.alert("AlertMessageOnly");
   await waitForElement(() => getByText("AlertMessageOnly"), { container });
 });
 
@@ -219,7 +219,7 @@ test("Can show configured alert", async () => {
   };
 
   // Show and wait for alert
-  app.alert(alert);
+  app.admin.alert(alert);
   await waitForElement(() => getByText("AlertTitle"), { container });
 
   const agreeButton = getByText("AlertAgree");
@@ -230,23 +230,21 @@ test("Can show configured alert", async () => {
 
   // Click dismiss button and expect onDismiss callback to been called
   fireEvent.click(dismissButton);
-  await wait(() => !app.state.alert.open);
-  expect(dismissed).toHaveBeenCalledTimes(1);
+  await wait(() => expect(dismissed).toHaveBeenCalledTimes(1));
 
   // Show and wait for another alert
-  app.alert(alert);
+  app.admin.alert(alert);
   await waitForElement(() => getByText("AlertTitle"), { container });
 
   // Click agree button and expect onAgree callback to been called
   fireEvent.click(getByText("AlertAgree"));
-  await wait(() => !app.state.alert.open);
-  expect(agreed).toHaveBeenCalledTimes(1);
+  await wait(() => expect(agreed).toHaveBeenCalledTimes(1));
 });
 
 test("Can show simple confirm", async () => {
   const { app, container, getByText } = await renderApp();
 
-  app.confirm("ConfirmMessageOnly");
+  app.admin.confirm("ConfirmMessageOnly");
   await waitForElement(() => getByText("Är du säker?"), { container });
   expect(getByText("ConfirmMessageOnly")).toBeTruthy();
 });
@@ -254,7 +252,7 @@ test("Can show simple confirm", async () => {
 test("Can show configured confirm", async () => {
   const { app, container, getByText } = await renderApp();
 
-  app.confirm({ message: "ConfirmMessageOnly", agree: "ConfirmAgree" });
+  app.admin.confirm({ message: "ConfirmMessageOnly", agree: "ConfirmAgree" });
   await waitForElement(() => getByText("Är du säker?"), { container });
   expect(getByText("ConfirmMessageOnly")).toBeTruthy();
   expect(getByText("ConfirmAgree")).toBeTruthy();
