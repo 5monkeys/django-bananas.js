@@ -1,6 +1,7 @@
 import Logger from "js-logger";
 
 import { t } from "../src";
+import { django, generateColor } from "../src/colors";
 import {
   absolutePath,
   capitalize,
@@ -90,4 +91,9 @@ test("Can translate strings via API", () => {
   window.i18n = { foo: "bar" };
   expect(t("foo")).toBe("bar");
   expect(t("baz")).toBe("baz");
+});
+
+test("Can generate Material UI color shapes", () => {
+  const green = "#34A77B";
+  expect(generateColor(green)).toEqual(django);
 });
