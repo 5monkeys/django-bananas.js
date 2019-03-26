@@ -1,16 +1,18 @@
-import { Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import React from "react";
 
+import { Translate, t } from "..";
 import CardPage from "./CardPage";
 
 const ErrorPage = ({ title, data }) => {
   const { statusCode } = data;
   return (
-    <CardPage title={title} subtitle={`Status: ${statusCode}`}>
-      <Typography>
-        Sorry, but the page you requested failed to load :-(
-      </Typography>
+    <CardPage title={title} subtitle={`Status: ${statusCode || t("Unknown")}`}>
+      <Translate>
+        {[404, 501].includes(statusCode)
+          ? "We're sorry, but the requested page could not be found."
+          : "There's been an error. It's been reported to the site administrators via email and should be fixed shortly. Thanks for your patience."}
+      </Translate>
     </CardPage>
   );
 };

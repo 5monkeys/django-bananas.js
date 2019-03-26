@@ -48,10 +48,40 @@ const styles = theme => ({
 });
 
 class LoadingScreen extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    loading: PropTypes.bool,
+    color: PropTypes.string,
+    logo: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.string,
+      PropTypes.node,
+    ]),
+    backdrop: PropTypes.bool,
+    role: PropTypes.string,
+  };
+
+  static defaultProps = {
+    loading: true,
+    color: undefined,
+    logo: undefined,
+    backdrop: false,
+    role: undefined,
+  };
+
   renderScreen() {
-    const { classes, loading, color, logo, backdrop, ...rest } = this.props;
+    const {
+      classes,
+      loading,
+      color,
+      logo,
+      backdrop,
+      role,
+      ...rest
+    } = this.props;
     return (
       <div
+        data-testid={role}
         className={classNames(classes.root, {
           [classes.backdrop]: backdrop,
           [classes.backdropPrimary]: backdrop && color === "primary",
@@ -92,19 +122,7 @@ class LoadingScreen extends React.Component {
   }
 }
 
-LoadingScreen.propTypes = {
-  classes: PropTypes.object.isRequired,
-  loading: PropTypes.bool,
-  color: PropTypes.string,
-  logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
-  backdrop: PropTypes.bool,
-};
-
-LoadingScreen.defaultProps = {
-  loading: true,
-  color: undefined,
-  logo: undefined,
-  backdrop: false,
-};
-
-export default withStyles(styles)(LoadingScreen);
+const BananasLoadingScreen = withStyles(styles, {
+  name: "BananasLoadingScreen",
+})(LoadingScreen);
+export default BananasLoadingScreen;

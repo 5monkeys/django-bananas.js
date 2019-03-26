@@ -1,12 +1,11 @@
 import createHistory from "history/createBrowserHistory";
 import Logger from "js-logger";
 
-import MePage from "./pages/MePage";
+import { MePage } from "./pages";
 import {
   absolutePath,
   capitalize,
   ensureLeadingHash,
-  ensureTrailingSlash,
   fromQuery,
   nthIndexOf,
   toQuery,
@@ -15,14 +14,18 @@ import {
 const logger = Logger.get("bananas");
 
 export default class Router {
-  constructor(baseUrl) {
-    let basename = baseUrl || "";
+  constructor(options = {}) {
+    let basename = options.prefix || "";
     if (basename.endsWith("/")) {
       basename = basename.substring(0, basename.length - 1);
     }
-    this.history = createHistory({
-      basename,
-    });
+    this.history = options.history
+      ? typeof options.history === "function"
+        ? options.history({ basename })
+        : options.history
+      : createHistory({
+          basename,
+        });
 
     // Disable muting of route notification events
     this.isMuted = false;
@@ -222,14 +225,6 @@ export default class Router {
     return path.substring(0, nthIndexOf(path, "/", 2, 1) + 1 || undefined);
   }
 
-  getReverseOperationId(id) {
-    /*
-     * Converts original operationId to normalized swagger client format
-     * foo.bar:read -> foo_bar_read
-     * */
-    return id.replace(new RegExp(/[.:-]/, "g"), "_");
-  }
-
   getPath(endpoint, method, action) {
     return method === "get" ? endpoint : `${endpoint}${action}/`;
   }
@@ -277,7 +272,8 @@ export default class Router {
   }
 
   getOperationTemplate(id) {
-    return this.getRoute(id).template;
+    const route = this.getRoute(id);
+    return route ? route.template : undefined;
   }
 
   ResolvedRoute(route, overrides) {
@@ -298,9 +294,7 @@ export default class Router {
   resolve(path) {
     // Resolve path to matching route
     const { location } = this.history;
-    const pathname = ensureTrailingSlash(
-      absolutePath(path.startsWith(".") ? location.pathname + path : path)
-    );
+    const pathname = absolutePath(path, location.pathname);
 
     for (const route of this.routes) {
       const match = route.pattern.exec(pathname);
@@ -367,7 +361,7 @@ export default class Router {
     logger.debug("Router.reroute()");
     const { location } = this.history;
     const { pathname, search, hash } = location;
-    this.route(
+    return this.route(
       to || {
         path: pathname,
         query: search,
@@ -403,7 +397,7 @@ export default class Router {
       typeof to === "string"
         ? { pathname: to, search: "", hash: "" }
         : {
-            pathname: ensureTrailingSlash(to.path || current.pathname),
+            pathname: to.path || current.pathname,
             search:
               typeof to.query === "object" ? toQuery(to.query) : to.query || "",
             hash: ensureLeadingHash(to.hash) || "",
@@ -427,7 +421,7 @@ export default class Router {
     const pageChange = next.pathname !== current.pathname;
     const rewind = pageChange && next.pathname === referer.pathname;
 
-    // Patch next location and keep parts from current/referer location
+    // Patch next location and keep parts from current or referer location
     if (patch && (!pageChange || rewind)) {
       const origin = next.pathname === referer.pathname ? referer : current;
       next.search = next.search ? next.search : origin.search;
@@ -446,10 +440,11 @@ export default class Router {
       next.hash !== current.hash;
 
     const replace = rewrite || !locationChange;
+    const action = replace ? "REPLACE" : "PUSH";
     const navigate = replace ? this.history.replace : this.history.push;
 
     // Notify that route about to update
-    this.routeWillUpdate(next, replace ? "REPLACE" : "PUSH");
+    this.routeWillUpdate(next, action);
 
     // Refresh current, event listeners may have modified state
     current = this.history.location;
@@ -459,11 +454,22 @@ export default class Router {
       scroll: rewind ? referer.state.scroll : 0,
       ...(replace ? current.state : undefined),
       route,
-      referer: pageChange ? current : referer,
+      referer:
+        pageChange && !rewrite
+          ? {
+              ...current,
+              state: {
+                ...current.state,
+                referer: undefined, // Drop referer's referer to not endless nest
+              },
+            }
+          : referer,
     };
 
     // Change history
     logger.debug("Router.route():", next);
     navigate(next);
+
+    return { location: next, action };
   }
 }

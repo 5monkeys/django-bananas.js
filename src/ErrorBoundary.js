@@ -20,13 +20,6 @@ class ErrorBoundary extends React.Component {
     return { error: new InternalPageError() };
   }
 
-  componentDidCatch() {
-    const { message } = this.props;
-    if (message) {
-      this.context.admin.error(this.props.message);
-    }
-  }
-
   render() {
     const { children, component, ...props } = this.props;
     const Fallback = component;

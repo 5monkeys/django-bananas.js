@@ -1,20 +1,23 @@
+import { amber } from "@material-ui/core/colors";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { cloneDeep, merge } from "lodash";
+
+import { django } from "./colors";
 
 const defaults = {
   bananas: true,
   typography: {
     useNextVariants: true,
   },
+  /*
   overrides: {
-    /*
     BananasNavBar: {
       drawer: {
         width: 280,
       },
     },
-    */
   },
+  */
 };
 
 export function applyThemeDefaults(theme) {
@@ -36,12 +39,10 @@ export function extendTheme(source, overrides) {
 
 const defaultTheme = {
   palette: {
+    primary: django,
     secondary: {
-      main: "#ffaa00",
+      main: amber[700],
       contrastText: "#fff",
-    },
-    primary: {
-      main: "#34A77B",
     },
     background: {
       default: "#fafafa",
@@ -49,8 +50,34 @@ const defaultTheme = {
   },
 };
 
-const themes = {
-  default: applyThemeDefaults(defaultTheme),
+const darkTheme = {
+  palette: {
+    type: "dark",
+    primary: defaultTheme.palette.primary,
+    secondary: defaultTheme.palette.secondary,
+    background: {
+      paper: "#303030",
+      default: "#222",
+    },
+    action: {
+      selected: "rgba(255, 255, 255, 0.12)",
+      hover: "rgba(255, 255, 255, 0.03)",
+    },
+    divider: "rgba(255, 255, 255, 0.07)",
+  },
+  overrides: {
+    MuiSnackbarContent: {
+      root: {
+        color: "#fff",
+      },
+    },
+  },
 };
+
+const themes = {
+  light: applyThemeDefaults(defaultTheme),
+  dark: applyThemeDefaults(darkTheme),
+};
+themes.default = themes.light;
 
 export default themes;

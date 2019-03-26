@@ -1,3 +1,7 @@
+import Logger from "js-logger";
+
+import { t } from "../src";
+import { django, generateColor } from "../src/colors";
 import {
   absolutePath,
   capitalize,
@@ -6,9 +10,10 @@ import {
   fromQuery,
   getCookie,
   nthIndexOf,
-  t,
   toQuery,
 } from "../src/utils";
+
+Logger.get("bananas").setLevel(Logger.OFF);
 
 test("Get cookie value", () => {
   Object.defineProperty(global.document, "cookie", {
@@ -20,10 +25,15 @@ test("Get cookie value", () => {
 
 test("Absolute path", () => {
   expect(absolutePath("")).toBe("");
-  expect(absolutePath("foo")).toBe("foo");
-  expect(absolutePath("foo/bar")).toBe("foo/bar");
-  expect(absolutePath("foo/./bar/")).toBe("foo/bar/");
-  expect(absolutePath("foo/./bar/../baz/")).toBe("foo/baz/");
+  expect(absolutePath("foo")).toBe("/foo/");
+  expect(absolutePath("foo/", "/bar")).toBe("/bar/foo/");
+  expect(absolutePath("/foo/bar")).toBe("/foo/bar/");
+  expect(absolutePath("foo/./bar/")).toBe("/foo/bar/");
+  expect(absolutePath("foo/./bar/../baz/")).toBe("/foo/baz/");
+  expect(absolutePath("/foo/./bar/../../baz")).toBe("/baz/");
+  expect(absolutePath("foo/./bar/../../")).toBe("/");
+  expect(absolutePath("../", "/foo/bar")).toBe("/foo/");
+  expect(absolutePath("../..", "/foo/bar")).toBe("/");
 });
 
 test("Capitalize string", () => {
@@ -35,13 +45,14 @@ test("Capitalize string", () => {
 
 test("Ensure leading hash (#)", () => {
   expect(ensureLeadingHash()).toBeUndefined();
-  expect(ensureLeadingHash("")).toBe("");
+  expect(ensureLeadingHash("")).toBe("#");
   expect(ensureLeadingHash("foo")).toBe("#foo");
   expect(ensureLeadingHash("#foo")).toBe("#foo");
 });
 
 test("Ensure trailing slash", () => {
   expect(ensureTrailingSlash()).toBeUndefined();
+  expect(ensureTrailingSlash("")).toBe("/");
   expect(ensureTrailingSlash("foo")).toBe("foo/");
   expect(ensureTrailingSlash("foo/")).toBe("foo/");
   expect(ensureTrailingSlash("/foo/")).toBe("/foo/");
@@ -73,6 +84,16 @@ test("Find nth occurance of pattern in string", () => {
   expect(nthIndexOf("foo/bar/baz/", "/", 3, 4)).toBe(-1);
 });
 
-test("Translation not implemented", () => {
-  expect(() => t("Log in")).toThrow();
+test("Can translate strings via API", () => {
+  expect(t("foo")).toBe("foo");
+  expect(t("baz")).toBe("baz");
+
+  window.i18n = { foo: "bar" };
+  expect(t("foo")).toBe("bar");
+  expect(t("baz")).toBe("baz");
+});
+
+test("Can generate Material UI color shapes", () => {
+  const green = "#34A77B";
+  expect(generateColor(green)).toEqual(django);
 });

@@ -5,11 +5,11 @@ import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
-import ErrorBoundary from "./ErrorBoundary";
+import { AlertController } from "./Alert";
 import LoadingScreen from "./LoadingScreen";
-import Messages from "./Messages";
+import { MessagesController } from "./Messages";
 import NavBar from "./NavBar";
-import ProgressBar from "./ProgressBar";
+import { Page, PageLoadController } from "./Page";
 import APIClient from "./api";
 import AdminContext from "./context";
 import {
@@ -18,12 +18,12 @@ import {
   PageNotFoundError,
   PageNotImplementedError,
 } from "./errors";
-import ErrorPage from "./pages/ErrorPage";
-import LoginPage from "./pages/LoginPage";
-import LoginPageForm from "./pages/LoginPageForm";
+import { ErrorPage, LoginPage } from "./pages";
 import Router from "./router";
 import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
+import { ComponentProxy } from "./utils";
+import { t } from ".";
 
 Logger.useDefaults();
 const logger = Logger.get("bananas");
@@ -49,14 +49,6 @@ const styles = theme => {
     admin: {
       backgroundColor: theme.palette.background.default,
     },
-    page: {
-      position: "relative",
-      display: "flex",
-      flexDirection: "column",
-      flexGrow: 1,
-      width: "100%",
-      height: "100%",
-    },
   };
 };
 
@@ -81,14 +73,19 @@ class Admin extends React.Component {
       this.settingsDidUpdate.bind(this)
     );
 
+    // Initialize component controllers proxy references
+    this.controllers = new ComponentProxy();
+    this.controllers.add(PageLoadController, "PageLoadController");
+    this.controllers.add(AlertController, "AlertController");
+    this.controllers.add(MessagesController, "MessagesController");
+    this.admin = this.controllers.proxy; // Shortcut
+
     this.state = {
-      booted: false,
-      loading: { boot: 1 },
-      user: undefined,
-      pageProps: undefined,
-      messages: [],
-      messageIndex: 0,
+      context: this.makeContext(),
       settings: this.settings.settings,
+      pageProps: undefined,
+      booting: true,
+      booted: false,
     };
 
     logger.setLevel(this.getLogLevel("bananas", "WARN"));
@@ -98,9 +95,11 @@ class Admin extends React.Component {
 
   getLogLevel(namespace, logLevel) {
     const level =
-      typeof this.props.logLevel === "string"
-        ? logLevel || this.props.logLevel
-        : this.props.logLevel[namespace] || logLevel || "WARN";
+      (typeof this.props.logLevel === "string"
+        ? this.props.logLevel
+        : this.props.logLevel[namespace]) ||
+      logLevel ||
+      "WARN";
 
     return Logger[level];
   }
@@ -112,8 +111,60 @@ class Admin extends React.Component {
     return log;
   }
 
+  makeContext(context) {
+    const locals = ["setTitle", "login", "logout"].reduce(
+      (result, shortcut) => ({
+        ...result,
+        [shortcut]: this[shortcut].bind(this),
+      }),
+      {
+        settings: this.settings,
+      }
+    );
+
+    return {
+      admin: {
+        ...this.admin,
+        ...locals,
+      },
+      router: undefined,
+      api: undefined,
+      user: undefined,
+      ...context,
+    };
+  }
+
+  setContext(ctx, callback) {
+    const context = { ...this.state.context, ...ctx };
+    this.setState({ context }, () => {
+      logger.debug("Updated AdminContext:", context);
+      if (callback) {
+        callback(context);
+      }
+    });
+  }
+
+  resetContext(callback) {
+    this.setContext(this.makeContext(), callback);
+  }
+
   componentDidMount() {
     this.boot();
+  }
+
+  componentWillUnmount() {
+    // Unlisten to router/history events
+    if (this.unlistenRouter) {
+      this.unlistenRouter();
+    }
+
+    // Undefine instances
+    this.router = undefined;
+    this.swagger = undefined;
+    this.api = undefined;
+
+    // Unbind app refernece on window
+    window.bananas = undefined;
   }
 
   async boot() {
@@ -133,8 +184,8 @@ class Admin extends React.Component {
     } catch (error) {
       logger.error("Critical Error: Failed to initialize API client!", error);
       const cause = error.response ? error.response.statusText : "Unreachable";
-      this.error(`Failed to boot: API ${cause}`);
-      this.loading("boot", false);
+      this.admin.error(`Failed to boot: API ${cause}`);
+      this.setState({ booting: false });
       return;
     }
 
@@ -145,41 +196,61 @@ class Admin extends React.Component {
       swagger
     );
 
-    const api = swagger.operations;
-    this.api = api;
     this.swagger = swagger;
+    this.api = swagger.operations;
+
+    // Load translations
+    const i18n = await this.api["bananas.i18n:list"]();
+    window.i18n = i18n.obj.catalog;
 
     // Initialize Router
     if (!this.router) {
-      this.router = new Router(this.props.prefix);
-      this.router.on("routeDidUpdate", this.routeDidUpdate.bind(this));
+      this.router = new Router({ prefix: this.props.prefix });
+      this.unlistenRouter = this.router.on(
+        "routeDidUpdate",
+        this.routeDidUpdate.bind(this)
+      );
     }
     this.router.initialize(swagger);
 
-    // Boot phase loading complete
-    this.loading("boot", false);
+    // Update AdminContext
+    this.setContext({ api: this.api, router: this.router });
 
-    // Route current window location if API is authenticatd
+    // Route to current window location if API is authenticatd
     if (swagger.isAuthenticated) {
-      this.user = { pending: true }; // Temp user to not flash login page
-      this.setState({ user: this.user });
+      if (!this.state.context.user) {
+        this.setContext({ user: { pending: true } });
+      }
       this.router.reroute();
     }
 
     // Finalize boot
-    this.setState({ booted: true });
-
-    logger.info("Booted!");
+    this.setState({ booting: false, booted: true }, () => {
+      logger.info("Booted!");
+    });
   }
 
-  reboot(user) {
-    this.unmountPage();
+  async reboot(user) {
+    await this.shutdown();
 
-    this.user = user;
-    this.api = undefined;
-    this.swagger = undefined;
+    if (user) {
+      this.setContext({ user });
+    }
 
-    this.setState({ booted: false, user }, this.boot.bind(this));
+    this.boot();
+  }
+
+  shutdown() {
+    return new Promise(async resolve => {
+      await this.unmountPage();
+
+      this.swagger = undefined;
+      this.api = undefined;
+
+      this.setState({ booted: false }, () => {
+        this.resetContext(resolve);
+      });
+    });
   }
 
   authorize() {
@@ -191,12 +262,18 @@ class Admin extends React.Component {
         reject(anonymous);
         return;
       }
+
+      logger.debug("Authorizing...");
+
       endpoint().then(
         response => {
-          this.user = { ...response.obj };
-          logger.info("Authorized User:", this.user);
-          this.setState({ user: this.user });
-          resolve(this.user);
+          const user = { ...response.obj };
+          const current = this.state.context.user;
+          if (JSON.stringify(user) !== JSON.stringify(current)) {
+            logger.info("Authorized User:", user);
+            this.setContext({ user });
+          }
+          resolve(user);
         },
         error => {
           if (error.message === "Forbidden") {
@@ -209,24 +286,13 @@ class Admin extends React.Component {
     });
   }
 
-  loading(type, on = true) {
-    const count = (this.state.loading[type] || (on ? 0 : 1)) + (on ? 1 : -1);
-    this.setState({ loading: { ...this.state.loading, [type]: count } });
-  }
-
-  isLoading(type) {
-    return type
-      ? this.state.loading[type] > 0
-      : Object.keys(this.state.loading).some(t => this.isLoading(t));
-  }
-
   onAPIClientError(error) {
-    this.loading("api", false);
-    this.error(error);
+    this.admin.progress(false);
+    this.admin.error(error);
   }
 
   onAPIClientProgress({ done }) {
-    this.loading("api", !done);
+    this.admin.progress(!done);
   }
 
   settingsDidUpdate(settings) {
@@ -250,21 +316,22 @@ class Admin extends React.Component {
       currentPage &&
       (!currentPage.route || currentPage.route.path !== location.pathname)
     ) {
-      this.unmountPage();
+      await this.unmountPage();
+      this.admin.loading();
     }
 
     // Authorize, load and mount page
     try {
-      if (!this.state.user || !this.state.user.id) {
+      if (!this.state.context.user || !this.state.context.user.id) {
         await this.authorize();
       }
-      const { Page, pageProps } = await this.loadPage(location, route);
-      this.mountPage(Page, pageProps);
+      const { PageComponent, pageProps } = await this.loadPage(location, route);
+      this.mountPage(PageComponent, pageProps);
     } catch (error) {
       if (error instanceof AnonymousUserError) {
         this.reboot();
       } else if (error instanceof PageError) {
-        this.mountErrorPage(error.message, error.code);
+        this.mountErrorPage(t(error.message), error.code);
       } else if (error.response && [401, 403].includes(error.response.status)) {
         try {
           await this.authorize();
@@ -276,6 +343,7 @@ class Admin extends React.Component {
           }
         }
       } else {
+        this.admin.loading(false);
         throw error;
       }
     }
@@ -291,10 +359,24 @@ class Admin extends React.Component {
       ? this.state.pageProps.route || null
       : null;
 
-    logger.debug("Load Page:", path, route, referer);
+    let { PageComponent } = this;
 
-    // Initial page props
-    let Page = null;
+    // Load or re-use page component
+    if (this.PageComponent && referer && referer.id === id) {
+      logger.debug("Re-using page component...");
+    } else {
+      logger.debug("Loading page component...", path, route, referer);
+
+      if (template === "Component") {
+        // Route has predefined page component, and no data needed
+        PageComponent = this.router.getOperationTemplate(operationId);
+      } else {
+        // Load page component
+        PageComponent = await this.loadPageComponent(template);
+      }
+    }
+
+    // Initialize page component props
     const pageProps = {
       key: `${id}:${location.search}`,
       route: {
@@ -311,14 +393,6 @@ class Admin extends React.Component {
       referer,
     };
 
-    if (template === "Component") {
-      // Route has predefined page component, and no data needed
-      Page = this.router.getOperationTemplate(operationId);
-    } else {
-      // Load page component
-      Page = await this.loadPageComponent(template);
-    }
-
     const reuseData =
       referer &&
       location.hash &&
@@ -333,7 +407,7 @@ class Admin extends React.Component {
       pageProps.data = await this.loadPageData(id, params, query);
     }
 
-    return { Page, pageProps };
+    return { PageComponent, pageProps };
   }
 
   async loadPageComponent(template) {
@@ -344,11 +418,19 @@ class Admin extends React.Component {
     return exports.default;
   }
 
-  loadPageData(operationId, params, filter) {
+  async loadPageData(operationId, params, filter) {
     if (this.api[operationId]) {
       logger.debug("Loading page data...", operationId, params, filter);
-      this.loading("data");
-      return this.api[operationId]({ ...params, ...filter });
+
+      try {
+        this.admin.loading();
+        const data = await this.api[operationId]({ ...params, ...filter });
+        this.admin.loading(false);
+        return data;
+      } catch (error) {
+        this.admin.loading(false);
+        throw error;
+      }
     }
 
     logger.debug(
@@ -359,29 +441,35 @@ class Admin extends React.Component {
 
   mountPage(PageComponent, pageProps) {
     logger.info("Mount Page:", pageProps);
-    this.Page = PageComponent;
+    this.admin.loading(false);
+    this.PageComponent = PageComponent;
     this.setState({ pageProps }, () => {
-      this.loading("data", false);
       this.setTitle(pageProps.title);
     });
   }
 
   mountErrorPage(title, statusCode) {
-    logger.warn(title || "Page Not Found");
+    const _title = title || t("Server error");
+    const _statusCode = statusCode || 500;
+    logger.warn(_title, _statusCode);
     this.mountPage(ErrorPage, {
-      key: statusCode || 500,
-      title: title || "Error",
-      data: { statusCode },
+      key: _statusCode,
+      title: _title,
+      data: { statusCode: _statusCode },
     });
   }
 
   unmountPage() {
-    if (this.state.pageProps) {
-      logger.info("Un-mounting page...", this.state.pageProps);
-      this.Page = null;
-      this.setState({ pageProps: null });
-      this.dismissMessages();
-    }
+    return new Promise(resolve => {
+      if (this.state.pageProps) {
+        logger.info("Un-mounting page...", this.state.pageProps);
+        this.PageComponent = null;
+        this.admin.dismissMessages();
+        this.setState({ pageProps: null }, resolve);
+      } else {
+        resolve();
+      }
+    });
   }
 
   setTitle(title) {
@@ -399,9 +487,9 @@ class Admin extends React.Component {
           logger.info("Successfull login...reboot");
           const user = response.obj;
           resolve(user);
-          this.dismissMessages();
+          this.admin.dismissMessages();
           this.reboot(user);
-          this.success(`Välkommen ${user.full_name}`);
+          this.admin.success(`${t("Welcome,")} ${user.full_name}`);
         },
         error => {
           reject(error);
@@ -416,76 +504,14 @@ class Admin extends React.Component {
     });
   }
 
-  /* MESSAGING */
-
-  getUniqueMessageId() {
-    const { messageIndex } = this.state;
-    this.setState({ messageIndex: messageIndex + 1 });
-    return messageIndex;
-  }
-
-  messageCloseHandler(id) {
-    return () => {
-      const updatedMessages = [...this.state.messages];
-      const index = updatedMessages.findIndex(msg => id === msg.id);
-      updatedMessages.splice(index, 1);
-      this.setState({ messages: updatedMessages });
-    };
-  }
-
-  createMessage({ message, type }) {
-    const messages = [...this.state.messages];
-    const id = this.getUniqueMessageId();
-    messages.push({
-      message,
-      type,
-      open: true,
-      id,
-      remove: this.messageCloseHandler(id),
-    });
-    this.setState({ messages });
-  }
-
-  error(message) {
-    this.createMessage({ type: "error", message });
-  }
-
-  warning(message) {
-    this.createMessage({ type: "warning", message });
-  }
-
-  success(message) {
-    this.createMessage({ type: "success", message });
-  }
-
-  info(message) {
-    this.createMessage({ type: "info", message });
-  }
-
-  dismissMessages() {
-    this.setState({
-      messages: this.state.messages.map(message => {
-        return { ...message, open: false };
-      }),
-    });
-  }
-
   render() {
-    const { Page, router, api } = this;
+    const { PageComponent } = this;
     const { classes, pageTheme, loginForm } = this.props;
-    const { booted, user, pageProps, settings, messages } = this.state;
-    const LoginForm = loginForm || LoginPageForm;
+    const { booting, booted, context, settings, pageProps } = this.state;
+    const { user } = context;
 
     const isHorizontalLayout = settings.horizontal;
     const isVerticalLayout = !settings.horizontal;
-
-    // TODO: Don't build context here to prevent new object and children re-render
-    const context = {
-      admin: this,
-      router,
-      api,
-      user,
-    };
 
     return (
       <>
@@ -511,29 +537,16 @@ class Admin extends React.Component {
                     branding={this.props.branding}
                     version={this.props.version}
                   />
-                  <div className={classes.page}>
-                    <ProgressBar loading={this.isLoading("api")} />
-                    <LoadingScreen
-                      loading={this.isLoading("data")}
-                      color="default"
-                      backdrop
-                    />
-                    {Page && (
-                      <ErrorBoundary>
-                        {pageTheme ? (
-                          <MuiThemeProvider theme={pageTheme}>
-                            <Page {...pageProps} />
-                          </MuiThemeProvider>
-                        ) : (
-                          <Page {...pageProps} />
-                        )}
-                      </ErrorBoundary>
-                    )}
-                  </div>
+                  <Page
+                    theme={pageTheme}
+                    component={PageComponent}
+                    controller={this.controllers.PageLoadController}
+                    {...pageProps}
+                  />
                 </>
               ) : (
                 <LoginPage
-                  form={LoginForm}
+                  form={loginForm}
                   logger={logger}
                   logo={this.props.logo}
                   title={this.props.title}
@@ -541,72 +554,86 @@ class Admin extends React.Component {
               )}
             </AdminContext.Provider>
           ) : (
-            <LoadingScreen logo={this.props.logo} loading={this.isLoading()} />
+            <LoadingScreen
+              role="bootscreen"
+              logo={this.props.logo}
+              loading={booting}
+            />
           )}
         </div>
-        <Messages messages={messages} />
+        <MessagesController ref={this.controllers.MessagesController} />
+        <AlertController ref={this.controllers.AlertController} />
       </>
     );
   }
 }
 
-const StyledAdmin = withStyles(styles)(Admin);
+const BananasAdmin = withStyles(styles, { name: "BananasAdmin" })(Admin);
 
-const App = ({ ...props }) => {
-  const theme = createBananasTheme(props.theme);
-  const pageTheme = props.pageTheme
-    ? createBananasTheme(props.pageTheme)
-    : undefined;
+class App extends React.Component {
+  static propTypes = {
+    api: PropTypes.string.isRequired,
+    pages: PropTypes.func.isRequired,
+    prefix: PropTypes.string,
+    logLevel: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 
-  logger.debug("Main Theme:", theme);
-  logger.debug("Page Theme:", pageTheme);
+    layout: PropTypes.string,
+    permanent: PropTypes.bool,
+    collapsed: PropTypes.bool,
+    dense: PropTypes.bool,
 
-  return (
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      <StyledAdmin {...{ ...props, theme, pageTheme }} />
-    </MuiThemeProvider>
-  );
-};
+    title: PropTypes.string,
+    branding: PropTypes.string,
+    version: PropTypes.string,
+    logo: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.string,
+      PropTypes.node,
+    ]),
+    icons: PropTypes.object,
 
-App.propTypes = {
-  api: PropTypes.string.isRequired,
-  pages: PropTypes.func.isRequired,
-  prefix: PropTypes.string,
-  logLevel: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    theme: PropTypes.object,
+    pageTheme: PropTypes.object,
+    loginForm: PropTypes.func,
+  };
 
-  layout: PropTypes.string,
-  permanent: PropTypes.bool,
-  dense: PropTypes.bool,
+  static defaultProps = {
+    prefix: "",
+    logLevel: "WARN",
 
-  title: PropTypes.string,
-  branding: PropTypes.string,
-  version: PropTypes.string,
-  logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
-  icons: PropTypes.object,
+    layout: "horizontal", // horizontal|vertical
+    dense: false,
+    permanent: false,
+    collapsed: false,
 
-  theme: PropTypes.object,
-  pageTheme: PropTypes.object,
-  loginForm: PropTypes.func,
-};
+    title: "Bananas",
+    branding: "Bananas",
+    version: "v1.2.15", // TODO: Get package version
+    logo: true,
+    icons: undefined,
 
-App.defaultProps = {
-  prefix: "",
-  logLevel: "WARN",
+    theme: themes.default,
+    pageTheme: undefined,
+    loginForm: undefined,
+  };
 
-  layout: "horizontal", // horizontal|vertical
-  dense: false,
-  permanent: false,
+  render() {
+    const { props } = this;
+    const theme = createBananasTheme(props.theme);
+    const pageTheme = props.pageTheme
+      ? createBananasTheme(props.pageTheme)
+      : undefined;
 
-  title: "Bananas",
-  branding: "Bananas",
-  version: "v1.0.0", // TODO: Get package version
-  logo: true,
-  icons: undefined,
+    logger.debug("Main Theme:", theme);
+    logger.debug("Page Theme:", pageTheme);
 
-  theme: themes.default,
-  pageTheme: undefined,
-  loginForm: undefined,
-};
+    return (
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <BananasAdmin {...{ ...props, theme, pageTheme }} />
+      </MuiThemeProvider>
+    );
+  }
+}
 
 export default App;

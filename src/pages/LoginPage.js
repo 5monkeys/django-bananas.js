@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import Logo from "../Logo";
+import DefaultLoginForm from "./LoginPageForm";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -40,7 +41,7 @@ const pageStyles = theme => ({
 class LoginPage extends React.Component {
   render() {
     const { classes, logger, title, logo } = this.props;
-    const Form = this.props.form;
+    const Form = this.props.form || DefaultLoginForm;
 
     return (
       <Dialog
@@ -65,13 +66,14 @@ class LoginPage extends React.Component {
 
 LoginPage.propTypes = {
   classes: PropTypes.object.isRequired,
-  form: PropTypes.func.isRequired,
   logger: PropTypes.object.isRequired,
+  form: PropTypes.func,
   title: PropTypes.string,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
 };
 
 LoginPage.defaultProps = {
+  form: undefined,
   title: undefined,
   logo: true,
 };

@@ -14,23 +14,25 @@ const styles = theme => ({
     padding: 0,
     borderTopWidth: 1,
     borderTopStyle: "solid",
-    borderTopColor: theme.palette.action.selected,
+    borderTopColor: theme.palette.divider,
     ...theme.mixins.toolbar,
   },
   link: {
     fontSize: "inherit",
     "& > *": {
-      fontSize: "0.95em",
+      fontSize: "0.9em",
     },
   },
   drawerLink: {
     "&:hover": {
       color: theme.palette.primary.main,
+      opacity: 1,
     },
   },
   appbarLink: {
     "&:hover": {
       color: theme.palette.secondary.light,
+      opacity: 1,
     },
   },
 });

@@ -127,6 +127,21 @@ const styles = theme => ({
       // Outermost left edge padding when icons disabled
       paddingLeft: 0,
     },
+    "& $label": {
+      color: theme.palette.primary.contrastText,
+    },
+    "& $subtitle": {
+      color: theme.palette.primary.contrastText,
+      "& > *": {
+        opacity: 0.54,
+      },
+    },
+    "& $icon": {
+      color: theme.palette.primary.contrastText,
+    },
+    "& $avatar": {
+      color: theme.palette.primary.contrastText,
+    },
   },
 
   avatarItem: {
@@ -156,17 +171,19 @@ const styles = theme => ({
   },
   label: {
     // Text label Typography element
+    color: theme.palette.text.primary,
     transition: theme.transitions.create(["font-size"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  subtitle: { color: theme.palette.text.secondary },
   labelInset: {}, // Class for inset padding when icons disabled
 
   avatar: {
     // Avatar element, circle or transparent depending on child
     backgroundColor: "transparent",
-    color: "inherit",
+    color: theme.palette.text.primary,
     fontSize: 24,
     margin: 0,
     width: "auto",
@@ -195,7 +212,7 @@ const styles = theme => ({
     // Icon element, child of Avatar
     marginRight: 0,
     fontSize: "inherit",
-    color: "inherit",
+    color: theme.palette.text.primary,
     opacity: 0.666,
     transition: theme.transitions.create(["width", "height", "font-size"], {
       easing: theme.transitions.easing.sharp,
@@ -272,16 +289,12 @@ const MenuItem = ({
           classes={{
             root: classes.labelItem,
             primary: classes.label,
+            secondary: classes.subtitle,
             inset: classes.labelInset,
           }}
           inset={!showIcon}
-          primaryTypographyProps={{
-            color: "inherit",
-            noWrap: true,
-          }}
-          secondaryTypographyProps={{
-            color: "inherit",
-          }}
+          primaryTypographyProps={{ noWrap: true }}
+          secondaryTypographyProps={{ noWrap: true }}
           primary={title}
           secondary={subtitle}
         />
