@@ -219,7 +219,7 @@ class Admin extends React.Component {
     // Route to current window location if API is authenticatd
     if (swagger.isAuthenticated) {
       if (!this.state.context.user) {
-        this.setContext({ user: { pending: true } });
+        await this.authorize();
       }
       this.router.reroute();
     }
@@ -322,9 +322,6 @@ class Admin extends React.Component {
 
     // Authorize, load and mount page
     try {
-      if (!this.state.context.user || !this.state.context.user.id) {
-        await this.authorize();
-      }
       const { PageComponent, pageProps } = await this.loadPage(location, route);
       this.mountPage(PageComponent, pageProps);
     } catch (error) {
