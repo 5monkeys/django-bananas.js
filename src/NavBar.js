@@ -245,6 +245,7 @@ class NavBar extends React.Component {
             [classes.drawerCollapsed]: collapsed,
           }),
         }}
+        data-testid="navbar-drawer"
       >
         {this.renderChildren()}
       </Drawer>
@@ -257,6 +258,7 @@ class NavBar extends React.Component {
           classes={{
             root: classNames(classes.appbar, classes.header),
           }}
+          data-testid="navbar-appbar"
         >
           <Container className={classes.appbarContainer}>
             {this.renderChildren()}

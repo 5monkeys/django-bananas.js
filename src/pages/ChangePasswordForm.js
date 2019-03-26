@@ -12,12 +12,16 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import AdminContext from "../context";
+import { Translate, t } from "..";
 
 const logger = Logger.get("bananas");
 
 const styles = theme => ({
   root: {
     maxWidth: 350,
+  },
+  formLabel: {
+    marginBottom: theme.spacing.unit * 2,
   },
   formControlNormal: {
     marginTop: theme.spacing.unit * 3,
@@ -62,7 +66,7 @@ class ChangePasswordForm extends React.Component {
       },
     }).then(
       () => {
-        admin.success("Password changed");
+        admin.success(t("Password changed successfully."));
         this.setState({
           touched: false,
           errors: null,
@@ -73,7 +77,7 @@ class ChangePasswordForm extends React.Component {
       },
       error => {
         logger.error("Failed to change password", error.response);
-        admin.error("Failed to change password");
+        admin.error(t("Incorrect authentication credentials."));
         this.setState({ errors: error.response.obj, touched: false });
       }
     );
@@ -101,8 +105,19 @@ class ChangePasswordForm extends React.Component {
     );
 
     return (
-      <form onSubmit={this.onSubmit} className={classes.root}>
-        <FormLabel component="legend">{endpoint.title}</FormLabel>
+      <form
+        onSubmit={this.onSubmit}
+        className={classes.root}
+        data-testid="change-password-form"
+      >
+        <FormLabel component="legend" classes={{ root: classes.formLabel }}>
+          {endpoint.title}
+        </FormLabel>
+        <Translate>
+          {
+            "Please enter your old password, for security's sake, and then enter your new password twice so we can verify you typed it in correctly."
+          }
+        </Translate>
         <FormControl fullWidth component="fieldset">
           <FormGroup>
             {["old_password", "new_password1", "new_password2"].map(field => (
@@ -111,6 +126,7 @@ class ChangePasswordForm extends React.Component {
                 autoComplete={field}
                 classes={{ root: classes.field }}
                 label={schema[field].title}
+                inputProps={{ "aria-label": schema[field].title }}
                 error={Boolean(errors && errors[field])}
                 helperText={Boolean(errors && errors[field]) && errors[field]}
                 name={field}
@@ -138,7 +154,7 @@ class ChangePasswordForm extends React.Component {
               (Boolean(errors) && !touched) || !filled || passwordCheckError
             }
           >
-            {endpoint.title}
+            {t("Change my password")}
           </Button>
         </FormControl>
       </form>

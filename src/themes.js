@@ -39,9 +39,7 @@ export function extendTheme(source, overrides) {
 
 const defaultTheme = {
   palette: {
-    primary: {
-      main: django[500],
-    },
+    primary: django,
     secondary: {
       main: amber[700],
       contrastText: "#fff",

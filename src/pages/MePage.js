@@ -21,6 +21,11 @@ const styles = theme => ({
 });
 
 class MePage extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
+  };
+
   static contextType = AdminContext;
 
   render() {
@@ -50,7 +55,7 @@ class MePage extends React.Component {
               square
             >
               <SettingsForm
-                settings={admin.state.settings}
+                settings={admin.settings.settings}
                 onChange={(setting, value) => {
                   admin.settings.configure({ [setting]: value });
                 }}
@@ -65,10 +70,5 @@ class MePage extends React.Component {
     );
   }
 }
-
-MePage.propTypes = {
-  classes: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(MePage);

@@ -7,3 +7,5 @@ install:
   - cp src/_bananas.settings.js src/bananas.settings.js
   - npm ci
   - cd ..
+after_success:
+  - npm run publishCoverageReport

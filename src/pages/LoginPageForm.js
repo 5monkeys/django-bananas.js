@@ -7,6 +7,11 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import AdminContext from "../context";
+import { t } from "..";
+
+const styles = () => ({
+  submit: { boxShadow: "none" },
+});
 
 const DialogContent = withStyles(theme => ({
   root: {
@@ -38,7 +43,9 @@ class LoginForm extends React.Component {
 
     admin.login(username, password).catch(error => {
       logger.debug("Login Failed", error.response, error);
-      this.context.admin.error("Login Failed");
+      this.context.admin.error(
+        t("Unable to log in with provided credentials.")
+      );
     });
   };
 
@@ -49,13 +56,19 @@ class LoginForm extends React.Component {
   };
 
   render() {
+    const { classes } = this.props;
+    const { api } = this.context;
+
+    const endpoint = api["bananas.login:create"];
+    const schema = endpoint.schema.data;
+
     return (
       <form onSubmit={this.onSubmit}>
         <DialogContent>
           <TextField
             autoFocus
             fullWidth
-            label="username"
+            label={schema.username.title}
             name="username"
             type="text"
             onChange={this.save}
@@ -63,7 +76,7 @@ class LoginForm extends React.Component {
           />
           <TextField
             fullWidth
-            label="password"
+            label={schema.password.title}
             name="password"
             type="password"
             onChange={this.save}
@@ -76,8 +89,9 @@ class LoginForm extends React.Component {
             type="submit"
             color="primary"
             aria-label="login"
+            classes={{ contained: classes.submit }}
           >
-            Login
+            {t("Log in")}
           </Button>
         </DialogActions>
       </form>
@@ -86,7 +100,8 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.propTypes = {
+  classes: PropTypes.object.isRequired,
   logger: PropTypes.object.isRequired,
 };
 
-export default LoginForm;
+export default withStyles(styles, { name: "BananasLoginForm" })(LoginForm);

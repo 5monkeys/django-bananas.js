@@ -45,7 +45,16 @@ const styles = theme => ({
   },
 });
 
-class UnstyledCustomSnackBar extends React.Component {
+class Message extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    message: PropTypes.node.isRequired,
+    open: PropTypes.bool.isRequired,
+    remove: PropTypes.func.isRequired,
+    type: PropTypes.oneOf(["success", "warning", "error", "info"]).isRequired,
+    id: PropTypes.number.isRequired,
+  };
+
   state = {
     open: true,
   };
@@ -73,6 +82,7 @@ class UnstyledCustomSnackBar extends React.Component {
         onExited={remove}
         open={open}
         autoHideDuration={type !== "error" ? 6000 : undefined} // don't autohide errors.
+        data-testid="Message"
       >
         <SnackbarContent
           className={classes[type]}
@@ -90,6 +100,7 @@ class UnstyledCustomSnackBar extends React.Component {
               color="inherit"
               className={classes.close}
               onClick={this.handleClose}
+              data-testid="message-close-button"
             >
               <CloseIcon className={classes.icon} />
             </IconButton>,
@@ -100,32 +111,101 @@ class UnstyledCustomSnackBar extends React.Component {
   }
 }
 
-UnstyledCustomSnackBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  message: PropTypes.node.isRequired,
-  open: PropTypes.bool.isRequired,
-  remove: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(["success", "warning", "error", "info"]).isRequired,
-  id: PropTypes.number.isRequired,
+const BananasMessage = withStyles(styles, { name: "BananasMessage" })(Message);
+
+class Messages extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    messages: PropTypes.array.isRequired,
+  };
+
+  render() {
+    const { classes, messages } = this.props;
+    const snackbars = messages.map(msg => (
+      <BananasMessage key={msg.id + msg.message} {...msg} />
+    ));
+
+    return snackbars ? <div className={classes.root}>{snackbars}</div> : null;
+  }
+}
+
+const BananasMessages = withStyles({ root: {} }, { name: "BananasMessages" })(
+  Messages
+);
+
+class MessagesController extends React.Component {
+  state = {
+    messageIndex: 0,
+    messages: [],
+  };
+
+  static expose = ["success", "info", "warning", "error", "dismissMessages"];
+
+  getUniqueMessageId() {
+    const { messageIndex } = this.state;
+    this.setState({ messageIndex: messageIndex + 1 });
+    return messageIndex;
+  }
+
+  messageCloseHandler(id) {
+    return () => {
+      const updatedMessages = [...this.state.messages];
+      const index = updatedMessages.findIndex(msg => id === msg.id);
+      updatedMessages.splice(index, 1);
+      this.setState({ messages: updatedMessages });
+    };
+  }
+
+  createMessage({ message, type }) {
+    const messages = [...this.state.messages];
+    const id = this.getUniqueMessageId();
+    messages.push({
+      message,
+      type,
+      open: true,
+      id,
+      remove: this.messageCloseHandler(id),
+    });
+    this.setState({ messages });
+  }
+
+  error(message) {
+    this.createMessage({ type: "error", message });
+  }
+
+  warning(message) {
+    this.createMessage({ type: "warning", message });
+  }
+
+  success(message) {
+    this.createMessage({ type: "success", message });
+  }
+
+  info(message) {
+    this.createMessage({ type: "info", message });
+  }
+
+  dismissMessages() {
+    const openMessages = this.state.messages.filter(message => message.open);
+
+    if (openMessages.length) {
+      this.setState({
+        messages: this.state.messages.map(message =>
+          message.open ? { ...message, open: false } : message
+        ),
+      });
+    }
+  }
+
+  render() {
+    const { messages } = this.state;
+    return <BananasMessages messages={messages} />;
+  }
+}
+
+export default BananasMessages;
+export {
+  BananasMessage as Message,
+  BananasMessages as Messages,
+  MessagesController,
 };
-
-const CustomSnackBar = withStyles(styles)(UnstyledCustomSnackBar);
-
-const Messages = withStyles(
-  {
-    root: {},
-  },
-  { name: "BananasMessages" }
-)(({ classes, messages }) => {
-  const snackbars = messages.map(msg => (
-    <CustomSnackBar key={msg.id + msg.message} {...msg} />
-  ));
-
-  return snackbars ? <div className={classes.root}>{snackbars}</div> : null;
-});
-
-Messages.propTypes = {
-  messages: PropTypes.array.isRequired,
-};
-
-export default Messages;

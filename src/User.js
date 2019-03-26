@@ -20,17 +20,19 @@ const styles = theme => ({
   link: {
     fontSize: "inherit",
     "& > *": {
-      fontSize: "0.95em",
+      fontSize: "0.9em",
     },
   },
   drawerLink: {
     "&:hover": {
       color: theme.palette.primary.main,
+      opacity: 1,
     },
   },
   appbarLink: {
     "&:hover": {
       color: theme.palette.secondary.light,
+      opacity: 1,
     },
   },
 });

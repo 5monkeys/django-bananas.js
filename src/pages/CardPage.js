@@ -21,6 +21,7 @@ const styles = () => ({
   },
   card: {
     minWidth: 400,
+    maxWidth: 600,
   },
 });
 
