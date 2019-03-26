@@ -1,4 +1,4 @@
-import { Button, Typography } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import {
   AdminContext,
@@ -26,33 +26,38 @@ const styles = theme => ({
   },
 });
 
-class UserPage extends React.Component {
+class UserForm extends React.Component {
   static contextType = AdminContext;
 
   render() {
     const {
       classes,
-      data: { obj: user },
-      title,
-      route,
+      data: { obj: data },
     } = this.props;
 
     return (
       <Form
-        initialValues={user}
-        route="example.user:update"
-        params={{ id: route.params.id }}
+        initialValues={data}
+        route="example.user:form.create"
         formProps={{ className: classes.formRoot }}
       >
-        <TitleBar title={`${title} ${user.username}`} back=".." />
+        <TitleBar title="Form" back=".." />
         <Content>
-          <Typography>
-            <strong>Route:</strong> {route.id} {`{id: ${route.params.id}}`}
-          </Typography>
+          <AutoField name="text" />
           <br />
-          <AutoField name="username" />
+          <AutoField name="date" />
           <br />
-          <AutoField name="email" />
+          <AutoField name="datetime" />
+          <br />
+          <AutoField name="boolean" variant="checkbox" />
+          <br />
+          <AutoField name="boolean" variant="switch" />
+          <br />
+          <AutoField name="integer" />
+          <br />
+          <AutoField name="choices" />
+          <br />
+          <AutoField name="multiple_choices" />
         </Content>
         <ToolBar color="paper" justify="end">
           <Tools>
@@ -66,11 +71,9 @@ class UserPage extends React.Component {
   }
 }
 
-UserPage.propTypes = {
+UserForm.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-  route: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(UserPage);
+export default withStyles(styles)(UserForm);

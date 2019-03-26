@@ -1,0 +1,403 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Can render field of type 'boolean' and variant 'checkbox' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-1"
+  >
+    <div
+      className="MuiFormGroup-root-5"
+    >
+      <label
+        className="MuiFormControlLabel-root-7"
+      >
+        <span
+          className="MuiButtonBase-root-29 MuiIconButton-root-23 MuiPrivateSwitchBase-root-19 MuiCheckbox-root-13 MuiCheckbox-colorSecondary-18"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchEnd={[Function]}
+          onTouchMove={[Function]}
+          onTouchStart={[Function]}
+          tabIndex={null}
+        >
+          <span
+            className="MuiIconButton-label-28"
+          >
+            <svg
+              aria-hidden="true"
+              className="MuiSvgIcon-root-32"
+              focusable="false"
+              role="presentation"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+              />
+            </svg>
+            <input
+              checked={false}
+              className="MuiPrivateSwitchBase-input-22"
+              data-indeterminate={false}
+              disabled={false}
+              name="boolean"
+              onChange={[Function]}
+              type="checkbox"
+            />
+          </span>
+          <span
+            className="MuiTouchRipple-root-77"
+          />
+        </span>
+        <span
+          className="MuiTypography-root-41 MuiTypography-body1-50 MuiFormControlLabel-label-12"
+        >
+          Boolean *
+        </span>
+      </label>
+    </div>
+  </div>
+</form>
+`;
+
+exports[`Can render field of type 'boolean' and variant 'switch' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-1"
+  >
+    <div
+      className="MuiFormGroup-root-5"
+    >
+      <label
+        className="MuiFormControlLabel-root-7"
+      >
+        <span
+          className="MuiSwitch-root-84"
+        >
+          <span
+            className="MuiButtonBase-root-29 MuiIconButton-root-23 MuiPrivateSwitchBase-root-19 MuiSwitch-switchBase-87 MuiSwitch-colorSecondary-90"
+            onBlur={[Function]}
+            onContextMenu={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={null}
+          >
+            <span
+              className="MuiIconButton-label-28"
+            >
+              <span
+                className="MuiSwitch-icon-85"
+              />
+              <input
+                checked={false}
+                className="MuiPrivateSwitchBase-input-22"
+                disabled={false}
+                name="boolean"
+                onChange={[Function]}
+                type="checkbox"
+              />
+            </span>
+            <span
+              className="MuiTouchRipple-root-77"
+            />
+          </span>
+          <span
+            className="MuiSwitch-bar-92"
+          />
+        </span>
+        <span
+          className="MuiTypography-root-41 MuiTypography-body1-50 MuiFormControlLabel-label-12"
+        >
+          Boolean *
+        </span>
+      </label>
+    </div>
+  </div>
+</form>
+`;
+
+exports[`Can render field of type 'choices' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-1"
+  >
+    <label
+      className="MuiFormLabel-root-104 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101"
+      data-shrink={false}
+      htmlFor="name-error"
+    >
+      Choices *
+    </label>
+    <div
+      className="MuiInputBase-root-131 MuiInput-root-118 MuiInput-underline-122 MuiInputBase-formControl-132 MuiInput-formControl-119"
+      onClick={[Function]}
+    >
+      <div
+        className="MuiSelect-root-111"
+      >
+        <div
+          aria-haspopup="true"
+          aria-pressed="false"
+          className="MuiSelect-select-112 MuiSelect-selectMenu-115 MuiInputBase-input-141 MuiInput-input-126"
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          role="button"
+          tabIndex={0}
+        >
+          <span
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "&#8203;",
+              }
+            }
+          />
+        </div>
+        <input
+          name="choices"
+          type="hidden"
+          value=""
+        />
+        <svg
+          aria-hidden="true"
+          className="MuiSvgIcon-root-32 MuiSelect-icon-117"
+          focusable="false"
+          role="presentation"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M7 10l5 5 5-5z"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</form>
+`;
+
+exports[`Can render field of type 'date' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-1"
+    onClick={[Function]}
+    onKeyPress={[Function]}
+  >
+    <label
+      className="MuiFormLabel-root-104 MuiFormLabel-filled-108 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101 MuiInputLabel-shrink-100"
+      data-shrink={true}
+    >
+      Date *
+    </label>
+    <div
+      className="MuiInputBase-root-131 MuiInput-root-118 MuiInput-underline-122 MuiInputBase-formControl-132 MuiInput-formControl-119"
+      onClick={[Function]}
+    >
+      <input
+        aria-invalid={false}
+        className="MuiInputBase-input-141 MuiInput-input-126"
+        disabled={false}
+        mask={null}
+        name="date"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        pipe={null}
+        readOnly={true}
+        required={false}
+        type="text"
+        value="Unknown"
+      />
+    </div>
+  </div>
+</form>
+`;
+
+exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-1"
+    onClick={[Function]}
+    onKeyPress={[Function]}
+  >
+    <label
+      className="MuiFormLabel-root-104 MuiFormLabel-filled-108 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101 MuiInputLabel-shrink-100"
+      data-shrink={true}
+    >
+      Datetime *
+    </label>
+    <div
+      className="MuiInputBase-root-131 MuiInput-root-118 MuiInput-underline-122 MuiInputBase-formControl-132 MuiInput-formControl-119"
+      onClick={[Function]}
+    >
+      <input
+        aria-invalid={false}
+        className="MuiInputBase-input-141 MuiInput-input-126"
+        disabled={false}
+        mask={null}
+        name="datetime"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        pipe={null}
+        readOnly={true}
+        required={false}
+        type="text"
+        value="Unknown"
+      />
+    </div>
+  </div>
+</form>
+`;
+
+exports[`Can render field of type 'integer' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-1"
+  >
+    <label
+      className="MuiFormLabel-root-104 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101"
+      data-shrink={false}
+    >
+      Integer *
+    </label>
+    <div
+      className="MuiInputBase-root-131 MuiInput-root-118 MuiInput-underline-122 MuiInputBase-formControl-132 MuiInput-formControl-119"
+      onClick={[Function]}
+    >
+      <input
+        aria-invalid={false}
+        className="MuiInputBase-input-141 MuiInput-input-126"
+        disabled={false}
+        name="integer"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        required={false}
+        type="text"
+        value=""
+      />
+    </div>
+  </div>
+</form>
+`;
+
+exports[`Can render field of type 'multiple_choices' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-1"
+  >
+    <label
+      className="MuiFormLabel-root-104 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101"
+      data-shrink={false}
+      htmlFor="name-error"
+    >
+      undefined *
+    </label>
+    <div
+      className="MuiInputBase-root-131 MuiInput-root-118 MuiInput-underline-122 MuiInputBase-formControl-132 MuiInput-formControl-119"
+      onClick={[Function]}
+    >
+      <div
+        className="MuiSelect-root-111"
+      >
+        <div
+          aria-haspopup="true"
+          aria-pressed="false"
+          className="MuiSelect-select-112 MuiSelect-selectMenu-115 MuiInputBase-input-141 MuiInput-input-126"
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          role="button"
+          tabIndex={0}
+        >
+          <span
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "&#8203;",
+              }
+            }
+          />
+        </div>
+        <input
+          name="multiple_choices"
+          type="hidden"
+          value=""
+        />
+        <svg
+          aria-hidden="true"
+          className="MuiSvgIcon-root-32 MuiSelect-icon-117"
+          focusable="false"
+          role="presentation"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M7 10l5 5 5-5z"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</form>
+`;
+
+exports[`Can render field of type 'text' and variant 'default' 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="MuiFormControl-root-1"
+  >
+    <label
+      className="MuiFormLabel-root-104 MuiInputLabel-root-93 MuiInputLabel-formControl-98 MuiInputLabel-animated-101"
+      data-shrink={false}
+    >
+      Text *
+    </label>
+    <div
+      className="MuiInputBase-root-131 MuiInput-root-118 MuiInput-underline-122 MuiInputBase-formControl-132 MuiInput-formControl-119"
+      onClick={[Function]}
+    >
+      <input
+        aria-invalid={false}
+        className="MuiInputBase-input-141 MuiInput-input-126"
+        disabled={false}
+        name="text"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        required={false}
+        type="text"
+        value=""
+      />
+    </div>
+  </div>
+</form>
+`;

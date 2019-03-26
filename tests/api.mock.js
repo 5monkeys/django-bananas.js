@@ -17,9 +17,12 @@ export const user = {
   groups: [],
 };
 
-export function mockAPI({ anonymous } = {}) {
+export function mockAPI({ anonymous, schema } = {}) {
   // Mock Schema
-  fetchMock.mock(schemaUrl, anonymous ? anonymSchema : authedSchema);
+  fetchMock.mock(
+    schemaUrl,
+    schema || (anonymous ? anonymSchema : authedSchema)
+  );
 
   const translations = {
     catalog: {
@@ -43,8 +46,8 @@ export function mockAPI({ anonymous } = {}) {
     });
 }
 
-const getAPIClient = ({ anonymous, ...handlers } = {}) => {
-  mockAPI({ anonymous });
+const getAPIClient = ({ anonymous, schema, ...handlers } = {}) => {
+  mockAPI({ anonymous, schema });
   return new APIClient({ url: schemaUrl, ...handlers });
 };
 

@@ -392,7 +392,7 @@ class Admin extends React.Component {
     if (reuseData) {
       logger.debug("Re-using page data...");
       pageProps.data = this.state.pageProps.data;
-    } else if (["list", "read"].includes(route.action)) {
+    } else if ((route.action || "").match(/\.?(list|read)$/)) {
       pageProps.data = await this.loadPageData(id, params, query);
     }
 

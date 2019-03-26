@@ -30,12 +30,19 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
+    "@date-io/date-fns": "^1.1.0",
     "@material-ui/core": "^3.9.0",
     "@material-ui/icons": ">=3.0.0",
+    "date-fns": "^2.0.0-alpha.27",
+    "final-form": "^4.12.0",
+    "final-form-arrays": "^1.1.2",
     "gravatar": "^1.8.0",
     "history": "^4.7.2",
     "js-logger": "^1.6.0",
+    "material-ui-pickers": "^2.2.4",
     "prop-types": "^15.5.7",
+    "react-final-form": "^4.1.0",
+    "react-final-form-arrays": "2.0.1",
     "react-i18next": "^9.0.2",
     "swagger-client": "3.8.22"
   }

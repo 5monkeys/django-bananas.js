@@ -263,6 +263,16 @@ class UsersPage extends React.Component {
                   variant="contained"
                   color="secondary"
                   onClick={async () => {
+                    context.router.route({ id: "example.user:form.read" });
+                  }}
+                >
+                  Form
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={async () => {
                     context.router.route("/foobar");
                   }}
                 >

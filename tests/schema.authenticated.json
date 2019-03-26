@@ -4,6 +4,65 @@
         "application/json"
     ],
     "definitions": {
+        "Form": {
+            "properties": {
+                "boolean": {
+                    "title": "Boolean",
+                    "type": "boolean"
+                },
+                "choices": {
+                    "enum": [
+                        "se",
+                        "no",
+                        "fi",
+                        "dk"
+                    ],
+                    "title": "Choices",
+                    "type": "string"
+                },
+                "date": {
+                    "format": "date",
+                    "title": "Date",
+                    "type": "string"
+                },
+                "datetime": {
+                    "format": "date-time",
+                    "title": "Datetime",
+                    "type": "string"
+                },
+                "integer": {
+                    "title": "Integer",
+                    "type": "integer"
+                },
+                "multiple_choices": {
+                    "items": {
+                        "enum": [
+                            "se",
+                            "no",
+                            "fi",
+                            "dk"
+                        ],
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "minLength": 1,
+                    "title": "Text",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "text",
+                "integer",
+                "date",
+                "datetime",
+                "boolean",
+                "choices",
+                "multiple_choices"
+            ],
+            "type": "object"
+        },
         "PasswordChange": {
             "properties": {
                 "new_password1": {
@@ -295,6 +354,57 @@
             },
             "parameters": []
         },
+        "/example/user/form/": {
+            "get": {
+                "description": "",
+                "operationId": "example.user:form.read",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/Form"
+                            },
+                            "type": "array"
+                        }
+                    }
+                },
+                "summary": "Form",
+                "tags": [
+                    "app:example",
+                    "crud"
+                ]
+            },
+            "parameters": [],
+            "post": {
+                "description": "",
+                "operationId": "example.user:form.create",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Form"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Form"
+                        }
+                    }
+                },
+                "summary": "Form",
+                "tags": [
+                    "app:example",
+                    "crud"
+                ]
+            }
+        },
         "/example/user/{id}/": {
             "delete": {
                 "description": "",
@@ -425,7 +535,7 @@
         "/example/user/{id}/baz/{x}/ham/{y}/": {
             "get": {
                 "description": "",
-                "operationId": "example.user:baz",
+                "operationId": "example.user:baz.baz",
                 "parameters": [],
                 "responses": {
                     "200": {
