@@ -568,6 +568,7 @@ class App extends React.Component {
 
     layout: PropTypes.string,
     permanent: PropTypes.bool,
+    collapsed: PropTypes.bool,
     dense: PropTypes.bool,
 
     title: PropTypes.string,
@@ -592,6 +593,7 @@ class App extends React.Component {
     layout: "horizontal", // horizontal|vertical
     dense: false,
     permanent: false,
+    collapsed: false,
 
     title: "Bananas",
     branding: "Bananas",
