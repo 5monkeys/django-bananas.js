@@ -74,9 +74,30 @@ const darkTheme = {
   },
 };
 
+const darthTheme = {
+  ...darkTheme,
+  overrides: {
+    ...darkTheme.overrides,
+    BananasNavBar: {
+      header: {
+        background: "#111",
+      },
+      drawer: {
+        background: "#272727",
+      },
+    },
+    BananasToolBar: {
+      colorPrimary: {
+        backgroundColor: "#272727",
+      },
+    },
+  },
+};
+
 const themes = {
   light: applyThemeDefaults(defaultTheme),
   dark: applyThemeDefaults(darkTheme),
+  darth: applyThemeDefaults(darthTheme),
 };
 themes.default = themes.light;
 
