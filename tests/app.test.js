@@ -145,6 +145,33 @@ test("Can render dashboard and navigate using menu", async () => {
   expect(queryAllByText(user.full_name)).toHaveLength(2);
 });
 
+test("Handles unauthenticated page load", async () => {
+  const { app, container, getByLabelText } = await renderApp();
+  const userListRoute = app.router.getRoute("example.user:list");
+
+  mockAPI({ anonymous: true });
+  fetchMock.get(`http://foo.bar/api/v1.0${userListRoute.path}`, {
+    body: {},
+    status: 403,
+  });
+
+  app.router.route(userListRoute.path);
+  await waitForElement(() => getByLabelText("login"), { container });
+});
+
+test("Handles unauthorized page load", async () => {
+  const { app, container, getByText } = await renderApp();
+  const userListRoute = app.router.getRoute("example.user:list");
+
+  fetchMock.get(`http://foo.bar/api/v1.0${userListRoute.path}`, {
+    body: {},
+    status: 403,
+  });
+
+  app.router.route(userListRoute.path);
+  await waitForElement(() => getByText("Status: 403"), { container });
+});
+
 test("Handles 404", async () => {
   const { app, container, getByText } = await renderApp();
   app.router.route("/foobar/");

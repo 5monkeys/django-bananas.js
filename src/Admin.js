@@ -325,13 +325,13 @@ class Admin extends React.Component {
       const { PageComponent, pageProps } = await this.loadPage(location, route);
       this.mountPage(PageComponent, pageProps);
     } catch (error) {
-      if (error instanceof AnonymousUserError) {
-        this.reboot();
-      } else if (error instanceof PageError) {
+      this.admin.loading(false);
+      if (error instanceof PageError) {
         this.mountErrorPage(t(error.message), error.code);
       } else if (error.response && [401, 403].includes(error.response.status)) {
         try {
           await this.authorize();
+          this.mountErrorPage(t("Permission denied."), error.response.status);
         } catch (authorizeError) {
           if (authorizeError instanceof AnonymousUserError) {
             this.reboot();
@@ -340,7 +340,6 @@ class Admin extends React.Component {
           }
         }
       } else {
-        this.admin.loading(false);
         throw error;
       }
     }

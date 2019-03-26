@@ -11,7 +11,9 @@ const ErrorPage = ({ title, data }) => {
       <Translate>
         {[404, 501].includes(statusCode)
           ? "We're sorry, but the requested page could not be found."
-          : "There's been an error. It's been reported to the site administrators via email and should be fixed shortly. Thanks for your patience."}
+          : statusCode >= 500
+          ? "There's been an error. It's been reported to the site administrators via email and should be fixed shortly. Thanks for your patience."
+          : ""}
       </Translate>
     </CardPage>
   );
