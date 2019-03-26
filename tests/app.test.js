@@ -170,6 +170,7 @@ test("Handles unauthorized page load", async () => {
 
   app.router.route(userListRoute.path);
   await waitForElement(() => getByText("Status: 403"), { container });
+  expect(getByText(/You are authenticated as admin/)).toBeDefined();
 });
 
 test("Handles 404", async () => {

@@ -100,24 +100,40 @@ export function capitalize(string) {
   return string.slice(0, 1).toUpperCase() + string.slice(1).toLowerCase();
 }
 
-export function t(key) {
+export function interpolateString(string, params) {
+  return Array.isArray(params)
+    ? params.reduce((s, value) => s.replace(/%[sd]|\{\}/, value), string)
+    : Object.entries(params).reduce(
+        (s, [key, value]) =>
+          s.replace(new RegExp(`%\\(${key}\\)[sd]|\\{${key}\\}`, "g"), value),
+        string
+      );
+}
+
+export function t(key, params) {
   if (!window.i18n) {
     logger.warn(
-      "Bananas i18n tranlations not initialized. Failed to translate:",
+      "Bananas i18n translations not initialized. Failed to translate:",
       key
     );
     return key;
   }
 
-  return window.i18n[key] || key;
+  const value = window.i18n[key] || key;
+  return params ? interpolateString(value, params) : value;
 }
 
-export const Translate = ({ children }) => (
-  <Typography>{t(children)}</Typography>
+export const Translate = ({ children, params }) => (
+  <Typography>{t(children, params)}</Typography>
 );
 
 Translate.propTypes = {
   children: PropTypes.node.isRequired,
+  params: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+};
+
+Translate.defaultProps = {
+  params: undefined,
 };
 
 /**

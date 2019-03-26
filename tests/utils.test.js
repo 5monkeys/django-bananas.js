@@ -9,6 +9,7 @@ import {
   ensureTrailingSlash,
   fromQuery,
   getCookie,
+  interpolateString,
   nthIndexOf,
   toQuery,
 } from "../src/utils";
@@ -88,9 +89,31 @@ test("Can translate strings via API", () => {
   expect(t("foo")).toBe("foo");
   expect(t("baz")).toBe("baz");
 
-  window.i18n = { foo: "bar" };
+  window.i18n = { foo: "bar", "foo %(bar)s": "bar %(bar)s" };
   expect(t("foo")).toBe("bar");
   expect(t("baz")).toBe("baz");
+
+  expect(t("foo %(bar)s", { bar: "banana" })).toBe("bar banana");
+});
+
+test("Can interpolate strings", () => {
+  expect(interpolateString("foo %(bar)s", { bar: "banana" })).toBe(
+    "foo banana"
+  );
+  expect(interpolateString("baz {bar}", { bar: "banana" })).toBe("baz banana");
+  expect(interpolateString("baz {bar} {bar}", { bar: "banana" })).toBe(
+    "baz banana banana"
+  );
+  expect(interpolateString("baz", { bar: "banana" })).toBe("baz");
+
+  expect(interpolateString("baz %s", ["banana"])).toBe("baz banana");
+  expect(interpolateString("baz %s %s", ["banana", "man"])).toBe(
+    "baz banana man"
+  );
+  expect(interpolateString("baz {}", ["banana"])).toBe("baz banana");
+  expect(interpolateString("baz {} {}", ["banana", "man"])).toBe(
+    "baz banana man"
+  );
 });
 
 test("Can generate Material UI color shapes", () => {
