@@ -37,8 +37,9 @@ export function extendTheme(source, overrides) {
   return extended;
 }
 
-const defaultTheme = {
+const lightTheme = {
   palette: {
+    type: "light",
     primary: django,
     secondary: {
       main: amber[700],
@@ -53,8 +54,8 @@ const defaultTheme = {
 const darkTheme = {
   palette: {
     type: "dark",
-    primary: defaultTheme.palette.primary,
-    secondary: defaultTheme.palette.secondary,
+    primary: lightTheme.palette.primary,
+    secondary: lightTheme.palette.secondary,
     background: {
       paper: "#303030",
       default: "#222",
@@ -78,6 +79,11 @@ const darthTheme = {
   ...darkTheme,
   overrides: {
     ...darkTheme.overrides,
+    BananasAdmin: {
+      root: {
+        backgroundColor: "#222",
+      },
+    },
     BananasNavBar: {
       header: {
         background: "#111",
@@ -86,16 +92,21 @@ const darthTheme = {
         background: "#272727",
       },
     },
-    BananasToolBar: {
+    BananasTitleBar: {
       colorPrimary: {
-        backgroundColor: "#272727",
+        background: "#272727",
+      },
+    },
+    BananasLoginPage: {
+      title: {
+        background: "#272727",
       },
     },
   },
 };
 
 const themes = {
-  light: applyThemeDefaults(defaultTheme),
+  light: applyThemeDefaults(lightTheme),
   dark: applyThemeDefaults(darkTheme),
   darth: applyThemeDefaults(darthTheme),
 };
