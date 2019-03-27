@@ -32,6 +32,7 @@ const DialogTitle = withStyles(theme => ({
 });
 
 const pageStyles = theme => ({
+  title: {},
   textLogo: {
     color: theme.palette.primary.contrastText,
     fontWeight: "bold",
@@ -49,7 +50,13 @@ class LoginPage extends React.Component {
         aria-labelledby="customized-dialog-title"
         open={true}
       >
-        <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
+        <DialogTitle
+          id="customized-dialog-title"
+          onClose={this.handleClose}
+          classes={{
+            root: classes.title,
+          }}
+        >
           {logo ? (
             <Logo src={logo} />
           ) : (
@@ -78,4 +85,4 @@ LoginPage.defaultProps = {
   logo: true,
 };
 
-export default withStyles(pageStyles)(LoginPage);
+export default withStyles(pageStyles, { name: "BananasLoginPage" })(LoginPage);
