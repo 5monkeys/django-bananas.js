@@ -119,9 +119,9 @@ class Content extends React.Component {
 Content.propTypes = {
   classes: PropTypes.object.isRequired,
   children: PropTypes.oneOfType([
-    PropTypes.object,
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
     PropTypes.string,
-    PropTypes.array,
   ]),
   disablePadding: PropTypes.bool,
   contained: PropTypes.bool,

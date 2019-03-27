@@ -66,9 +66,9 @@ class Form extends React.Component {
 
 Form.propTypes = {
   children: PropTypes.oneOfType([
-    PropTypes.func,
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
+    PropTypes.func,
   ]).isRequired,
   route: PropTypes.string.isRequired,
   params: PropTypes.object,

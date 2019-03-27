@@ -50,9 +50,12 @@ const CardPage = ({ classes, children, title, subtitle }) => (
 
 CardPage.propTypes = {
   classes: PropTypes.object.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
-  children: PropTypes.object,
 };
 
 CardPage.defaultProps = {

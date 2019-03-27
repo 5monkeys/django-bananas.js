@@ -324,7 +324,10 @@ ToolBar.propTypes = {
   theme: PropTypes.object,
   autoStyle: PropTypes.bool,
   overrides: PropTypes.object,
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   color: PropTypes.string,
   border: PropTypes.string,
   dense: PropTypes.bool,

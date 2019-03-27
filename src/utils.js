@@ -128,7 +128,7 @@ export const Translate = ({ children, params }) => (
 );
 
 Translate.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   params: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 

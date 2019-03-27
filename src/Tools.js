@@ -27,12 +27,15 @@ class Tools extends React.Component {
 
 Tools.propTypes = {
   classes: PropTypes.object.isRequired,
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   className: PropTypes.string,
 };
 
 Tools.defaultProps = {
-  children: undefined,
+  children: null,
   className: undefined,
 };
 

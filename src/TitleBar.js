@@ -106,7 +106,10 @@ const TitleBar = ({
 TitleBar.propTypes = {
   classes: PropTypes.object.isRequired,
   overrides: PropTypes.object,
-  children: PropTypes.node,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   title: PropTypes.string,
   back: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   dense: PropTypes.bool,

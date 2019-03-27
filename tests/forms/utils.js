@@ -13,9 +13,8 @@ TestContext.propTypes = {
   api: PropTypes.object.isRequired,
   admin: PropTypes.object,
   children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string,
-    PropTypes.array,
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
   ]).isRequired,
 };
 
