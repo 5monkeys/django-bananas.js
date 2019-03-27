@@ -74,7 +74,7 @@ class ToolBar extends React.Component {
 
     // Darker primary color
     const primary =
-      color === "primary"
+      color === "primary" && this.props.emphasize
         ? {
             main: theme.palette.primary.dark,
             light: lighten(
@@ -94,7 +94,7 @@ class ToolBar extends React.Component {
 
     // Darker secondary color
     const secondary =
-      color === "secondary"
+      color === "secondary" && this.props.emphasize
         ? {
             main: theme.palette.secondary.dark,
             light: lighten(
@@ -323,6 +323,7 @@ ToolBar.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object,
   autoStyle: PropTypes.bool,
+  emphasize: PropTypes.bool,
   overrides: PropTypes.object,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -337,6 +338,7 @@ ToolBar.propTypes = {
 ToolBar.defaultProps = {
   theme: undefined,
   autoStyle: true,
+  emphasize: true,
   overrides: {},
   children: null,
   color: "primary",
