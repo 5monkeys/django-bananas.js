@@ -231,6 +231,7 @@ class ToolBar extends React.Component {
       classes,
       theme,
       autoStyle,
+      emphasize,
       overrides,
       children,
       color,

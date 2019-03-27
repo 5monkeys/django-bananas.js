@@ -54,17 +54,18 @@ const TitleBar = ({
     back && back.indexOf(":") > 0 ? { route: back } : { path: back };
 
   // Determine primary background is overridden, don't emphasize tools if so
-  const primaryOverride =
+  const primaryIsOverridden =
     theme.overrides &&
     theme.overrides.BananasTitleBar &&
-    theme.overrides.BananasTitleBar.colorPrimary;
-  const primaryIsOverridden = Boolean(
-    primaryOverride &&
-      ![primaryOverride.background, primaryOverride.backgroundColor].includes(
-        theme.palette.primary.main
-      )
-  );
-  const emphasize = color === "primary" && !primaryIsOverridden;
+    theme.overrides.BananasTitleBar.colorPrimary &&
+    ((theme.overrides.BananasTitleBar.colorPrimary.background &&
+      theme.overrides.BananasTitleBar.colorPrimary.background !==
+        theme.palette.primary.main) ||
+      (theme.overrides.BananasTitleBar.colorPrimary.background &&
+        theme.overrides.BananasTitleBar.colorPrimary.background !==
+          theme.palette.primary.main));
+
+  const emphasize = color === "primary" ? !primaryIsOverridden : true;
 
   return (
     <ToolBar
