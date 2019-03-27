@@ -1,6 +1,6 @@
 import Fab from "@material-ui/core/Fab";
 import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, withTheme } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -40,6 +40,7 @@ const styles = theme => ({
 
 const TitleBar = ({
   classes,
+  theme,
   overrides,
   children,
   color,
@@ -52,9 +53,23 @@ const TitleBar = ({
   const backLinkProps =
     back && back.indexOf(":") > 0 ? { route: back } : { path: back };
 
+  // Determine primary background is overridden, don't emphasize tools if so
+  const primaryOverride =
+    theme.overrides &&
+    theme.overrides.BananasTitleBar &&
+    theme.overrides.BananasTitleBar.colorPrimary;
+  const primaryIsOverridden = Boolean(
+    primaryOverride &&
+      ![primaryOverride.background, primaryOverride.backgroundColor].includes(
+        theme.palette.primary.main
+      )
+  );
+  const emphasize = color === "primary" && !primaryIsOverridden;
+
   return (
     <ToolBar
       color={color}
+      emphasize={emphasize}
       justify={justify}
       dense={dense}
       overrides={{
@@ -105,11 +120,13 @@ const TitleBar = ({
 
 TitleBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   overrides: PropTypes.object,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
+  color: PropTypes.string,
   title: PropTypes.string,
   back: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   dense: PropTypes.bool,
@@ -119,10 +136,13 @@ TitleBar.propTypes = {
 TitleBar.defaultProps = {
   overrides: {},
   children: null,
+  color: "primary",
   title: undefined,
   back: false,
   dense: false,
   justify: "between",
 };
 
-export default withStyles(styles, { name: "BananasTitleBar" })(TitleBar);
+export default withStyles(styles, { name: "BananasTitleBar" })(
+  withTheme()(TitleBar)
+);
