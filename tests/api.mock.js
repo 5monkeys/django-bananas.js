@@ -39,7 +39,10 @@ export function mockAPI({ anonymous, schema } = {}) {
   // Mock i18n, me and login
   fetchMock
     .get("http://foo.bar/api/v1.0/bananas/i18n/", { body: translations })
-    .get("http://foo.bar/api/v1.0/bananas/me/", { body: user })
+    .get(
+      "http://foo.bar/api/v1.0/bananas/me/",
+      anonymous ? 403 : { body: user }
+    )
     .post("http://foo.bar/api/v1.0/bananas/login/", () => {
       mockAPI(); // Re-mock API as authenticated
       return { body: user };

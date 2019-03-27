@@ -219,7 +219,7 @@ class Admin extends React.Component {
     // Route to current window location if API is authenticatd
     if (swagger.isAuthenticated) {
       if (!this.state.context.user) {
-        this.setContext({ user: { pending: true } });
+        await this.authorize();
       }
       this.router.reroute();
     }
@@ -322,17 +322,24 @@ class Admin extends React.Component {
 
     // Authorize, load and mount page
     try {
-      await this.authorize();
       const { PageComponent, pageProps } = await this.loadPage(location, route);
       this.mountPage(PageComponent, pageProps);
     } catch (error) {
-      // TODO: Handle un-authorized data -> Mount 401/403 page
-      if (error instanceof AnonymousUserError) {
-        this.reboot();
-      } else if (error instanceof PageError) {
+      this.admin.loading(false);
+      if (error instanceof PageError) {
         this.mountErrorPage(t(error.message), error.code);
+      } else if (error.response && [401, 403].includes(error.response.status)) {
+        try {
+          await this.authorize();
+          this.mountErrorPage(t("Permission denied."), error.response.status);
+        } catch (authorizeError) {
+          if (authorizeError instanceof AnonymousUserError) {
+            this.reboot();
+          } else {
+            throw error;
+          }
+        }
       } else {
-        this.admin.loading(false);
         throw error;
       }
     }
