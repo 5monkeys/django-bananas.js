@@ -52,7 +52,7 @@ class Settings {
   }
 
   save(settings) {
-    for (const setting of Object.keys(settings)) {
+    for (const setting of Object.keys(settings).filter(s => s !== "editable")) {
       window.localStorage.setItem(setting, settings[setting]);
       logger.debug("Saving Setting:", setting, settings[setting]);
     }

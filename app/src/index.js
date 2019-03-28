@@ -98,6 +98,7 @@ ReactDOM.render(
       // "bananas.me:list": SettingsIcon,
       "example.user:list": PeopleIcon,
     }}
+    editableSettings
   />,
   document.getElementById("root")
 );

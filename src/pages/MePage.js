@@ -47,23 +47,25 @@ class MePage extends React.Component {
             >
               <ChangePasswordForm />
             </Paper>
-            <Paper
-              classes={{
-                root: classes.paper,
-              }}
-              elevation={1}
-              square
-            >
-              <SettingsForm
-                settings={admin.settings.settings}
-                onChange={(setting, value) => {
-                  admin.settings.configure({ [setting]: value });
+            {admin.settings.settings.editable && (
+              <Paper
+                classes={{
+                  root: classes.paper,
                 }}
-                onReset={() => {
-                  admin.settings.reset();
-                }}
-              />
-            </Paper>
+                elevation={1}
+                square
+              >
+                <SettingsForm
+                  settings={admin.settings.settings}
+                  onChange={(setting, value) => {
+                    admin.settings.configure({ [setting]: value });
+                  }}
+                  onReset={() => {
+                    admin.settings.reset();
+                  }}
+                />
+              </Paper>
+            )}
           </div>
         </Content>
       </>

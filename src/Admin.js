@@ -60,6 +60,7 @@ class Admin extends React.Component {
 
     // Default GUI settings from props
     const propSettings = {
+      editable: props.editableSettings,
       horizontal: props.layout === "horizontal",
       icons: props.icons !== null,
       collapsable: !(props.permanent || false),
@@ -591,6 +592,7 @@ class App extends React.Component {
     theme: PropTypes.object,
     pageTheme: PropTypes.object,
     loginForm: PropTypes.func,
+    editableSettings: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -611,6 +613,7 @@ class App extends React.Component {
     theme: themes.default,
     pageTheme: undefined,
     loginForm: undefined,
+    editableSettings: false,
   };
 
   render() {

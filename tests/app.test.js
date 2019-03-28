@@ -26,6 +26,7 @@ const renderApp = async ({ anonymous } = {}) => {
       title="Test Title"
       branding="Test Branding"
       version="v1.2.3"
+      editableSettings
     />
   );
 
