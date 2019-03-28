@@ -27,10 +27,21 @@ const exampleAppTheme = themes.default.extend({
         //   backgroundColor: django[700],
         //   background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12) 10px, transparent 10px, transparent 20px)",
       },
+      drawer: {
+        /* Example: Change drawer width */
+        //   width: 350,
+      },
+    },
+    BananasTitleBar: {
+      colorPrimary: {
+        /* Example: Change primary colored TitleBar's */
+        //   background: blue[500],
+      },
     },
     /*
     BananasContainer: {
       root: {
+        // Example: Center components using the Container
         maxWidth: 900,
         margin: "0 auto",
         width: "100%",
