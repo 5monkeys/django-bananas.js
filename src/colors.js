@@ -4,7 +4,7 @@ import {
   rgbToHex,
 } from "@material-ui/core/styles/colorManipulator";
 
-export const generateColor = base => {
+export const createColor = base => {
   const color = {
     500: base,
   };

@@ -1,7 +1,7 @@
 import Logger from "js-logger";
 
 import { t } from "../src";
-import { django, generateColor } from "../src/colors";
+import { createColor, django } from "../src/colors";
 import {
   absolutePath,
   capitalize,
@@ -118,5 +118,5 @@ test("Can interpolate strings", () => {
 
 test("Can generate Material UI color shapes", () => {
   const green = "#34A77B";
-  expect(generateColor(green)).toEqual(django);
+  expect(createColor(green)).toEqual(django);
 });
