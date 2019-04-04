@@ -375,7 +375,7 @@ class Admin extends React.Component {
 
     // Initialize page component props
     const pageProps = {
-      key: `${id}:${location.search}:${location.hash}`,
+      key: `${id}:${location.search}`,
       route: {
         id,
         params,

@@ -54,21 +54,13 @@ class Page extends React.Component {
     component: undefined,
   };
 
-  constructor(props) {
-    super(props);
-
-    // Destruct named props to filter out props to pass over to page component
-    const { classes, component, controller, ...pageProps } = props;
-
-    this.state = {
-      PageComponent: component,
-      pageProps,
-    };
-  }
-
   render() {
-    const { classes, controller } = this.props;
-    const { PageComponent, pageProps } = this.state;
+    const {
+      classes,
+      controller,
+      component: PageComponent,
+      ...pageProps
+    } = this.props;
     return (
       <div className={classes.root}>
         <PageLoadController ref={controller} />
