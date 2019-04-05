@@ -40,6 +40,7 @@ class AutoField extends React.Component {
       name,
       fieldProps: fieldPropsOverride,
       variant,
+      FieldComponent,
       ...rest
     } = this.props;
     const schema = fieldFromSchema(this.context.schema, name);
@@ -48,7 +49,8 @@ class AutoField extends React.Component {
     }
     const fieldType = schema.enum ? "enum" : schema.type;
     const fields = fieldsByType[fieldType] || fieldsByType.string;
-    const { component: Field, type } = fields[schema.format] || fields.default;
+    const { component, type } = fields[schema.format] || fields.default;
+    const Field = FieldComponent || component;
 
     return (
       <FField name={name} type={type} {...rest} novalidate>
@@ -79,11 +81,13 @@ AutoField.propTypes = {
   name: PropTypes.string.isRequired,
   variant: PropTypes.string,
   fieldProps: PropTypes.object,
+  FieldComponent: PropTypes.func,
 };
 
 AutoField.defaultProps = {
   variant: undefined,
   fieldProps: {},
+  FieldComponent: undefined,
 };
 
 export default AutoField;
