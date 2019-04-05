@@ -111,7 +111,8 @@ function (_React$Component) {
           name = _this$props.name,
           fieldPropsOverride = _this$props.fieldProps,
           variant = _this$props.variant,
-          rest = _objectWithoutProperties(_this$props, ["name", "fieldProps", "variant"]);
+          FieldComponent = _this$props.FieldComponent,
+          rest = _objectWithoutProperties(_this$props, ["name", "fieldProps", "variant", "FieldComponent"]);
 
       var schema = (0, _utils.fieldFromSchema)(this.context.schema, name);
 
@@ -123,9 +124,10 @@ function (_React$Component) {
       var fields = fieldsByType[fieldType] || fieldsByType.string;
 
       var _ref = fields[schema.format] || fields.default,
-          Field = _ref.component,
+          component = _ref.component,
           type = _ref.type;
 
+      var Field = FieldComponent || component;
       return _react.default.createElement(_reactFinalForm.Field, _extends({
         name: name,
         type: type
@@ -158,11 +160,13 @@ _defineProperty(AutoField, "contextType", _FormContext.default);
 AutoField.propTypes = {
   name: _propTypes.default.string.isRequired,
   variant: _propTypes.default.string,
-  fieldProps: _propTypes.default.object
+  fieldProps: _propTypes.default.object,
+  FieldComponent: _propTypes.default.func
 };
 AutoField.defaultProps = {
   variant: undefined,
-  fieldProps: {}
+  fieldProps: {},
+  FieldComponent: undefined
 };
 var _default = AutoField;
 exports.default = _default;
