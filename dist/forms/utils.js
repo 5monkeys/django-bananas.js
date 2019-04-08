@@ -4,14 +4,25 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.fieldFromSchema = fieldFromSchema;
+exports.fieldFromNestedSchema = fieldFromNestedSchema;
+exports.fieldFromFlatSchema = fieldFromFlatSchema;
 exports.fieldFromErrorResponse = fieldFromErrorResponse;
 
 function normalizePath(path) {
   return path.replace("]", "").replace("[", ".");
-} // TODO: more verbose error messages
-
+}
 
 function fieldFromSchema(schema, field) {
+  if (Array.isArray(schema)) {
+    return fieldFromFlatSchema(schema, field);
+  }
+
+  return fieldFromNestedSchema(schema, field);
+} // TODO: more verbose error messages
+// Nested schema is typically used for content-type application/json
+
+
+function fieldFromNestedSchema(schema, field) {
   var normalizedSchema = {
     type: "object",
     properties: schema
@@ -36,6 +47,20 @@ function fieldFromSchema(schema, field) {
 
     throw new Error("Encountered lookup \"".concat(key, "\" on unsupported type \"").concat(acc.type, "\"."));
   }, normalizedSchema);
+} // Flat schema is typically used for content-type multipart/form-data
+
+
+function fieldFromFlatSchema(schema, field) {
+  var value = schema.find(function (_ref) {
+    var name = _ref.name;
+    return name === field;
+  });
+
+  if (typeof value === "undefined") {
+    throw new Error("Encountered a non-existent field \"".concat(field, "\"."));
+  }
+
+  return value;
 }
 
 function fieldFromErrorResponse(response, field) {
