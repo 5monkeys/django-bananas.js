@@ -136,6 +136,9 @@ Swagger.makeApisTagOperation = client => {
                   }),
                   {}
                 );
+              } else if (parameter.in === "formData") {
+                parameters.data = parameters.data || {};
+                parameters.data[parameter.name] = parameter;
               } else if (parameter.in === "query") {
                 parameters[parameter.name] = parameter;
               }
