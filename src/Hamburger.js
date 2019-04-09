@@ -12,6 +12,7 @@ const styles = theme => ({
     alignItems: "center",
     paddingLeft: theme.spacing.unit / 2,
     paddingRight: theme.spacing.unit / 2,
+    marginRight: "1px",
   },
 });
 
