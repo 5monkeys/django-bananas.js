@@ -5,10 +5,8 @@
   "author": "Jonas Lundberg",
   "repository": "5monkeys/django-bananas.js",
   "description": "React admin frontend for Django.",
-  "main": "dist/index.js",
-  "files": [
-    "dist"
-  ],
+  "main": "index.js",
+  "private": true,
   "keywords": [
     "admin",
     "bananas",
@@ -26,9 +24,8 @@
     "coverage": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "buildwatch": "babel src --watch --out-dir dist",
-    "build": "babel --delete-dir-on-start src --out-dir dist",
-    "test": "npm run eslint && npm run coverage && npm run build",
-    "prepublishOnly": "npm test"
+    "build": "babel --delete-dir-on-start src --out-dir dist && cp package.json LICENSE README.md dist/",
+    "test": "npm run eslint && npm run coverage && npm run build"
   },
   "jest": {
     "setupFilesAfterEnv": [
