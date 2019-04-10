@@ -1,6 +1,6 @@
 {
   "name": "django-bananas",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "license": "MIT",
   "author": "Jonas Lundberg",
   "repository": "5monkeys/django-bananas.js",
@@ -24,7 +24,7 @@
     "coverage": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "buildwatch": "babel src --watch --out-dir dist",
-    "build": "babel --delete-dir-on-start src --out-dir dist && cp package.json LICENSE README.md dist/",
+    "build": "babel --delete-dir-on-start src --out-dir dist && cp LICENSE README.md dist/ && sed \"/\\\"private\\\":\\s*true/d\" package.json > dist/package.json",
     "test": "npm run eslint && npm run coverage && npm run build"
   },
   "jest": {

@@ -4,6 +4,4 @@ build:
 
 .PHONY: publish
 publish: build
-	cd dist/ && \
-		sed -i 's/"private": true,/"private": false,/' package.json && \
-		npm publish
+	cd dist/ && npm publish --dry-run
