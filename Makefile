@@ -8,4 +8,4 @@ dist: build
 	./node_modules/.bin/gh-pages --dist dist --branch ${BRANCH}
 
 publish: build
-	cd dist/ && npm publish --dry-run
+	cd dist/ && npm publish
