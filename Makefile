@@ -3,7 +3,7 @@ build:
 	npm run test
 
 BRANCH := $(shell git branch | grep \* | cut -d ' ' -f2)
-dist:
+dist: build
 	@echo Cleaning local dist branch...
 	@rm -rf node_modules/gh-pages/.cache
 	@echo Pushing built dist to branch: dist/$(BRANCH)
