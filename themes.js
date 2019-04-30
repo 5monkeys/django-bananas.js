@@ -20,7 +20,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var defaults = {
+const defaults = {
   bananas: true,
   typography: {
     useNextVariants: true
@@ -50,16 +50,14 @@ function createBananasTheme(theme) {
 }
 
 function extendTheme(source, overrides) {
-  var extended = (0, _lodash.merge)((0, _lodash.cloneDeep)(source), overrides);
+  const extended = (0, _lodash.merge)((0, _lodash.cloneDeep)(source), overrides);
 
-  extended.extend = function (o) {
-    return extendTheme(extended, o);
-  };
+  extended.extend = o => extendTheme(extended, o);
 
   return extended;
 }
 
-var lightTheme = {
+const lightTheme = {
   palette: {
     type: "light",
     primary: _colors2.django,
@@ -72,7 +70,7 @@ var lightTheme = {
     }
   }
 };
-var darkTheme = {
+const darkTheme = {
   palette: {
     type: "dark",
     primary: lightTheme.palette.primary,
@@ -96,7 +94,7 @@ var darkTheme = {
   }
 };
 
-var darthTheme = _objectSpread({}, darkTheme, {
+const darthTheme = _objectSpread({}, darkTheme, {
   overrides: _objectSpread({}, darkTheme.overrides, {
     BananasAdmin: {
       root: {
@@ -124,7 +122,7 @@ var darthTheme = _objectSpread({}, darkTheme, {
   })
 });
 
-var themes = {
+const themes = {
   light: applyThemeDefaults(lightTheme),
   dark: applyThemeDefaults(darkTheme),
   darth: applyThemeDefaults(darthTheme)

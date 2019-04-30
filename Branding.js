@@ -19,38 +19,36 @@ var _Logo = _interopRequireDefault(require("./Logo"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var styles = function styles() {
-  return {
-    root: {
-      width: "100%",
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center"
-    },
-    button: {
-      justifyContent: "flex-start",
-      width: "100%",
-      height: "100%",
-      padding: 0
-    },
-    smallText: {},
-    extra: {
-      marginLeft: 10,
-      "& > *": {
-        textAlign: "left",
-        fontSize: "0.75rem",
-        display: "block",
-        lineHeight: "1em"
-      }
-    },
-    textLogo: {
-      fontWeight: "bold"
+const styles = () => ({
+  root: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  button: {
+    justifyContent: "flex-start",
+    width: "100%",
+    height: "100%",
+    padding: 0
+  },
+  smallText: {},
+  extra: {
+    marginLeft: 10,
+    "& > *": {
+      textAlign: "left",
+      fontSize: "0.75rem",
+      display: "block",
+      lineHeight: `1em`
     }
-  };
-};
+  },
+  textLogo: {
+    fontWeight: "bold"
+  }
+});
 
 function Branding(_ref) {
-  var classes = _ref.classes,
+  let classes = _ref.classes,
       className = _ref.className,
       logo = _ref.logo,
       title = _ref.title,

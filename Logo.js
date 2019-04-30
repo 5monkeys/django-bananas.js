@@ -13,28 +13,26 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var styles = function styles(theme) {
-  return {
-    gInner: {
-      fill: theme.palette.primary.contrastText
-    },
-    g: {
-      strokeWidth: "1",
-      fillRule: "evenodd",
-      fill: "none",
-      stroke: "none"
-    },
-    imgLogo: {
-      height: 36
-    },
-    bananas: {
-      fill: theme.palette.primary.contrastText
-    }
-  };
-};
+const styles = theme => ({
+  gInner: {
+    fill: theme.palette.primary.contrastText
+  },
+  g: {
+    strokeWidth: "1",
+    fillRule: "evenodd",
+    fill: "none",
+    stroke: "none"
+  },
+  imgLogo: {
+    height: 36
+  },
+  bananas: {
+    fill: theme.palette.primary.contrastText
+  }
+});
 
-var Logo = function Logo(_ref) {
-  var src = _ref.src,
+const Logo = (_ref) => {
+  let src = _ref.src,
       classes = _ref.classes;
 
   if (src === true) {

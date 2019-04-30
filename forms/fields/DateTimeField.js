@@ -17,14 +17,14 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-var DateTimeField = function DateTimeField(_ref) {
-  var _ref$input = _ref.input,
+const DateTimeField = (_ref) => {
+  let _ref$input = _ref.input,
       _onChange = _ref$input.onChange,
       inputProps = _objectWithoutProperties(_ref$input, ["onChange"]),
       fieldProps = _ref.fieldProps;
 
   return _react.default.createElement(_materialUiPickers.DateTimePicker, _extends({}, inputProps, fieldProps, {
-    onChange: function onChange(date) {
+    onChange: date => {
       _onChange(date.toISOString());
     }
   }));

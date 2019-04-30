@@ -7,24 +7,24 @@ exports.django = exports.createColor = void 0;
 
 var _colorManipulator = require("@material-ui/core/styles/colorManipulator");
 
-var createColor = function createColor(base) {
-  var color = {
+const createColor = base => {
+  const color = {
     500: base
   };
 
-  for (var i = 500; i > 100; i -= 100) {
+  for (let i = 500; i > 100; i -= 100) {
     color[i - 100] = (0, _colorManipulator.rgbToHex)((0, _colorManipulator.lighten)(color[i], 0.15));
   }
 
-  for (var _i = 500; _i < 900; _i += 100) {
-    color[_i + 100] = (0, _colorManipulator.rgbToHex)((0, _colorManipulator.darken)(color[_i], 0.15));
+  for (let i = 500; i < 900; i += 100) {
+    color[i + 100] = (0, _colorManipulator.rgbToHex)((0, _colorManipulator.darken)(color[i], 0.15));
   }
 
   return color;
 };
 
 exports.createColor = createColor;
-var django = {
+const django = {
   100: "#93d0b8",
   200: "#81c8ac",
   300: "#6bbf9e",

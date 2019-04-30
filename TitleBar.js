@@ -35,39 +35,37 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-var styles = function styles(theme) {
-  return {
-    root: {},
-    colorPrimary: {},
-    colorSecondary: {},
-    colorPaper: {},
-    titleRoot: {
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      paddingRight: theme.spacing.unit * 2
-    },
-    title: {
-      flexGrow: 0,
-      flexShrink: 0
-    },
-    back: {
-      marginLeft: theme.spacing.unit / -2,
-      marginRight: theme.spacing.unit * 2,
-      boxShadow: "none",
-      borderWidth: "1.5pt",
-      borderStyle: "solid",
-      borderColor: theme.palette.primary.contrastText,
-      backgroundColor: "transparent",
-      "&:hover, &:active": {
-        boxShadow: "none"
-      }
+const styles = theme => ({
+  root: {},
+  colorPrimary: {},
+  colorSecondary: {},
+  colorPaper: {},
+  titleRoot: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingRight: theme.spacing.unit * 2
+  },
+  title: {
+    flexGrow: 0,
+    flexShrink: 0
+  },
+  back: {
+    marginLeft: theme.spacing.unit / -2,
+    marginRight: theme.spacing.unit * 2,
+    boxShadow: "none",
+    borderWidth: "1.5pt",
+    borderStyle: "solid",
+    borderColor: theme.palette.primary.contrastText,
+    backgroundColor: "transparent",
+    "&:hover, &:active": {
+      boxShadow: "none"
     }
-  };
-};
+  }
+});
 
-var TitleBar = function TitleBar(_ref) {
-  var classes = _ref.classes,
+const TitleBar = (_ref) => {
+  let classes = _ref.classes,
       theme = _ref.theme,
       overrides = _ref.overrides,
       children = _ref.children,
@@ -78,14 +76,14 @@ var TitleBar = function TitleBar(_ref) {
       justify = _ref.justify,
       rest = _objectWithoutProperties(_ref, ["classes", "theme", "overrides", "children", "color", "title", "back", "dense", "justify"]);
 
-  var backLinkProps = back && back.indexOf(":") > 0 ? {
+  const backLinkProps = back && back.indexOf(":") > 0 ? {
     route: back
   } : {
     path: back
   }; // Determine primary background is overridden, don't emphasize tools if so
 
-  var primaryIsOverridden = theme.overrides && theme.overrides.BananasTitleBar && theme.overrides.BananasTitleBar.colorPrimary && (theme.overrides.BananasTitleBar.colorPrimary.background && theme.overrides.BananasTitleBar.colorPrimary.background !== theme.palette.primary.main || theme.overrides.BananasTitleBar.colorPrimary.background && theme.overrides.BananasTitleBar.colorPrimary.background !== theme.palette.primary.main);
-  var emphasize = color === "primary" ? !primaryIsOverridden : true;
+  const primaryIsOverridden = theme.overrides && theme.overrides.BananasTitleBar && theme.overrides.BananasTitleBar.colorPrimary && (theme.overrides.BananasTitleBar.colorPrimary.background && theme.overrides.BananasTitleBar.colorPrimary.background !== theme.palette.primary.main || theme.overrides.BananasTitleBar.colorPrimary.background && theme.overrides.BananasTitleBar.colorPrimary.background !== theme.palette.primary.main);
+  const emphasize = color === "primary" ? !primaryIsOverridden : true;
   return _react.default.createElement(_ToolBar.default, _extends({
     color: color,
     emphasize: emphasize,
@@ -110,7 +108,9 @@ var TitleBar = function TitleBar(_ref) {
     component: "h1",
     variant: dense ? "subtitle1" : "h6",
     color: "inherit",
-    className: (0, _classnames.default)(classes.title, _defineProperty({}, overrides.title, overrides.title))
+    className: (0, _classnames.default)(classes.title, {
+      [overrides.title]: overrides.title
+    })
   }, title)), children);
 };
 

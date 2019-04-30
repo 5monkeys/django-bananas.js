@@ -13,8 +13,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-var ChoiceField = function ChoiceField(_ref) {
-  var input = _ref.input,
+const ChoiceField = (_ref) => {
+  let input = _ref.input,
       schema = _ref.schema,
       fieldProps = _ref.fieldProps;
   return _react.default.createElement(_core.FormControl, {
@@ -25,12 +25,10 @@ var ChoiceField = function ChoiceField(_ref) {
     value: input.value || []
   }), !schema.required && _react.default.createElement(_core.MenuItem, {
     value: ""
-  }, _react.default.createElement("em", null, "None")), schema.enum.map(function (value) {
-    return _react.default.createElement(_core.MenuItem, {
-      value: value,
-      key: value
-    }, value);
-  })), fieldProps.error && _react.default.createElement(_core.FormHelperText, null, fieldProps.helperText));
+  }, _react.default.createElement("em", null, "None")), schema.enum.map(value => _react.default.createElement(_core.MenuItem, {
+    value: value,
+    key: value
+  }, value))), fieldProps.error && _react.default.createElement(_core.FormHelperText, null, fieldProps.helperText));
 };
 
 var _default = ChoiceField;

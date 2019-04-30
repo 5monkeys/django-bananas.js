@@ -21,34 +21,32 @@ var _CardPage = _interopRequireDefault(require("./CardPage"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var errorMessages = {
+const errorMessages = {
   403: "You are authenticated as %(username)s, but are not authorized to access this page. Would you like to login to a different account?",
   404: "We're sorry, but the requested page could not be found.",
   501: "We're sorry, but the requested page could not be found."
 };
 
-var styles = function styles(theme) {
-  return {
-    actions: {
-      marginTop: theme.spacing.unit * 3,
-      textAlign: "right"
-    },
-    actionButton: {
-      boxShadow: "none"
-    }
-  };
-};
+const styles = theme => ({
+  actions: {
+    marginTop: theme.spacing.unit * 3,
+    textAlign: "right"
+  },
+  actionButton: {
+    boxShadow: "none"
+  }
+});
 
-var ErrorPage = function ErrorPage(_ref) {
-  var classes = _ref.classes,
+const ErrorPage = (_ref) => {
+  let classes = _ref.classes,
       title = _ref.title,
       statusCode = _ref.data.statusCode;
-  return _react.default.createElement(_context.default.Consumer, null, function (_ref2) {
-    var admin = _ref2.admin,
+  return _react.default.createElement(_context.default.Consumer, null, (_ref2) => {
+    let admin = _ref2.admin,
         user = _ref2.user;
     return _react.default.createElement(_CardPage.default, {
       title: title,
-      subtitle: "Status: ".concat(statusCode || (0, _.t)("Unknown"))
+      subtitle: `Status: ${statusCode || (0, _.t)("Unknown")}`
     }, _react.default.createElement(_.Translate, {
       params: user
     }, statusCode >= 500 ? "There's been an error. It's been reported to the site administrators via email and should be fixed shortly. Thanks for your patience." : errorMessages[statusCode] || ""), statusCode === 403 && _react.default.createElement("div", {
@@ -56,9 +54,7 @@ var ErrorPage = function ErrorPage(_ref) {
     }, _react.default.createElement(_Button.default, {
       variant: "contained",
       color: "secondary",
-      onClick: function onClick() {
-        return admin.logout();
-      },
+      onClick: () => admin.logout(),
       className: classes.actionButton
     }, (0, _.t)("Log in again"))));
   });

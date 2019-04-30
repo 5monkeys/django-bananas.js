@@ -23,209 +23,205 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var styles = function styles(theme) {
-  return {
-    root: {
-      paddingTop: 0,
-      paddingBottom: 0,
-      transition: theme.transitions.create("min-height", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen
-      })
+const styles = theme => ({
+  root: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    transition: theme.transitions.create("min-height", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  // Classes for states
+  selected: {},
+  expanded: {},
+  collapsed: {},
+  wide: {},
+  dense: {},
+  leftAligned: {},
+  rightAligned: {
+    // Reverse order of avatar and label
+    flexDirection: "row-reverse",
+    textAlign: "right"
+  },
+  multiline: {
+    "& *": {
+      // Label with multiple lines (priamry and secondary)
+      lineHeight: 1.2
     },
-    // Classes for states
-    selected: {},
-    expanded: {},
-    collapsed: {},
-    wide: {},
-    dense: {},
-    leftAligned: {},
-    rightAligned: {
-      // Reverse order of avatar and label
-      flexDirection: "row-reverse",
-      textAlign: "right"
-    },
-    multiline: {
-      "& *": {
-        // Label with multiple lines (priamry and secondary)
-        lineHeight: 1.2
-      },
-      "& $icon": {
-        // Large Icon to span multiple lines
-        width: 40,
-        height: 40,
-        fontSize: 40
-      }
-    },
-    drawerVariant: {
-      "&$leftAligned": {
-        paddingLeft: 0
-      },
-      "&$rightAligned": {
-        paddingRight: 0
-      },
-      "&$wide": {
-        // Wide outer height
-        minHeight: 40 + theme.spacing.unit,
-        "& $avatarItem": {
-          // Expanded avatar wrapper width, with centered Avatar
-          width: 40 + theme.spacing.unit * 3
-        },
-        "&$collapsed $avatarItem": {
-          // Collapsed avatar wrapper width, with centered Avatar
-          width: 40 + theme.spacing.unit * 2
-        }
-      },
-      "&$dense": {
-        // Dense outer height
-        minHeight: 24 + theme.spacing.unit,
-        "& $avatarItem": {
-          // Avatar wrapper width, with centered Avatar
-          width: 40 + theme.spacing.unit * 2
-        }
-      },
-      "&$expanded $labelItem": {
-        opacity: 1.0 // Fade label when expanding
-
-      },
-      "&$collapsed $labelItem": {
-        opacity: 0.0 // Fade label when collapsing
-
-      },
-      "& $labelInset:first-child": {
-        // Outermost left edge padding when icons disabled
-        paddingLeft: theme.spacing.unit * 3
-      }
-    },
-    appbarVariant: {
-      "&$wide": _objectSpread({}, theme.mixins.toolbar),
-      "&$dense": {
-        minHeight: 36,
-        "&$leftAligned": {
-          // Outermost edge padding
-          paddingLeft: theme.spacing.unit * 1.5,
-          paddingRight: theme.spacing.unit * 1.5
-        }
-      },
-      "&$leftAligned": {
-        // Outermost edge padding
-        paddingLeft: theme.spacing.unit * 2,
-        paddingRight: theme.spacing.unit * 2,
-        "& $avatarItem": {
-          // Padding between avatar and label
-          marginRight: theme.spacing.unit
-        }
-      },
-      "&$rightAligned": {
-        // Outermost edge padding
-        paddingLeft: theme.spacing.unit * 2,
-        paddingRight: theme.spacing.unit * 3,
-        "& $avatarItem": {
-          // Padding between avatar and label
-          marginLeft: theme.spacing.unit
-        }
-      },
-      "& $labelInset:first-child": {
-        // Outermost left edge padding when icons disabled
-        paddingLeft: 0
-      },
-      "& $label": {
-        color: theme.palette.primary.contrastText
-      },
-      "& $subtitle": {
-        color: theme.palette.primary.contrastText,
-        "& > *": {
-          opacity: 0.54
-        }
-      },
-      "& $icon": {
-        color: theme.palette.primary.contrastText
-      },
-      "& $avatar": {
-        color: theme.palette.primary.contrastText
-      }
-    },
-    avatarItem: {
-      // Avatar wrapper for flexing
-      flexShrink: 0,
-      flexGrow: 0,
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      color: "inherit",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen
-      })
-    },
-    labelItem: {
-      // Text label wrapper for flexing
-      flexShrink: 1,
-      flexGrow: 0,
-      padding: 0,
-      transition: theme.transitions.create("opacity", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen
-      })
-    },
-    label: {
-      // Text label Typography element
-      color: theme.palette.text.primary,
-      transition: theme.transitions.create(["font-size"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen
-      })
-    },
-    subtitle: {
-      color: theme.palette.text.secondary
-    },
-    labelInset: {},
-    // Class for inset padding when icons disabled
-    avatar: {
-      // Avatar element, circle or transparent depending on child
-      backgroundColor: "transparent",
-      color: theme.palette.text.primary,
-      fontSize: 24,
-      margin: 0,
-      width: "auto",
-      height: "auto",
-      transition: theme.transitions.create(["width", "height", "font-size"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen
-      })
-    },
-    char: {
-      // Circle Avatar variant with first letter of label
-      backgroundColor: theme.palette.action.selected,
-      fontSize: "inherit",
-      width: 36,
-      height: 36
-    },
-    charDense: {
-      // Dense version of circle avatar
-      fontSize: "0.9em",
-      width: 24,
-      height: 24
-    },
-    icon: {
-      // Icon element, child of Avatar
-      marginRight: 0,
-      fontSize: "inherit",
-      color: theme.palette.text.primary,
-      opacity: 0.666,
-      transition: theme.transitions.create(["width", "height", "font-size"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen
-      })
+    "& $icon": {
+      // Large Icon to span multiple lines
+      width: 40,
+      height: 40,
+      fontSize: 40
     }
-  };
-};
+  },
+  drawerVariant: {
+    "&$leftAligned": {
+      paddingLeft: 0
+    },
+    "&$rightAligned": {
+      paddingRight: 0
+    },
+    "&$wide": {
+      // Wide outer height
+      minHeight: 40 + theme.spacing.unit,
+      "& $avatarItem": {
+        // Expanded avatar wrapper width, with centered Avatar
+        width: 40 + theme.spacing.unit * 3
+      },
+      "&$collapsed $avatarItem": {
+        // Collapsed avatar wrapper width, with centered Avatar
+        width: 40 + theme.spacing.unit * 2
+      }
+    },
+    "&$dense": {
+      // Dense outer height
+      minHeight: 24 + theme.spacing.unit,
+      "& $avatarItem": {
+        // Avatar wrapper width, with centered Avatar
+        width: 40 + theme.spacing.unit * 2
+      }
+    },
+    "&$expanded $labelItem": {
+      opacity: 1.0 // Fade label when expanding
 
-var MenuItem = function MenuItem(_ref) {
-  var _classNames, _classNames2;
+    },
+    "&$collapsed $labelItem": {
+      opacity: 0.0 // Fade label when collapsing
 
-  var classes = _ref.classes,
+    },
+    "& $labelInset:first-child": {
+      // Outermost left edge padding when icons disabled
+      paddingLeft: theme.spacing.unit * 3
+    }
+  },
+  appbarVariant: {
+    "&$wide": _objectSpread({}, theme.mixins.toolbar),
+    "&$dense": {
+      minHeight: 36,
+      "&$leftAligned": {
+        // Outermost edge padding
+        paddingLeft: theme.spacing.unit * 1.5,
+        paddingRight: theme.spacing.unit * 1.5
+      }
+    },
+    "&$leftAligned": {
+      // Outermost edge padding
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 2,
+      "& $avatarItem": {
+        // Padding between avatar and label
+        marginRight: theme.spacing.unit
+      }
+    },
+    "&$rightAligned": {
+      // Outermost edge padding
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 3,
+      "& $avatarItem": {
+        // Padding between avatar and label
+        marginLeft: theme.spacing.unit
+      }
+    },
+    "& $labelInset:first-child": {
+      // Outermost left edge padding when icons disabled
+      paddingLeft: 0
+    },
+    "& $label": {
+      color: theme.palette.primary.contrastText
+    },
+    "& $subtitle": {
+      color: theme.palette.primary.contrastText,
+      "& > *": {
+        opacity: 0.54
+      }
+    },
+    "& $icon": {
+      color: theme.palette.primary.contrastText
+    },
+    "& $avatar": {
+      color: theme.palette.primary.contrastText
+    }
+  },
+  avatarItem: {
+    // Avatar wrapper for flexing
+    flexShrink: 0,
+    flexGrow: 0,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "inherit",
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  labelItem: {
+    // Text label wrapper for flexing
+    flexShrink: 1,
+    flexGrow: 0,
+    padding: 0,
+    transition: theme.transitions.create("opacity", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  label: {
+    // Text label Typography element
+    color: theme.palette.text.primary,
+    transition: theme.transitions.create(["font-size"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  subtitle: {
+    color: theme.palette.text.secondary
+  },
+  labelInset: {},
+  // Class for inset padding when icons disabled
+  avatar: {
+    // Avatar element, circle or transparent depending on child
+    backgroundColor: "transparent",
+    color: theme.palette.text.primary,
+    fontSize: 24,
+    margin: 0,
+    width: "auto",
+    height: "auto",
+    transition: theme.transitions.create(["width", "height", "font-size"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  char: {
+    // Circle Avatar variant with first letter of label
+    backgroundColor: theme.palette.action.selected,
+    fontSize: "inherit",
+    width: 36,
+    height: 36
+  },
+  charDense: {
+    // Dense version of circle avatar
+    fontSize: "0.9em",
+    width: 24,
+    height: 24
+  },
+  icon: {
+    // Icon element, child of Avatar
+    marginRight: 0,
+    fontSize: "inherit",
+    color: theme.palette.text.primary,
+    opacity: 0.666,
+    transition: theme.transitions.create(["width", "height", "font-size"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  }
+});
+
+const MenuItem = (_ref) => {
+  let classes = _ref.classes,
       route = _ref.route,
       title = _ref.title,
       subtitle = _ref.subtitle,
@@ -235,18 +231,29 @@ var MenuItem = function MenuItem(_ref) {
       collapsed = _ref.collapsed,
       dense = _ref.dense,
       direction = _ref.direction;
-  var ItemIcon = icon;
-  var showIcon = ItemIcon !== null;
-  var isIconDefined = showIcon && Boolean(ItemIcon);
-  var isDrawerVariant = variant === "drawer";
-  var isAppBarVariant = variant === "appbar";
-  var isLtR = direction === "ltr";
-  var isRtL = direction === "rtl";
-  var isMultiLine = Boolean(subtitle);
+  const ItemIcon = icon;
+  const showIcon = ItemIcon !== null;
+  const isIconDefined = showIcon && Boolean(ItemIcon);
+  const isDrawerVariant = variant === "drawer";
+  const isAppBarVariant = variant === "appbar";
+  const isLtR = direction === "ltr";
+  const isRtL = direction === "rtl";
+  const isMultiLine = Boolean(subtitle);
   return _react.default.createElement(_Link.default, {
     route: route
   }, _react.default.createElement(_core.ListItem, {
-    className: (0, _classnames.default)(classes.root, (_classNames = {}, _defineProperty(_classNames, classes.drawerVariant, isDrawerVariant), _defineProperty(_classNames, classes.appbarVariant, isAppBarVariant), _defineProperty(_classNames, classes.leftAligned, isLtR), _defineProperty(_classNames, classes.rightAligned, isRtL), _defineProperty(_classNames, classes.expanded, !collapsed), _defineProperty(_classNames, classes.collapsed, collapsed), _defineProperty(_classNames, classes.dense, dense), _defineProperty(_classNames, classes.wide, !dense), _defineProperty(_classNames, classes.multiline, isMultiLine), _defineProperty(_classNames, classes.selected, selected), _classNames)),
+    className: (0, _classnames.default)(classes.root, {
+      [classes.drawerVariant]: isDrawerVariant,
+      [classes.appbarVariant]: isAppBarVariant,
+      [classes.leftAligned]: isLtR,
+      [classes.rightAligned]: isRtL,
+      [classes.expanded]: !collapsed,
+      [classes.collapsed]: collapsed,
+      [classes.dense]: dense,
+      [classes.wide]: !dense,
+      [classes.multiline]: isMultiLine,
+      [classes.selected]: selected
+    }),
     dense: dense || isMultiLine,
     selected: selected,
     button: true
@@ -254,7 +261,10 @@ var MenuItem = function MenuItem(_ref) {
     className: classes.avatarItem
   }, _react.default.createElement(_core.ListItemAvatar, null, _react.default.createElement(_core.Avatar, {
     classes: {
-      root: (0, _classnames.default)(classes.avatar, (_classNames2 = {}, _defineProperty(_classNames2, classes.char, !isIconDefined), _defineProperty(_classNames2, classes.charDense, !isIconDefined && dense && !isMultiLine), _classNames2))
+      root: (0, _classnames.default)(classes.avatar, {
+        [classes.char]: !isIconDefined,
+        [classes.charDense]: !isIconDefined && dense && !isMultiLine
+      })
     }
   }, isIconDefined ? _react.default.createElement(ItemIcon, {
     className: classes.icon
