@@ -134,3 +134,25 @@ Log level per application label:
 
 ### prefix
 Prefix sets the base url for the router. Use this if the admin app is mounted on a sub-path, i.e. `/bananas/`.
+
+## Example app
+
+This repo contains an example app in the `app/` folder.
+
+1. Set up and start the backend: [django-bananas](https://github.com/5monkeys/django-bananas).
+
+2. Copy the sample settings:
+
+   ```
+	 cp app/src/_bananas.settings.js app/src/bananas.settings.js
+   ```
+
+   You can then play around with different settings in `bananas.settings.js`.
+
+3. Start the example app:
+
+   ```
+   docker-compose up -d
+   ```
+
+(If you develop on this package, you need to run `npm ci` both in the repo root and in `app/` to make `npm test` pass.)
