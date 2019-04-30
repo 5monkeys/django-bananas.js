@@ -135,6 +135,17 @@ Log level per application label:
 ### prefix
 Prefix sets the base url for the router. Use this if the admin app is mounted on a sub-path, i.e. `/bananas/`.
 
+## Browser support
+
+The code shipped to npm uses modern JavaScript, supported natively by all evergreen browsers. If you need deeper browser support, you need to configure your build system to transpile and polyfill `node_modules/` code.
+
+If you use [Create React App](https://facebook.github.io/create-react-app/), which runs Babel on code from npm packages, you can get IE11 support by adding the following to your main entrypoint:
+
+```js
+import "react-app-polyfill/ie11";
+import "react-app-polyfill/stable";
+```
+
 ## Example app
 
 This repo contains an example app in the `app/` folder.
