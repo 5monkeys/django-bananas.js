@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@date-io/date-fns": "^1.1.0",
+    "classnames": "^2.2.6",
     "date-fns": "^2.0.0-alpha.27",
     "final-form": ">=4.12.0",
     "final-form-arrays": ">=1.1.2",
@@ -48,7 +49,6 @@
   "peerDependencies": {
     "@material-ui/core": ">=3.9.0",
     "@material-ui/icons": ">=3.0.0",
-    "material-ui-pickers": "^2.2.4",
     "react": ">=16.6.0",
     "lodash": "^4.17.11"
   },
@@ -67,7 +67,6 @@
     "babel-eslint": "10.0.1",
     "babel-jest": "24.1.0",
     "babel-plugin-transform-dynamic-import": "2.1.0",
-    "classnames": "2.2.6",
     "coveralls": "3.0.3",
     "doctoc": "1.4.0",
     "eslint": "5.10.0",
@@ -86,7 +85,6 @@
     "react-dom": "16.6.3",
     "react-jss": "8.6.1",
     "react-test-renderer": "16.6.3",
-    "react-testing-library": "6.0.0",
-    "regexp-tree": "0.1.0"
+    "react-testing-library": "6.0.0"
   }
 }
