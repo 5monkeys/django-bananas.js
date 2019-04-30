@@ -1,4 +1,4 @@
-import createHistory from "history/createBrowserHistory";
+import { createBrowserHistory } from "history";
 import Logger from "js-logger";
 
 import { MePage } from "./pages";
@@ -23,7 +23,7 @@ export default class Router {
       ? typeof options.history === "function"
         ? options.history({ basename })
         : options.history
-      : createHistory({
+      : createBrowserHistory({
           basename,
         });
 
