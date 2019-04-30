@@ -41,7 +41,7 @@ ReactDOM.render(
 | **dense** | Boolean | *false* ||
 | **editableSettings** | Boolean | *false* ||
 | **loginForm** | Function | *undefined* ||
-| **logLevel** | String, Object | *WARN* | INFO, DEBUG, WARN, ERROR |
+| **logLevel** | String, Object | *WARN* | INFO, DEBUG, WARN, ERROR, OFF |
 | **prefix** | String | *""* ||
 
 ### api

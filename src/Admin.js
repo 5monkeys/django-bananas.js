@@ -573,7 +573,7 @@ class App extends React.Component {
     pages: PropTypes.func.isRequired,
     prefix: PropTypes.string,
     logLevel: PropTypes.oneOfType([
-      PropTypes.oneOf(["INFO", "DEBUG", "WARN", "ERROR"]),
+      PropTypes.oneOf(["INFO", "DEBUG", "WARN", "ERROR", "OFF"]),
       PropTypes.object,
     ]),
 
