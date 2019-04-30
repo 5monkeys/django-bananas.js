@@ -4,6 +4,10 @@
 [![Coverage Status](https://coveralls.io/repos/github/5monkeys/django-bananas.js/badge.svg?branch=master)](https://coveralls.io/github/5monkeys/django-bananas.js?branch=master)
 ![npm](https://img.shields.io/npm/v/django-bananas.svg)
 
+```
+npm install django-bananas react react-dom @material-ui/core @material-ui/icons lodash
+```
+
 ``` jsx
 import Bananas from "django-bananas";
 import React from "react";
@@ -22,6 +26,8 @@ ReactDOM.render(
 
 | Property | Type | Default | Choices |
 |:-|:-|:-|:-|
+| **api** | String | **Required** ||
+| **pages** | Function | **Required** ||
 | **title** | String | *Bananas* ||
 | **logo** | Function, String, Boolean | true ||
 | **branding** | String | *Bananas* ||
@@ -33,9 +39,22 @@ ReactDOM.render(
 | **permanent** | Boolean | *false* ||
 | **collapsed** | Boolean | *false* ||
 | **dense** | Boolean | *false* ||
+| **editableSettings** | Boolean | *false* ||
 | **loginForm** | Function | *undefined* ||
 | **logLevel** | String, Object | *WARN* | INFO, DEBUG, WARN, ERROR |
 | **prefix** | String | *""* ||
+
+### api
+Base API URL.
+
+### pages
+A function that dynamically imports pages. A page file should `export default` a React component to render for the given route.
+
+```js
+route => import(`./pages/${route}`)
+```
+
+Make sure that the directory containing your page files exists (even if it’s empty)! (`./pages/` in the above example.) Otherwise your build tool might throw an error.
 
 ### title
 Sets trailing part of the document title: `<current page title> | My Admin-App Title`.

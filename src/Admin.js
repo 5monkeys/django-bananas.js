@@ -572,9 +572,12 @@ class App extends React.Component {
     api: PropTypes.string.isRequired,
     pages: PropTypes.func.isRequired,
     prefix: PropTypes.string,
-    logLevel: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    logLevel: PropTypes.oneOfType([
+      PropTypes.oneOf(["INFO", "DEBUG", "WARN", "ERROR"]),
+      PropTypes.object,
+    ]),
 
-    layout: PropTypes.string,
+    layout: PropTypes.oneOf(["horizontal", "vertical"]),
     permanent: PropTypes.bool,
     collapsed: PropTypes.bool,
     dense: PropTypes.bool,
@@ -599,7 +602,7 @@ class App extends React.Component {
     prefix: "",
     logLevel: "WARN",
 
-    layout: "horizontal", // horizontal|vertical
+    layout: "horizontal",
     dense: false,
     permanent: false,
     collapsed: false,
