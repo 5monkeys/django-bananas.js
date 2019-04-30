@@ -86,7 +86,6 @@
     "react-dom": "16.6.3",
     "react-jss": "8.6.1",
     "react-test-renderer": "16.6.3",
-    "react-testing-library": "6.0.0",
-    "regexp-tree": "0.1.0"
+    "react-testing-library": "6.0.0"
   }
 }
