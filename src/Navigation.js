@@ -97,7 +97,7 @@ class Navigation extends React.Component {
       return nav;
     }, {});
 
-    const apps = Object.keys(groupedRoutes).sort((a, b) => a < b);
+    const apps = Object.keys(groupedRoutes);
     const multipleApps = apps.length > 2;
 
     return (
