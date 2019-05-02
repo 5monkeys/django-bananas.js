@@ -115,7 +115,7 @@ class Navigation extends _react.default.Component {
       appRoutes.push(route);
       return nav;
     }, {});
-    const apps = Object.keys(groupedRoutes).sort((a, b) => a < b);
+    const apps = Object.keys(groupedRoutes);
     const multipleApps = apps.length > 2;
     return _react.default.createElement("div", {
       className: (0, _classnames.default)(classes.root, {
