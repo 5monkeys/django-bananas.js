@@ -181,7 +181,7 @@ _swaggerClient.default.makeApisTagOperation = function (client) {
 
       call.title = spec.summary;
       call.schema = spec.parameters.reduce(function (parameters, parameter) {
-        if (parameter.in === "body") {
+        if (["body", "formData"].includes(parameter.in)) {
           var required = parameter.schema.required || [];
           parameters[parameter.name] = Object.entries(parameter.schema.properties).reduce(function (schema, _ref3) {
             var _ref4 = _slicedToArray(_ref3, 2),
@@ -192,9 +192,6 @@ _swaggerClient.default.makeApisTagOperation = function (client) {
               required: required.includes(key)
             })));
           }, {});
-        } else if (parameter.in === "formData") {
-          parameters.data = parameters.data || {};
-          parameters.data[parameter.name] = parameter;
         } else if (parameter.in === "query") {
           parameters[parameter.name] = parameter;
         }

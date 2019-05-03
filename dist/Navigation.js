@@ -149,9 +149,7 @@ function (_React$Component) {
         appRoutes.push(route);
         return nav;
       }, {});
-      var apps = Object.keys(groupedRoutes).sort(function (a, b) {
-        return a < b;
-      });
+      var apps = Object.keys(groupedRoutes);
       var multipleApps = apps.length > 2;
       return _react.default.createElement("div", {
         className: (0, _classnames.default)(classes.root, (_classNames = {}, _defineProperty(_classNames, classes.verticalRoot, !horizontal), _defineProperty(_classNames, classes.horizontalRoot, horizontal), _classNames))
