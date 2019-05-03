@@ -45,7 +45,12 @@ const renderApp = async ({ anonymous } = {}) => {
   return { ...helpers, app };
 };
 
-afterEach(cleanup);
+afterEach(() => {
+  // Make sure that we always start on the dashboard page
+  window.history.pushState({}, "", "/");
+  fetchMock.reset();
+  cleanup();
+});
 
 test("Has App", () => {
   expect(Bananas.App).toBeDefined();
@@ -407,4 +412,21 @@ test("Can change password", async () => {
 
   // Expect success message to show
   await waitForElement(() => getByText("Password changed successfully."));
+});
+
+test("A hash change will trigger rerender", async () => {
+  const { app, container, getByText } = await renderApp({ anonymous: false });
+
+  // Mock Users API call
+  const userListRoute = app.router.getRoute("example.user:list");
+  fetchMock.mock(`http://foo.bar/api/v1.0${userListRoute.path}`, { body: [] });
+
+  app.router.reroute({ id: "example.user:list" });
+  await waitForElement(() => getByText("Hash: none"), { container });
+
+  app.router.reroute({ id: "example.user:list", hash: "#foo" });
+  await waitForElement(() => getByText("Hash: foo"), { container });
+
+  app.router.reroute({ id: "example.user:list", hash: "#bar" });
+  await waitForElement(() => getByText("Hash: bar"), { container });
 });
