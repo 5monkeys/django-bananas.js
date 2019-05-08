@@ -157,6 +157,8 @@ _swaggerClient.default.makeApisTagOperation = client => {
 
         return parameters;
       }, {});
+      const response200 = spec.responses[200];
+      call.response = response200 != null && response200.schema != null ? simplifySchema(response200.schema) : undefined;
       return _objectSpread({}, originals, {
         [spec.__originalOperationId]: call
       });
@@ -170,3 +172,15 @@ _swaggerClient.default.makeApisTagOperation = client => {
 
 var _default = APIClient;
 exports.default = _default;
+
+function simplifySchema(schema) {
+  if (schema.type === "object") {
+    return schema.properties;
+  }
+
+  if (schema.type === "array") {
+    return simplifySchema(schema.items);
+  }
+
+  return schema;
+}

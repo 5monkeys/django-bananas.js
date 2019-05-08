@@ -13,6 +13,7 @@ exports.nthIndexOf = nthIndexOf;
 exports.capitalize = capitalize;
 exports.interpolateString = interpolateString;
 exports.t = t;
+exports.getFromSchema = getFromSchema;
 exports.MultiMeter = exports.ComponentProxy = exports.Translate = void 0;
 
 var _core = require("@material-ui/core");
@@ -24,6 +25,10 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest(); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -230,3 +235,37 @@ class MultiMeter {
 }
 
 exports.MultiMeter = MultiMeter;
+
+function getFromSchema(schema, path) {
+  return getFromSchemaHelper(schema, path.split("."), []);
+}
+
+function getFromSchemaHelper(schema, pathItems, location) {
+  if (pathItems.length === 0) {
+    return schema;
+  }
+
+  const _pathItems = _toArray(pathItems),
+        key = _pathItems[0],
+        restPath = _pathItems.slice(1);
+
+  const type = {}.toString.call(schema);
+
+  if (type !== "[object Object]") {
+    throw new TypeError(`Cannot access ${JSON.stringify(key)} on ${type} at ${JSON.stringify(["schema", ...location].join("."))}`);
+  }
+
+  if (schema.type === "array") {
+    return getFromSchemaHelper(schema.items, pathItems, [...location, "items"]);
+  }
+
+  if (schema.type === "object") {
+    return getFromSchemaHelper(schema.properties, pathItems, [...location, "properties"]);
+  }
+
+  if (!{}.hasOwnProperty.call(schema, key)) {
+    throw new TypeError(`${JSON.stringify(key)} is not present at ${JSON.stringify(["schema", ...location].join("."))}. Valid choices: ${JSON.stringify(Object.keys(schema))}`);
+  }
+
+  return getFromSchemaHelper(schema[key], restPath, [...location, key]);
+}

@@ -440,6 +440,16 @@ class Admin extends _react.default.Component {
       try {
         this.admin.loading();
         const data = await this.api[operationId](_objectSpread({}, params, filter));
+        data.schema = this.api[operationId].response;
+
+        data.getTitle = path => {
+          if (data.schema == null) {
+            throw new TypeError(`Cannot get title because .schema is missing.`);
+          }
+
+          return (0, _utils.getFromSchema)(data.schema, `${path}.title`);
+        };
+
         this.admin.loading(false);
         return data;
       } catch (error) {
