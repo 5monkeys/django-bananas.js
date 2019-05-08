@@ -144,6 +144,11 @@ Swagger.makeApisTagOperation = client => {
               }
               return parameters;
             }, {});
+            const response200 = spec.responses[200];
+            call.response =
+              response200 != null && response200.schema != null
+                ? simplifySchema(response200.schema)
+                : undefined;
 
             return {
               ...originals,
@@ -163,3 +168,13 @@ Swagger.makeApisTagOperation = client => {
 };
 
 export default APIClient;
+
+function simplifySchema(schema) {
+  if (schema.type === "object") {
+    return schema.properties;
+  }
+  if (schema.type === "array") {
+    return simplifySchema(schema.items);
+  }
+  return schema;
+}
