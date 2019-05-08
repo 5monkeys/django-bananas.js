@@ -181,3 +181,45 @@ export class MultiMeter {
       : Object.keys(this.meters).some(n => this.reads(n));
   };
 }
+
+export function getFromSchema(schema, path) {
+  return getFromSchemaHelper(schema, path.split("."), []);
+}
+
+function getFromSchemaHelper(schema, pathItems, location) {
+  if (pathItems.length === 0) {
+    return schema;
+  }
+
+  const [key, ...restPath] = pathItems;
+
+  const type = {}.toString.call(schema);
+  if (type !== "[object Object]") {
+    throw new TypeError(
+      `Cannot access ${JSON.stringify(key)} on ${type} at ${JSON.stringify(
+        ["schema", ...location].join(".")
+      )}`
+    );
+  }
+
+  if (schema.type === "array") {
+    return getFromSchemaHelper(schema.items, pathItems, [...location, "items"]);
+  }
+
+  if (schema.type === "object") {
+    return getFromSchemaHelper(schema.properties, pathItems, [
+      ...location,
+      "properties",
+    ]);
+  }
+
+  if (!{}.hasOwnProperty.call(schema, key)) {
+    throw new TypeError(
+      `${JSON.stringify(key)} is not present at ${JSON.stringify(
+        ["schema", ...location].join(".")
+      )}. Valid choices: ${JSON.stringify(Object.keys(schema))}`
+    );
+  }
+
+  return getFromSchemaHelper(schema[key], restPath, [...location, key]);
+}

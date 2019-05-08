@@ -22,7 +22,7 @@ import { ErrorPage, LoginPage } from "./pages";
 import Router from "./router";
 import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
-import { ComponentProxy } from "./utils";
+import { ComponentProxy, getFromSchema } from "./utils";
 import { t } from ".";
 
 Logger.useDefaults();
@@ -422,6 +422,13 @@ class Admin extends React.Component {
       try {
         this.admin.loading();
         const data = await this.api[operationId]({ ...params, ...filter });
+        data.schema = this.api[operationId].response;
+        data.getTitle = path => {
+          if (data.schema == null) {
+            throw new TypeError(`Cannot get title because .schema is missing.`);
+          }
+          return getFromSchema(data.schema, `${path}.title`);
+        };
         this.admin.loading(false);
         return data;
       } catch (error) {
