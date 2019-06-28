@@ -43,6 +43,7 @@ ReactDOM.render(
 | **loginForm** | Function | *undefined* ||
 | **logLevel** | String, Object | *WARN* | INFO, DEBUG, WARN, ERROR, OFF |
 | **prefix** | String | *""* ||
+| **customizeContext** | Function | *undefined* ||
 
 ### api
 Base API URL.
@@ -156,6 +157,9 @@ Log level per application label:
 
 ### prefix
 Prefix sets the base url for the router. Use this if the admin app is mounted on a sub-path, i.e. `/bananas/`.
+
+### customizeContext
+A function that receives the standard `AdminContext` and returns a new context object.
 
 ## Browser support
 

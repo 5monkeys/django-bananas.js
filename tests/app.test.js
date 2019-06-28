@@ -483,3 +483,22 @@ test("Can customize HTTP headers", async () => {
     expect(options.headers.Authorization).toBe("secret");
   });
 });
+
+test("Can customize context", async () => {
+  const websocketClient = {};
+
+  await renderApp({
+    anonymous: false,
+    props: {
+      customizeContext: context => ({
+        ...context,
+        userFullName: context.user.full_name,
+        websocketClient,
+      }),
+    },
+  });
+
+  // `./pages/index.js` sets `window.__adminContext` to the current `AdminContext`.
+  expect(window.__adminContext.userFullName).toBe("Monkey Kong");
+  expect(window.__adminContext.websocketClient).toBe(websocketClient);
+});
