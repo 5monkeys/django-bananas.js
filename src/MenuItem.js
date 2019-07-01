@@ -309,7 +309,7 @@ MenuItem.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   variant: PropTypes.string,
-  icon: PropTypes.func,
+  icon: PropTypes.oneOfType([PropTypes.node, PropTypes.func, PropTypes.object]),
   dense: PropTypes.bool,
   selected: PropTypes.bool,
   collapsed: PropTypes.bool,
