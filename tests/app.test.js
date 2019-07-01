@@ -1,13 +1,13 @@
-import fetchMock from "fetch-mock";
-import Logger from "js-logger";
-import React from "react";
 import {
   cleanup,
   fireEvent,
   render,
   wait,
   waitForElement,
-} from "react-testing-library";
+} from "@testing-library/react";
+import fetchMock from "fetch-mock";
+import Logger from "js-logger";
+import React from "react";
 
 import Bananas from "../src";
 import { PageNotFoundError, PageNotImplementedError } from "../src/errors";

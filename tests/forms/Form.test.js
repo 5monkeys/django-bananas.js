@@ -1,7 +1,7 @@
+import { cleanup, fireEvent, render, wait } from "@testing-library/react";
 import fetchMock from "fetch-mock";
 import Logger from "js-logger";
 import React from "react";
-import { cleanup, fireEvent, render, wait } from "react-testing-library";
 
 import { AutoField, Form } from "../../src/forms";
 import getAPIClient from "../api.mock";
