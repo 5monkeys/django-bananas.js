@@ -91,7 +91,7 @@ User.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string,
   collapsed: PropTypes.bool,
-  icon: PropTypes.func,
+  icon: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 };
 
 User.defaultProps = {

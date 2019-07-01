@@ -22,7 +22,11 @@ const styles = theme => ({
 class ThemedPage extends React.Component {
   static propTypes = {
     controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
-    component: PropTypes.func,
+    component: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.func,
+      PropTypes.node,
+    ]),
     theme: PropTypes.object,
   };
 
@@ -47,7 +51,11 @@ class Page extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
     controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
-    component: PropTypes.func,
+    component: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.object,
+      PropTypes.node,
+    ]),
   };
 
   static defaultProps = {
