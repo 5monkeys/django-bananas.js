@@ -37,7 +37,7 @@ const styles = theme => ({
     paddingRight: theme.spacing(2),
   },
   addIcon: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing(1),
   },
   users: {
     marginTop: theme.spacing(3),

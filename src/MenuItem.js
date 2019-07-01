@@ -58,7 +58,7 @@ const styles = theme => ({
     },
     "&$wide": {
       // Wide outer height
-      minHeight: 40 + theme.spacing.unit,
+      minHeight: 40 + theme.spacing(1),
 
       "& $avatarItem": {
         // Expanded avatar wrapper width, with centered Avatar
@@ -71,7 +71,7 @@ const styles = theme => ({
     },
     "&$dense": {
       // Dense outer height
-      minHeight: 24 + theme.spacing.unit,
+      minHeight: 24 + theme.spacing(1),
 
       "& $avatarItem": {
         // Avatar wrapper width, with centered Avatar
@@ -110,7 +110,7 @@ const styles = theme => ({
 
       "& $avatarItem": {
         // Padding between avatar and label
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing(1),
       },
     },
     "&$rightAligned": {
@@ -120,7 +120,7 @@ const styles = theme => ({
 
       "& $avatarItem": {
         // Padding between avatar and label
-        marginLeft: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
       },
     },
     "& $labelInset:first-child": {

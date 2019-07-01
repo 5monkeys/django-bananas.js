@@ -11,7 +11,7 @@ const styles = theme => ({
     alignItems: "center",
     "& > * + *": {
       // Margin between nodes (buttons)
-      marginLeft: theme.spacing.unit,
+      marginLeft: theme.spacing(1),
     },
   },
 });

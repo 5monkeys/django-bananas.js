@@ -27,7 +27,7 @@ const DialogActions = withStyles(theme => ({
   root: {
     borderTop: `1px solid ${theme.palette.divider}`,
     margin: 0,
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   },
 }))(MuiDialogActions);
 

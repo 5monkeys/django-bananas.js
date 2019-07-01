@@ -25,7 +25,7 @@ const styles = theme => ({
     flexShrink: 0,
   },
   back: {
-    marginLeft: theme.spacing.unit / -2,
+    marginLeft: -theme.spacing(2),
     marginRight: theme.spacing(2),
     boxShadow: "none",
     borderWidth: "1.5pt",

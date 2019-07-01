@@ -47,8 +47,8 @@ const styles = theme => ({
   },
   vertical: {
     "&multiple": {
-      paddingTop: theme.spacing.unit,
-      paddingBottom: theme.spacing.unit,
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
     },
   },
   dense: {},

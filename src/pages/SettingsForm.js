@@ -11,7 +11,7 @@ import React from "react";
 const styles = theme => ({
   reset: {
     marginLeft: 48,
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(1),
   },
 });
 
