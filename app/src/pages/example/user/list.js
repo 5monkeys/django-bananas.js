@@ -130,7 +130,7 @@ class UsersPage extends React.Component {
               <Typography>
                 <strong>Hash:</strong> {hash}
               </Typography>
-              <Paper className={classes.users}>
+              <Paper className={classes.users} elevation={2}>
                 <Table>
                   <TableHead>
                     <TableRow>
