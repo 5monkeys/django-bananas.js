@@ -15,7 +15,7 @@ const styles = theme => ({
     justifyContent: "space-between",
   },
   paper: {
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
     alignSelf: "flex-start",
   },
 });

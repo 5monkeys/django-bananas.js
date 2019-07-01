@@ -62,11 +62,11 @@ const styles = theme => ({
 
       "& $avatarItem": {
         // Expanded avatar wrapper width, with centered Avatar
-        width: 40 + theme.spacing.unit * 3,
+        width: 40 + theme.spacing(3),
       },
       "&$collapsed $avatarItem": {
         // Collapsed avatar wrapper width, with centered Avatar
-        width: 40 + theme.spacing.unit * 2,
+        width: 40 + theme.spacing(2),
       },
     },
     "&$dense": {
@@ -75,7 +75,7 @@ const styles = theme => ({
 
       "& $avatarItem": {
         // Avatar wrapper width, with centered Avatar
-        width: 40 + theme.spacing.unit * 2,
+        width: 40 + theme.spacing(2),
       },
     },
     "&$expanded $labelItem": {
@@ -86,7 +86,7 @@ const styles = theme => ({
     },
     "& $labelInset:first-child": {
       // Outermost left edge padding when icons disabled
-      paddingLeft: theme.spacing.unit * 3,
+      paddingLeft: theme.spacing(3),
     },
   },
 
@@ -99,14 +99,14 @@ const styles = theme => ({
 
       "&$leftAligned": {
         // Outermost edge padding
-        paddingLeft: theme.spacing.unit * 1.5,
-        paddingRight: theme.spacing.unit * 1.5,
+        paddingLeft: theme.spacing(5),
+        paddingRight: theme.spacing(5),
       },
     },
     "&$leftAligned": {
       // Outermost edge padding
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 2,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
 
       "& $avatarItem": {
         // Padding between avatar and label
@@ -115,8 +115,8 @@ const styles = theme => ({
     },
     "&$rightAligned": {
       // Outermost edge padding
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 3,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(3),
 
       "& $avatarItem": {
         // Padding between avatar and label

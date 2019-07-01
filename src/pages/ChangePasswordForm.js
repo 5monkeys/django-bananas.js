@@ -21,14 +21,14 @@ const styles = theme => ({
     maxWidth: 350,
   },
   formLabel: {
-    marginBottom: theme.spacing.unit * 2,
+    marginBottom: theme.spacing(2),
   },
   formControlNormal: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     marginBottom: 0,
   },
   field: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
   },
 });
 

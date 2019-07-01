@@ -6,9 +6,6 @@ import { django } from "./colors";
 
 const defaults = {
   bananas: true,
-  typography: {
-    useNextVariants: true,
-  },
   /*
   overrides: {
     BananasNavBar: {

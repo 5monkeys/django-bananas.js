@@ -23,7 +23,7 @@ const styles = theme => ({
     height: "100%",
   },
   padded: {
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
   },
 });
 

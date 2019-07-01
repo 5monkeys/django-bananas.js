@@ -18,7 +18,7 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    paddingRight: theme.spacing.unit * 2,
+    paddingRight: theme.spacing(2),
   },
   title: {
     flexGrow: 0,
@@ -26,7 +26,7 @@ const styles = theme => ({
   },
   back: {
     marginLeft: theme.spacing.unit / -2,
-    marginRight: theme.spacing.unit * 2,
+    marginRight: theme.spacing(2),
     boxShadow: "none",
     borderWidth: "1.5pt",
     borderStyle: "solid",
@@ -145,5 +145,5 @@ TitleBar.defaultProps = {
 };
 
 export default withStyles(styles, { name: "BananasTitleBar" })(
-  withTheme()(TitleBar)
+  withTheme(TitleBar)
 );

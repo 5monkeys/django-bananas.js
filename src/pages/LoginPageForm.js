@@ -16,9 +16,9 @@ const styles = () => ({
 const DialogContent = withStyles(theme => ({
   root: {
     margin: 0,
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     "& > * + * ": {
-      marginTop: theme.spacing.unit * 2,
+      marginTop: theme.spacing(2),
     },
   },
 }))(MuiDialogContent);

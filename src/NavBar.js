@@ -74,7 +74,7 @@ const styles = theme => ({
     }),
   },
   drawerCollapsed: {
-    width: 40 + theme.spacing.unit * 2 + 1,
+    width: 40 + theme.spacing(2) + 1,
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -84,8 +84,8 @@ const styles = theme => ({
   drawerBranding: {},
   permanentDrawerBrandingButton: {
     padding: 0,
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
   /* APPBAR STYLES */
   appbar: {
@@ -100,8 +100,8 @@ const styles = theme => ({
   },
   permanentAppbarBrandingButton: {
     padding: 0,
-    paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(2),
   },
   pageOffset: {
     ...theme.mixins.toolbar,

@@ -14,7 +14,7 @@ const DialogTitle = withStyles(theme => ({
     margin: 0,
     textAlign: "center",
     backgroundColor: theme.palette.primary.main,
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
   closeButton: {
     position: "absolute",

@@ -15,7 +15,7 @@ const errorMessages = {
 
 const styles = theme => ({
   actions: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     textAlign: "right",
   },
   actionButton: {

@@ -34,13 +34,13 @@ const styles = theme => ({
   },
   addButton: {
     boxShadow: "none",
-    paddingRight: theme.spacing.unit * 2,
+    paddingRight: theme.spacing(2),
   },
   addIcon: {
     marginRight: theme.spacing.unit,
   },
   users: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
   },
   userHover: {
     cursor: "pointer",
