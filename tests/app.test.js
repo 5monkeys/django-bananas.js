@@ -231,7 +231,7 @@ test("Can show and dismiss messages", async () => {
     app,
     container,
     getByText,
-    getByTestId,
+    getAllByTestId,
     queryByTestId,
   } = await renderApp();
 
@@ -250,8 +250,8 @@ test("Can show and dismiss messages", async () => {
   app.admin.error("ERROR_MSG");
   await waitForElement(() => getByText("ERROR_MSG"), { container });
 
-  // Click X icon and expect message to go away
-  const closeButton = getByTestId("message-close-button");
+  // Click X icon and expect error message to go away, the other ones goes away by clickAway
+  const closeButton = getAllByTestId("message-close-button")[0];
   fireEvent.click(closeButton);
   await wait(
     () =>
