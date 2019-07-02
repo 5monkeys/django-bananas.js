@@ -85,9 +85,9 @@
     "jest": "24.1.0",
     "jest-dom": "^3.5.0",
     "prettier": "1.15.3",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.9.0-alpha.0",
+    "react-dom": "^16.9.0-alpha.0",
     "react-jss": "10.0.0-alpha.21",
-    "react-test-renderer": "16.8.6"
+    "react-test-renderer": "16.9.0-alpha.0"
   }
 }
