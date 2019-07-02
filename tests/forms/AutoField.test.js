@@ -12,6 +12,10 @@ import TextField from "../../src/forms/fields/TextField";
 import getAPIClient from "../api.mock";
 import { TestContext } from "./utils";
 
+const MockDate = require("mockdate");
+
+MockDate.set("1/30/2000", 120);
+
 Logger.get("bananas").setLevel(Logger.OFF);
 
 class Boundary extends React.Component {
