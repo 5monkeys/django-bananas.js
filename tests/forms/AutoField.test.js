@@ -12,6 +12,8 @@ import TextField from "../../src/forms/fields/TextField";
 import getAPIClient from "../api.mock";
 import { TestContext } from "./utils";
 
+process.env.TZ = "America/Los_Angeles";
+
 Logger.get("bananas").setLevel(Logger.OFF);
 
 class Boundary extends React.Component {
@@ -47,28 +49,8 @@ test.each([
   ["boolean", "checkbox", BooleanField],
   ["boolean", "switch", BooleanField],
   ["choices", "default", ChoiceField],
-  [
-    "date",
-    "default",
-    DateField,
-    {
-      input: {
-        value:
-          "Tue Jul 02 2019 11:36:30 GMT+0000 (Central European Summer Time)",
-      },
-    },
-  ],
-  [
-    "datetime",
-    "default",
-    DateTimeField,
-    {
-      input: {
-        value:
-          "Tue Jul 02 2019 11:36:30 GMT+0000 (Central European Summer Time)",
-      },
-    },
-  ],
+  ["date", "default", DateField, { input: { value: "2019-07-02" } }],
+  ["datetime", "default", DateTimeField, { input: { value: "2019-07-02" } }],
   ["integer", "default", TextField],
   ["multiple_choices", "default", MultipleChoiceField],
   ["text", "default", TextField],

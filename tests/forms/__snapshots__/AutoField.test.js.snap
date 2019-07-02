@@ -252,7 +252,7 @@ exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
         readOnly={true}
         required={false}
         type="text"
-        value="July 2nd 01:36 p.m."
+        value="July 2nd 02:00 a.m."
       />
     </div>
   </div>
