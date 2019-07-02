@@ -20,7 +20,7 @@
     "eslint:fix": "eslint . --fix",
     "prettier": "prettier --write \"*.md\"",
     "doctoc": "doctoc --maxlevel 3 README.md",
-    "jest": "jest --verbose",
+    "jest": "env TZ='America/Los_Angeles' jest --verbose",
     "coverage": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "buildwatch": "babel src --watch --out-dir dist",

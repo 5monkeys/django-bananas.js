@@ -12,8 +12,6 @@ import TextField from "../../src/forms/fields/TextField";
 import getAPIClient from "../api.mock";
 import { TestContext } from "./utils";
 
-process.env.TZ = "America/Los_Angeles";
-
 Logger.get("bananas").setLevel(Logger.OFF);
 
 class Boundary extends React.Component {
