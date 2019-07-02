@@ -54,7 +54,7 @@ test.each([
     {
       input: {
         value:
-          "Tue Jul 02 2019 11:36:30 GMT+0200 (Central European Summer Time)",
+          "Tue Jul 02 2019 11:36:30 GMT+0000 (Central European Summer Time)",
       },
     },
   ],
@@ -65,7 +65,7 @@ test.each([
     {
       input: {
         value:
-          "Tue Jul 02 2019 11:36:30 GMT+0200 (Central European Summer Time)",
+          "Tue Jul 02 2019 11:36:30 GMT+0000 (Central European Summer Time)",
       },
     },
   ],
