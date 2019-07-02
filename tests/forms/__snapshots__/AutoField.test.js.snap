@@ -210,14 +210,13 @@ exports[`Can render field of type 'date' and variant 'default' 1`] = `
         aria-invalid={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
-        name="date"
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
         readOnly={true}
         required={false}
         type="text"
-        value="July 1st"
+        value="July 2nd"
       />
     </div>
   </div>
@@ -247,14 +246,13 @@ exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
         aria-invalid={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
-        name="datetime"
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
         readOnly={true}
         required={false}
         type="text"
-        value="July 1st 03:54 p.m."
+        value="July 2nd 09:44 a.m."
       />
     </div>
   </div>

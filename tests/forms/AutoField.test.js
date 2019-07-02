@@ -47,19 +47,29 @@ test.each([
   ["boolean", "checkbox", BooleanField],
   ["boolean", "switch", BooleanField],
   ["choices", "default", ChoiceField],
-  ["date", "default", DateField],
-  ["datetime", "default", DateTimeField],
+  [
+    "date",
+    "default",
+    DateField,
+    { input: { value: "2019-07-02T07:44:45.068Z" } },
+  ],
+  [
+    "datetime",
+    "default",
+    DateTimeField,
+    { input: { value: "2019-07-02T07:44:45.068Z" } },
+  ],
   ["integer", "default", TextField],
   ["multiple_choices", "default", MultipleChoiceField],
   ["text", "default", TextField],
 ])(
   "Can render field of type '%s' and variant '%s'",
-  async (name, variant, fieldComponent) => {
+  async (name, variant, fieldComponent, extraProps = {}) => {
     const api = await getAPIClient();
     const tree = renderer.create(
       <TestContext api={api}>
         <Form route="example.user:form.create">
-          <AutoField name={name} variant={variant} />
+          <AutoField name={name} variant={variant} {...extraProps} />
         </Form>
       </TestContext>
     );
