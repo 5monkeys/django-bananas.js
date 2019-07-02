@@ -51,13 +51,23 @@ test.each([
     "date",
     "default",
     DateField,
-    { input: { value: "2019-07-02T07:44:45.068Z" } },
+    {
+      input: {
+        value:
+          "Tue Jul 02 2019 11:36:30 GMT+0200 (Central European Summer Time)",
+      },
+    },
   ],
   [
     "datetime",
     "default",
     DateTimeField,
-    { input: { value: "2019-07-02T07:44:45.068Z" } },
+    {
+      input: {
+        value:
+          "Tue Jul 02 2019 11:36:30 GMT+0200 (Central European Summer Time)",
+      },
+    },
   ],
   ["integer", "default", TextField],
   ["multiple_choices", "default", MultipleChoiceField],
