@@ -166,11 +166,7 @@ class AlertController extends React.Component {
 
   render() {
     return (
-      <Alert
-        classes={{}}
-        {...this.state}
-        onClose={this.dismissModal.bind(this)}
-      />
+      <BananasAlert {...this.state} onClose={this.dismissModal.bind(this)} />
     );
   }
 }
