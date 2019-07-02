@@ -1,4 +1,5 @@
 import IconButton from "@material-ui/core/IconButton";
+import Slide from "@material-ui/core/Slide";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import { amber, blue, green } from "@material-ui/core/colors";
@@ -60,7 +61,7 @@ class Message extends React.Component {
   };
 
   handleClose = (e, reason) => {
-    if (this.props.type === "error" && reason === "clickaway") {
+    if (reason === "clickaway") {
       return;
     }
     this.setState({ open: false });
@@ -78,6 +79,7 @@ class Message extends React.Component {
           vertical: "bottom",
           horizontal: "right",
         }}
+        TransitionComponent={Slide}
         onClose={this.handleClose}
         onExited={remove}
         open={open}
