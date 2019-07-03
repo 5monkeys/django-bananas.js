@@ -34,7 +34,7 @@ ReactDOM.render(
 | **version** | String | *v1.0.0* ||
 | **theme** | Object | *[django-bananas/themes].default (light)* ||
 | **pageTheme** | Object | *undefined* ||
-| **icons** | Object, Boolean | *{"home": ..., "bananas.me:list": ...}* ||
+| **nav** | Object, Boolean | *{"home": ..., "bananas.me:list": ...}* ||
 | **layout** | String | *horizontal* | horizontal, vertical |
 | **permanent** | Boolean | *false* ||
 | **collapsed** | Boolean | *false* ||
@@ -86,13 +86,13 @@ Shown in the navigation header next to the logo.
 />
 ```
 
-### icons
-The `icons` setting is a mapping between navigation endpoints *(operation-id)* and icons. Set `icons={false}` to disable icons in the navigation.
+### nav
+The `nav` setting lets you define the order of items in the navigation, as well as icons for each item. It is a mapping between navigation endpoints *(operation-id)* and icons, or an array of navigation endpoints if you want to define order but not icons. Items not mentioned in the mapping or array are put last in alphabetical order, with a fallback icon (if needed).
 
 ``` jsx
 <Bananas.App
   // ...
-  icons={{
+  nav={{
     // "home": MyCustomDashboardIcon,
     // "bananas.me:list": MyCustomUserIcon,
     "example.user:list": PeopleIcon,

@@ -1,6 +1,8 @@
-/* eslint-disable react/no-unused-state */ import CssBaseline from "@material-ui/core/CssBaseline";
+/* eslint-disable react/no-unused-state */
+import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import deprecated from "deprecated-prop-type";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
@@ -62,7 +64,7 @@ class Admin extends React.Component {
     const propSettings = {
       editable: props.editableSettings,
       horizontal: props.layout === "horizontal",
-      icons: props.icons !== null,
+      icons: Boolean(props.nav) && !Array.isArray(props.nav),
       collapsable: !(props.permanent || false),
       collapsed: props.collapsed || false,
       dense: props.dense || false,
@@ -535,7 +537,15 @@ class Admin extends React.Component {
                     dense={settings.dense}
                     permanent={!settings.collapsable}
                     collapsed={settings.collapsed}
-                    icons={settings.icons ? this.props.icons : null}
+                    nav={
+                      settings.icons
+                        ? this.props.nav
+                        : Array.isArray(this.props.nav)
+                        ? this.props.nav
+                        : this.props.nav
+                        ? Object.keys(this.props.nav)
+                        : null
+                    }
                     logo={this.props.logo}
                     title={this.props.title}
                     branding={this.props.branding}
@@ -597,7 +607,11 @@ class App extends React.Component {
       PropTypes.string,
       PropTypes.node,
     ]),
-    icons: PropTypes.object,
+    icons: deprecated(PropTypes.object, 'Please use "nav" instead.'),
+    nav: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.string.isRequired),
+      PropTypes.object,
+    ]),
 
     theme: PropTypes.object,
     pageTheme: PropTypes.object,
@@ -619,6 +633,7 @@ class App extends React.Component {
     version: "v1.3.0", // TODO: Get package version
     logo: true,
     icons: undefined,
+    nav: undefined,
 
     theme: themes.default,
     pageTheme: undefined,
@@ -627,7 +642,11 @@ class App extends React.Component {
   };
 
   render() {
-    const { props } = this;
+    const {
+      // Default `nav` to the legacy `icons` prop, and remove `icons` from props.
+      props: { icons, nav = icons, ...rest },
+    } = this;
+    const props = { nav, ...rest };
     const theme = createBananasTheme(props.theme);
     const pageTheme = props.pageTheme
       ? createBananasTheme(props.pageTheme)

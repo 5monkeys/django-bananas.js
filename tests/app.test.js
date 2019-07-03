@@ -15,7 +15,7 @@ import { mockAPI, user } from "./api.mock";
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
-const renderApp = async ({ anonymous } = {}) => {
+const renderApp = async ({ anonymous = false, props = {} } = {}) => {
   mockAPI({ anonymous });
 
   const helpers = render(
@@ -27,6 +27,7 @@ const renderApp = async ({ anonymous } = {}) => {
       branding="Test Branding"
       version="v1.2.3"
       editableSettings
+      {...props}
     />
   );
 
@@ -429,4 +430,36 @@ test("A hash change will trigger rerender", async () => {
 
   app.router.reroute({ id: "example.user:list", hash: "#bar" });
   await waitForElement(() => getByText("Hash: bar"), { container });
+});
+
+test("Can customize menu", async () => {
+  const { getByTestId, queryAllByTestId } = await renderApp({
+    props: {
+      nav: {
+        "example.user:list": null,
+        home: () => <span data-testid="CustomMenuItemIcon" />,
+      },
+    },
+  });
+
+  expect(getByTestId("CustomMenuItemIcon")).toBeTruthy();
+  const items = queryAllByTestId("MenuItemText").map(
+    element => element.textContent
+  );
+  expect(items[0]).toBe("Användare");
+  expect(items[1]).toBe("Dashboard");
+});
+
+test("Can customize menu with array", async () => {
+  const { getByTestId, queryAllByTestId } = await renderApp({
+    props: {
+      nav: ["example.user:list"],
+    },
+  });
+
+  expect(getByTestId("MenuItemIcon")).toBeTruthy();
+  const items = queryAllByTestId("MenuItemText").map(
+    element => element.textContent
+  );
+  expect(items[0]).toBe("Användare");
 });
