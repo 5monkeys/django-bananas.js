@@ -26,7 +26,7 @@ ReactDOM.render(
 
 | Property | Type | Default | Choices |
 |:-|:-|:-|:-|
-| **api** | String | **Required** ||
+| **api** | String, Object | **Required** ||
 | **pages** | Function | **Required** ||
 | **title** | String | *Bananas* ||
 | **logo** | Function, String, Boolean | true ||
@@ -46,6 +46,28 @@ ReactDOM.render(
 
 ### api
 Base API URL.
+
+``` jsx
+<Bananas.App
+  // ...
+  api="http://localhost:8000/api"
+/>
+```
+
+Alternatively, you can pass an object of extra [swagger-js](https://github.com/swagger-api/swagger-js) options. For example, you could add a custom header:
+
+``` jsx
+<Bananas.App
+  // ...
+  api={{
+    url: "http://localhost:8000/api",
+    requestInterceptor: request => {
+      request.headers.Authorization = "secret";
+      return request;
+    },
+  }}
+/>
+```
 
 ### pages
 A function that dynamically imports pages. A page file should `export default` a React component to render for the given route.
