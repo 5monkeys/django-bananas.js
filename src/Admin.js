@@ -235,6 +235,11 @@ class Admin extends React.Component {
       this.router.reroute();
     }
 
+    // Allow adding extra things to the AdminContext.
+    if (this.props.customizeContext) {
+      this.setContext(this.props.customizeContext(this.state.context));
+    }
+
     // Finalize boot
     this.setState({ booting: false, booted: true }, () => {
       logger.info("Booted!");
@@ -630,6 +635,7 @@ class App extends React.Component {
     pageTheme: PropTypes.object,
     loginForm: PropTypes.func,
     editableSettings: PropTypes.bool,
+    customizeContext: PropTypes.func,
   };
 
   static defaultProps = {
@@ -652,6 +658,7 @@ class App extends React.Component {
     pageTheme: undefined,
     loginForm: undefined,
     editableSettings: false,
+    customizeContext: undefined,
   };
 
   render() {
