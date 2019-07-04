@@ -84,17 +84,38 @@ class Navigation extends React.Component {
 
   render() {
     const currentUrl = this.context.router.history.location.pathname;
-    const { routes, collapsed, horizontal, dense, icons, classes } = this.props;
+    const {
+      routes,
+      collapsed,
+      horizontal,
+      dense,
+      nav,
+      showIcons,
+      classes,
+    } = this.props;
 
-    const groupedRoutes = routes.reduce((nav, route) => {
+    const navKeys = Object.keys(nav);
+
+    // Put items listed in `nav` first, then keep the original (alphabetical) order.
+    const indexMap = routes.reduce((result, route, index) => {
+      const navIndex = navKeys.indexOf(route.id);
+      result[route.id] = navIndex >= 0 ? navIndex : index + navKeys.length;
+      return result;
+    }, {});
+
+    const sortedRoutes = routes
+      .slice()
+      .sort((a, b) => indexMap[a.id] - indexMap[b.id]);
+
+    const groupedRoutes = sortedRoutes.reduce((result, route) => {
       const { app } = route;
-      let appRoutes = nav[app];
+      let appRoutes = result[app];
       if (appRoutes === undefined) {
         appRoutes = [];
-        nav[app] = appRoutes;
+        result[app] = appRoutes;
       }
       appRoutes.push(route);
-      return nav;
+      return result;
     }, {});
 
     const apps = Object.keys(groupedRoutes);
@@ -138,14 +159,14 @@ class Navigation extends React.Component {
                 ({ id, path, title }) =>
                   // Only show "Dashboard" item in vertical+icon mode
                   ((!horizontal &&
-                    (icons.enabled || (!icons.enabled && id !== "home"))) ||
+                    (showIcons || (!showIcons && id !== "home"))) ||
                     (horizontal && id !== "home")) && (
                     <MenuItem
                       key={id}
                       route={id}
                       variant={horizontal ? "appbar" : "drawer"}
                       title={title}
-                      icon={icons.enabled ? icons[id] : null}
+                      icon={showIcons ? nav[id] : null}
                       dense={dense}
                       selected={
                         path.length > 1
@@ -170,13 +191,14 @@ Navigation.propTypes = {
   collapsed: PropTypes.bool,
   horizontal: PropTypes.bool,
   dense: PropTypes.bool,
-  icons: PropTypes.object,
+  nav: PropTypes.object.isRequired,
+  showIcons: PropTypes.bool,
 };
 Navigation.defaultProps = {
   collapsed: false,
   horizontal: false,
   dense: true,
-  icons: undefined,
+  showIcons: false,
 };
 
 export default withStyles(styles)(Navigation);
