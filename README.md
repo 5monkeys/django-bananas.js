@@ -26,7 +26,7 @@ ReactDOM.render(
 
 | Property | Type | Default | Choices |
 |:-|:-|:-|:-|
-| **api** | String | **Required** ||
+| **api** | String, Object | **Required** ||
 | **pages** | Function | **Required** ||
 | **title** | String | *Bananas* ||
 | **logo** | Function, String, Boolean | true ||
@@ -34,7 +34,7 @@ ReactDOM.render(
 | **version** | String | *v1.0.0* ||
 | **theme** | Object | *[django-bananas/themes].default (light)* ||
 | **pageTheme** | Object | *undefined* ||
-| **icons** | Object, Boolean | *{"home": ..., "bananas.me:list": ...}* ||
+| **nav** | Object, Boolean | *{"home": ..., "bananas.me:list": ...}* ||
 | **layout** | String | *horizontal* | horizontal, vertical |
 | **permanent** | Boolean | *false* ||
 | **collapsed** | Boolean | *false* ||
@@ -43,9 +43,32 @@ ReactDOM.render(
 | **loginForm** | Function | *undefined* ||
 | **logLevel** | String, Object | *WARN* | INFO, DEBUG, WARN, ERROR, OFF |
 | **prefix** | String | *""* ||
+| **customizeContext** | Function | *undefined* ||
 
 ### api
 Base API URL.
+
+``` jsx
+<Bananas.App
+  // ...
+  api="http://localhost:8000/api"
+/>
+```
+
+Alternatively, you can pass an object of extra [swagger-js](https://github.com/swagger-api/swagger-js) options. For example, you could add a custom header:
+
+``` jsx
+<Bananas.App
+  // ...
+  api={{
+    url: "http://localhost:8000/api",
+    requestInterceptor: request => {
+      request.headers.Authorization = "secret";
+      return request;
+    },
+  }}
+/>
+```
 
 ### pages
 A function that dynamically imports pages. A page file should `export default` a React component to render for the given route.
@@ -86,13 +109,13 @@ Shown in the navigation header next to the logo.
 />
 ```
 
-### icons
-The `icons` setting is a mapping between navigation endpoints *(operation-id)* and icons. Set `icons={false}` to disable icons in the navigation.
+### nav
+The `nav` setting lets you define the order of items in the navigation, as well as icons for each item. It is a mapping between navigation endpoints *(operation-id)* and icons, or an array of navigation endpoints if you want to define order but not icons. Items not mentioned in the mapping or array are put last in alphabetical order, with a fallback icon (if needed).
 
 ``` jsx
 <Bananas.App
   // ...
-  icons={{
+  nav={{
     // "home": MyCustomDashboardIcon,
     // "bananas.me:list": MyCustomUserIcon,
     "example.user:list": PeopleIcon,
@@ -134,6 +157,9 @@ Log level per application label:
 
 ### prefix
 Prefix sets the base url for the router. Use this if the admin app is mounted on a sub-path, i.e. `/bananas/`.
+
+### customizeContext
+A function that receives the standard `AdminContext` and returns a new context object.
 
 ## Browser support
 

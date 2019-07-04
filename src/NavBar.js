@@ -15,6 +15,11 @@ import Navigation from "./Navigation";
 import User from "./User";
 import AdminContext from "./context";
 
+const DEFAULT_NAV = {
+  home: HomeIcon,
+  "bananas.me:list": AccountCircleIcon,
+};
+
 const styles = theme => ({
   branding: {
     padding: 0,
@@ -118,21 +123,14 @@ class NavBar extends React.Component {
     const isDrawerVariant = variant === "drawer";
     const isAppBarVariant = variant === "appbar";
 
-    // Set default icons
-    const icons = {
-      enabled: Boolean(props.icons), // Helper: Show icons or not
-      home: HomeIcon,
-      "bananas.me:list": AccountCircleIcon,
-      ...props.icons,
-    };
-
     return {
       ...state,
       isDrawerVariant,
       isAppBarVariant,
       permanent,
       collapsed,
-      icons,
+      nav: makeNav(props.nav),
+      showIcons: Boolean(props.nav) && !Array.isArray(props.nav),
     };
   }
 
@@ -156,7 +154,8 @@ class NavBar extends React.Component {
       isAppBarVariant,
       collapsed,
       permanent,
-      icons,
+      nav,
+      showIcons,
     } = this.state;
 
     const { router } = this.context;
@@ -206,7 +205,8 @@ class NavBar extends React.Component {
               horizontal={isAppBarVariant}
               collapsed={collapsed}
               dense={dense}
-              icons={icons}
+              nav={nav}
+              showIcons={showIcons}
               routes={routes}
             />
           </div>
@@ -219,7 +219,7 @@ class NavBar extends React.Component {
           <User
             variant={variant}
             collapsed={collapsed}
-            icon={icons["bananas.me:list"]}
+            icon={nav["bananas.me:list"]}
           />
         </div>
       </>
@@ -285,7 +285,10 @@ NavBar.propTypes = {
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
   // Used in: getDerivedStateFromProps
   // eslint-disable-next-line react/no-unused-prop-types
-  icons: PropTypes.object,
+  nav: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string.isRequired),
+    PropTypes.object,
+  ]),
 };
 
 NavBar.defaultProps = {
@@ -298,7 +301,33 @@ NavBar.defaultProps = {
   branding: "",
   version: "",
   logo: true,
-  icons: undefined,
+  nav: undefined,
 };
 
 export default withStyles(styles, { name: "BananasNavBar" })(NavBar);
+
+function makeNav(propsNav) {
+  const navObject =
+    // `["id1", "id2"]` is a shorthand for `{"id1": null, "id2": null}`.
+    Array.isArray(propsNav)
+      ? propsNav.reduce((result, key) => {
+          result[key] = null;
+          return result;
+        }, {})
+      : // Object or missing.
+        { ...propsNav };
+
+  // This might seem unnecessary, but is needed to allow moving the default nav
+  // items.
+  const defaultNav = Object.keys(DEFAULT_NAV).reduce((result, key) => {
+    if (!{}.hasOwnProperty.call(navObject, key)) {
+      result[key] = DEFAULT_NAV[key];
+    }
+    return result;
+  }, {});
+
+  return {
+    ...defaultNav,
+    ...navObject,
+  };
+}

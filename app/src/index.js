@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { blue } from "@material-ui/core/colors";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import AppleIcon from "@material-ui/icons/Lens";
 import PeopleIcon from "@material-ui/icons/People";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Bananas from "django-bananas";
@@ -73,7 +74,6 @@ const CustomLoginForm = () => <form>This is a custom login form</form>;
 
 ReactDOM.render(
   <Bananas.App
-    {...settings}
     pages={route => import(`./pages/${route}`)}
     // logLevel="DEBUG"
     logLevel={{
@@ -92,13 +92,16 @@ ReactDOM.render(
     // collapsed: false,
     // dense: true,
     // icons={null}
-    icons={{
+    nav={{
       // home: DashboardIcon,
       "bananas.me:list": Gravatar,
       // "bananas.me:list": SettingsIcon,
+      "fruit.banana:list": undefined,
+      "fruit.apple:list": AppleIcon,
       "example.user:list": PeopleIcon,
     }}
     editableSettings
+    {...settings}
   />,
   document.getElementById("root")
 );

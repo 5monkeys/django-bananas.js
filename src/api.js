@@ -46,7 +46,9 @@ class APIClient extends Swagger {
             request.method = argHash.method;
             delete argHash.parameters.__method__;
           }
-          return request;
+          return this.requestInterceptor
+            ? this.requestInterceptor(request)
+            : request;
         },
         responseInterceptor: response => {
           // Intercept response and catch API errors
@@ -63,6 +65,9 @@ class APIClient extends Swagger {
           } else {
             this.progressHandler({ done: true });
           }
+          return this.responseInterceptor
+            ? this.responseInterceptor(response)
+            : response;
         },
       })
       .catch(error => {

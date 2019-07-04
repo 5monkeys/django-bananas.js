@@ -15,7 +15,7 @@ import { mockAPI, user } from "./api.mock";
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
-const renderApp = async ({ anonymous } = {}) => {
+const renderApp = async ({ anonymous = false, props = {} } = {}) => {
   mockAPI({ anonymous });
 
   const helpers = render(
@@ -27,6 +27,7 @@ const renderApp = async ({ anonymous } = {}) => {
       branding="Test Branding"
       version="v1.2.3"
       editableSettings
+      {...props}
     />
   );
 
@@ -429,4 +430,75 @@ test("A hash change will trigger rerender", async () => {
 
   app.router.reroute({ id: "example.user:list", hash: "#bar" });
   await waitForElement(() => getByText("Hash: bar"), { container });
+});
+
+test("Can customize menu", async () => {
+  const { getByTestId, queryAllByTestId } = await renderApp({
+    props: {
+      nav: {
+        "example.user:list": null,
+        home: () => <span data-testid="CustomMenuItemIcon" />,
+      },
+    },
+  });
+
+  expect(getByTestId("CustomMenuItemIcon")).toBeTruthy();
+  const items = queryAllByTestId("MenuItemText").map(
+    element => element.textContent
+  );
+  expect(items[0]).toBe("Användare");
+  expect(items[1]).toBe("Dashboard");
+});
+
+test("Can customize menu with array", async () => {
+  const { getByTestId, queryAllByTestId } = await renderApp({
+    props: {
+      nav: ["example.user:list"],
+    },
+  });
+
+  expect(getByTestId("MenuItemIcon")).toBeTruthy();
+  const items = queryAllByTestId("MenuItemText").map(
+    element => element.textContent
+  );
+  expect(items[0]).toBe("Användare");
+});
+
+test("Can customize HTTP headers", async () => {
+  await renderApp({
+    anonymous: false,
+    props: {
+      api: {
+        url: "http://foo.bar/api",
+        requestInterceptor: request => {
+          request.headers.Authorization = "secret";
+          return request;
+        },
+      },
+    },
+  });
+
+  expect(fetchMock.called()).toBe(true);
+  fetchMock.calls().forEach(([, options]) => {
+    expect(options.headers.Authorization).toBe("secret");
+  });
+});
+
+test("Can customize context", async () => {
+  const websocketClient = {};
+
+  await renderApp({
+    anonymous: false,
+    props: {
+      customizeContext: context => ({
+        ...context,
+        userFullName: context.user.full_name,
+        websocketClient,
+      }),
+    },
+  });
+
+  // `./pages/index.js` sets `window.__adminContext` to the current `AdminContext`.
+  expect(window.__adminContext.userFullName).toBe("Monkey Kong");
+  expect(window.__adminContext.websocketClient).toBe(websocketClient);
 });

@@ -265,7 +265,7 @@ const MenuItem = ({
         button
       >
         {showIcon && (
-          <div className={classes.avatarItem}>
+          <div className={classes.avatarItem} data-testid="MenuItemIcon">
             <ListItemAvatar>
               <Avatar
                 classes={{
@@ -297,6 +297,7 @@ const MenuItem = ({
           secondaryTypographyProps={{ noWrap: true }}
           primary={title}
           secondary={subtitle}
+          data-testid="MenuItemText"
         />
       </ListItem>
     </Link>
