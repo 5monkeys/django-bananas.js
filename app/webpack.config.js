@@ -2,12 +2,9 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: () =>
-    new Promise(resolve =>
-      resolve({
-        index: "./src/index.js",
-      })
-    ),
+  entry: {
+    index: "./src/index.js",
+  },
   mode: "development",
   devtool: "cheap-source-map",
   output: {

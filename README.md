@@ -5,7 +5,7 @@
 ![npm](https://img.shields.io/npm/v/django-bananas.svg)
 
 ```
-npm install django-bananas react react-dom @material-ui/core @material-ui/icons lodash
+npm install django-bananas react react-dom @material-ui/core @material-ui/icons final-form final-form-arrays react-final-form react-final-form-arrays
 ```
 
 ``` jsx
