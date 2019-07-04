@@ -1,4 +1,5 @@
 import Logger from "js-logger";
+import MockDate from "mockdate";
 import React from "react";
 import renderer from "react-test-renderer";
 
@@ -12,9 +13,10 @@ import TextField from "../../src/forms/fields/TextField";
 import getAPIClient from "../api.mock";
 import { TestContext } from "./utils";
 
-const MockDate = require("mockdate");
-
-MockDate.set("1/30/2000", 120);
+// Set a fixed current date and timezone to make snapshots stable and tests work
+// both locally and on Travis.
+// This won’t affect other files.
+MockDate.set("2019-07-04T15:49:55.441Z", 120);
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
@@ -51,19 +53,19 @@ test.each([
   ["boolean", "checkbox", BooleanField],
   ["boolean", "switch", BooleanField],
   ["choices", "default", ChoiceField],
-  ["date", "default", DateField, { input: { value: "2019-07-02" } }],
-  ["datetime", "default", DateTimeField, { input: { value: "2019-07-02" } }],
+  ["date", "default", DateField],
+  ["datetime", "default", DateTimeField],
   ["integer", "default", TextField],
   ["multiple_choices", "default", MultipleChoiceField],
   ["text", "default", TextField],
 ])(
   "Can render field of type '%s' and variant '%s'",
-  async (name, variant, fieldComponent, extraProps = {}) => {
+  async (name, variant, fieldComponent) => {
     const api = await getAPIClient();
     const tree = renderer.create(
       <TestContext api={api}>
         <Form route="example.user:form.create">
-          <AutoField name={name} variant={variant} {...extraProps} />
+          <AutoField name={name} variant={variant} />
         </Form>
       </TestContext>
     );
