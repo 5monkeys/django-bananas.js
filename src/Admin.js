@@ -175,7 +175,11 @@ class Admin extends React.Component {
     this.setTitle();
 
     // Initialize API client
-    const apiBase = this.props.api;
+    const apiProp =
+      typeof this.props.api === "string"
+        ? { url: this.props.api }
+        : this.props.api;
+    const { url: apiBase, ...rest } = apiProp;
     const apiUrl = `${apiBase}/v1.0/schema.json`;
     let swagger = undefined;
     try {
@@ -183,6 +187,10 @@ class Admin extends React.Component {
         url: apiUrl,
         errorHandler: this.onAPIClientError.bind(this),
         progressHandler: this.onAPIClientProgress.bind(this),
+        // Allow overriding `errorHandler` and `progressHandler` if you want to
+        // indicate errors with something other than snackbars or progress with
+        // something other than the standard progress bar.
+        ...rest,
       });
     } catch (error) {
       logger.error("Critical Error: Failed to initialize API client!", error);
@@ -586,7 +594,12 @@ const BananasAdmin = withStyles(styles, { name: "BananasAdmin" })(Admin);
 
 class App extends React.Component {
   static propTypes = {
-    api: PropTypes.string.isRequired,
+    api: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.shape({
+        url: PropTypes.string.isRequired,
+      }).isRequired,
+    ]).isRequired,
     pages: PropTypes.func.isRequired,
     prefix: PropTypes.string,
     logLevel: PropTypes.oneOfType([

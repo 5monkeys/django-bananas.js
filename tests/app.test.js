@@ -463,3 +463,23 @@ test("Can customize menu with array", async () => {
   );
   expect(items[0]).toBe("Användare");
 });
+
+test("Can customize HTTP headers", async () => {
+  await renderApp({
+    anonymous: false,
+    props: {
+      api: {
+        url: "http://foo.bar/api",
+        requestInterceptor: request => {
+          request.headers.Authorization = "secret";
+          return request;
+        },
+      },
+    },
+  });
+
+  expect(fetchMock.called()).toBe(true);
+  fetchMock.calls().forEach(([, options]) => {
+    expect(options.headers.Authorization).toBe("secret");
+  });
+});
