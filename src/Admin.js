@@ -647,7 +647,7 @@ class App extends React.Component {
 
     title: "Bananas",
     branding: "Bananas",
-    version: "v1.3.0", // TODO: Get package version
+    version: "v2.0.0", // TODO: Get package version
     logo: true,
     icons: undefined,
     nav: undefined,
