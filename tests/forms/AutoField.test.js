@@ -1,4 +1,5 @@
 import Logger from "js-logger";
+import MockDate from "mockdate";
 import React from "react";
 import renderer from "react-test-renderer";
 
@@ -12,6 +13,11 @@ import TextField from "../../src/forms/fields/TextField";
 import getAPIClient from "../api.mock";
 import { TestContext } from "./utils";
 
+// Set a fixed current date and timezone to make snapshots stable and tests work
+// both locally and on Travis.
+// This won’t affect other files.
+MockDate.set("2019-07-04T15:49:55.441Z", 120);
+
 Logger.get("bananas").setLevel(Logger.OFF);
 
 class Boundary extends React.Component {
@@ -22,7 +28,6 @@ class Boundary extends React.Component {
   }
 
   render() {
-    // eslint-disable-next-line react/prop-types
     const { children } = this.props;
     const { error } = this.state;
     return error != null ? error.message : children;

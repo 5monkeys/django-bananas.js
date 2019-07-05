@@ -4,8 +4,8 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import MenuItem from "./MenuItem";
 import AdminContext from "./context";
+import MenuItem from "./MenuItem";
 
 const styles = theme => ({
   root: {
@@ -47,8 +47,8 @@ const styles = theme => ({
   },
   vertical: {
     "&multiple": {
-      paddingTop: theme.spacing.unit,
-      paddingBottom: theme.spacing.unit,
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
     },
   },
   dense: {},

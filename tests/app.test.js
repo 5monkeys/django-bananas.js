@@ -1,13 +1,13 @@
-import fetchMock from "fetch-mock";
-import Logger from "js-logger";
-import React from "react";
 import {
   cleanup,
   fireEvent,
   render,
   wait,
   waitForElement,
-} from "react-testing-library";
+} from "@testing-library/react";
+import fetchMock from "fetch-mock";
+import Logger from "js-logger";
+import React from "react";
 
 import Bananas from "../src";
 import { PageNotFoundError, PageNotImplementedError } from "../src/errors";
@@ -232,7 +232,7 @@ test("Can show and dismiss messages", async () => {
     app,
     container,
     getByText,
-    getByTestId,
+    getAllByTestId,
     queryByTestId,
   } = await renderApp();
 
@@ -251,8 +251,8 @@ test("Can show and dismiss messages", async () => {
   app.admin.error("ERROR_MSG");
   await waitForElement(() => getByText("ERROR_MSG"), { container });
 
-  // Click X icon and expect message to go away
-  const closeButton = getByTestId("message-close-button");
+  // Click X icon and expect error message to go away, the other ones goes away by clickAway
+  const closeButton = getAllByTestId("message-close-button")[0];
   fireEvent.click(closeButton);
   await wait(
     () =>

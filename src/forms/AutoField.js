@@ -2,13 +2,13 @@ import PropTypes from "prop-types";
 import React from "react";
 import { Field as FField } from "react-final-form";
 
-import FormContext from "./FormContext";
 import BooleanField from "./fields/BooleanField";
 import ChoiceField from "./fields/ChoiceField";
 import DateField from "./fields/DateField";
 import DateTimeField from "./fields/DateTimeField";
 import MultipleChoiceField from "./fields/MultipleChoiceField";
 import TextField from "./fields/TextField";
+import FormContext from "./FormContext";
 import { fieldFromSchema } from "./utils";
 
 const fieldsByType = {

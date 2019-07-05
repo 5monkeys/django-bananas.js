@@ -1,11 +1,11 @@
 import DateFnsUtils from "@date-io/date-fns";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import arrayMutators from "final-form-arrays";
-import { MuiPickersUtilsProvider } from "material-ui-pickers";
 import PropTypes from "prop-types";
 import React from "react";
 import { Form as FForm } from "react-final-form";
 
-import { AdminContext } from "..";
+import AdminContext from "../context";
 import FormContext from "./FormContext";
 
 class Form extends React.Component {

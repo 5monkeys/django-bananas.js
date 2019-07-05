@@ -3,8 +3,9 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
+import Content from "../Content";
 import AdminContext from "../context";
-import { Content, TitleBar } from "..";
+import TitleBar from "../TitleBar";
 import ChangePasswordForm from "./ChangePasswordForm";
 import SettingsForm from "./SettingsForm";
 
@@ -15,7 +16,7 @@ const styles = theme => ({
     justifyContent: "space-between",
   },
   paper: {
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
     alignSelf: "flex-start",
   },
 });

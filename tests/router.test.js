@@ -1,4 +1,4 @@
-import createHistory from "history/createMemoryHistory";
+import { createMemoryHistory } from "history";
 import Logger from "js-logger";
 
 import Router from "../src/router";
@@ -9,7 +9,7 @@ const nofAPIRoutes = 13;
 const nofInternalRoutes = 1;
 
 const getRouter = async ({ anonymous } = {}) => {
-  const router = new Router({ history: createHistory() });
+  const router = new Router({ history: createMemoryHistory() });
   const api = await getAPIClient({ anonymous });
   router.initialize(api);
   return router;

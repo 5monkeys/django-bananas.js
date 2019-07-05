@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
@@ -8,10 +7,6 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import { AlertController } from "./Alert";
-import LoadingScreen from "./LoadingScreen";
-import { MessagesController } from "./Messages";
-import NavBar from "./NavBar";
-import { Page, PageLoadController } from "./Page";
 import APIClient from "./api";
 import AdminContext from "./context";
 import {
@@ -20,12 +15,15 @@ import {
   PageNotFoundError,
   PageNotImplementedError,
 } from "./errors";
+import LoadingScreen from "./LoadingScreen";
+import { MessagesController } from "./Messages";
+import NavBar from "./NavBar";
+import { Page, PageLoadController } from "./Page";
 import { ErrorPage, LoginPage } from "./pages";
 import Router from "./router";
 import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
-import { ComponentProxy, getFromSchema } from "./utils";
-import { t } from ".";
+import { ComponentProxy, getFromSchema, t } from "./utils";
 
 Logger.useDefaults();
 const logger = Logger.get("bananas");

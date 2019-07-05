@@ -34,13 +34,13 @@ const styles = theme => ({
   },
   addButton: {
     boxShadow: "none",
-    paddingRight: theme.spacing.unit * 2,
+    paddingRight: theme.spacing(2),
   },
   addIcon: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing(1),
   },
   users: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
   },
   userHover: {
     cursor: "pointer",
@@ -130,7 +130,7 @@ class UsersPage extends React.Component {
               <Typography>
                 <strong>Hash:</strong> {hash}
               </Typography>
-              <Paper className={classes.users}>
+              <Paper className={classes.users} elevation={2}>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -227,13 +227,13 @@ class UsersPage extends React.Component {
                     context.admin.alert({
                       title: "Do you want to do this?",
                       message: (
-                        <React.Fragment>
+                        <>
                           Will do something that can not be undone.
                           <NotificationsIcon
                             fontSize="small"
                             color="secondary"
                           />
-                        </React.Fragment>
+                        </>
                       ),
                       agree: "Okidokey!",
                       dismiss: "Nope",

@@ -2,12 +2,10 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: () =>
-    new Promise(resolve =>
-      resolve({
-        index: "./src/index.js",
-      })
-    ),
+  context: __dirname,
+  entry: {
+    index: "./src/index.js",
+  },
   mode: "development",
   devtool: "cheap-source-map",
   output: {
@@ -18,7 +16,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      "django-bananas": "/code/django-bananas",
+      "django-bananas": path.resolve(__dirname, "..", "src"),
     },
   },
   devServer: {
@@ -41,27 +39,17 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.m?js$/,
+        test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: "babel-loader",
-          options: {
-            plugins: [
-              "@babel/plugin-syntax-dynamic-import",
-              "@babel/plugin-proposal-class-properties",
-            ],
-            presets: ["@babel/preset-react"],
-          },
         },
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: {},
-          },
-        ],
+        use: {
+          loader: "file-loader",
+        },
       },
     ],
   },

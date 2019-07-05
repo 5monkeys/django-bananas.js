@@ -58,24 +58,24 @@ const styles = theme => ({
     },
     "&$wide": {
       // Wide outer height
-      minHeight: 40 + theme.spacing.unit,
+      minHeight: 40 + theme.spacing(1),
 
       "& $avatarItem": {
         // Expanded avatar wrapper width, with centered Avatar
-        width: 40 + theme.spacing.unit * 3,
+        width: 40 + theme.spacing(3),
       },
       "&$collapsed $avatarItem": {
         // Collapsed avatar wrapper width, with centered Avatar
-        width: 40 + theme.spacing.unit * 2,
+        width: 40 + theme.spacing(2),
       },
     },
     "&$dense": {
       // Dense outer height
-      minHeight: 24 + theme.spacing.unit,
+      minHeight: 24 + theme.spacing(1),
 
       "& $avatarItem": {
         // Avatar wrapper width, with centered Avatar
-        width: 40 + theme.spacing.unit * 2,
+        width: 40 + theme.spacing(2),
       },
     },
     "&$expanded $labelItem": {
@@ -86,7 +86,7 @@ const styles = theme => ({
     },
     "& $labelInset:first-child": {
       // Outermost left edge padding when icons disabled
-      paddingLeft: theme.spacing.unit * 3,
+      paddingLeft: theme.spacing(3),
     },
   },
 
@@ -99,28 +99,28 @@ const styles = theme => ({
 
       "&$leftAligned": {
         // Outermost edge padding
-        paddingLeft: theme.spacing.unit * 1.5,
-        paddingRight: theme.spacing.unit * 1.5,
+        paddingLeft: theme.spacing(5),
+        paddingRight: theme.spacing(5),
       },
     },
     "&$leftAligned": {
       // Outermost edge padding
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 2,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
 
       "& $avatarItem": {
         // Padding between avatar and label
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing(1),
       },
     },
     "&$rightAligned": {
       // Outermost edge padding
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 3,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(3),
 
       "& $avatarItem": {
         // Padding between avatar and label
-        marginLeft: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
       },
     },
     "& $labelInset:first-child": {
@@ -310,7 +310,7 @@ MenuItem.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   variant: PropTypes.string,
-  icon: PropTypes.func,
+  icon: PropTypes.oneOfType([PropTypes.node, PropTypes.func, PropTypes.object]),
   dense: PropTypes.bool,
   selected: PropTypes.bool,
   collapsed: PropTypes.bool,

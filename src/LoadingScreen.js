@@ -43,7 +43,7 @@ const styles = theme => ({
   logo: {
     position: "absolute",
     margin: 0,
-    marginTop: -36 - theme.spacing.unit * 3,
+    marginTop: -36 - theme.spacing(3),
   },
 });
 

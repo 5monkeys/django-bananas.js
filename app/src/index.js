@@ -10,8 +10,8 @@ import themes from "django-bananas/themes";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import Gravatar from "./Gravatar";
 import settings from "./bananas.settings";
+import Gravatar from "./Gravatar";
 
 const exampleAppTheme = themes.default.extend({
   palette: {

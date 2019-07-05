@@ -10,8 +10,8 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: theme.spacing.unit / 2,
-    paddingRight: theme.spacing.unit / 2,
+    paddingLeft: theme.spacing(0.5),
+    paddingRight: theme.spacing(0.5),
     marginRight: "1px",
   },
 });

@@ -1,7 +1,7 @@
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -14,12 +14,12 @@ const DialogTitle = withStyles(theme => ({
     margin: 0,
     textAlign: "center",
     backgroundColor: theme.palette.primary.main,
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
   closeButton: {
     position: "absolute",
-    right: theme.spacing.unit,
-    top: theme.spacing.unit,
+    right: theme.spacing(1),
+    top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
 }))(props => {
