@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import AdminContext from "../context";
-import { Translate, t } from "..";
+import { t, Translate } from "../utils";
 import CardPage from "./CardPage";
 
 const errorMessages = {

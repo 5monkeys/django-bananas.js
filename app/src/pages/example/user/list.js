@@ -227,13 +227,13 @@ class UsersPage extends React.Component {
                     context.admin.alert({
                       title: "Do you want to do this?",
                       message: (
-                        <React.Fragment>
+                        <>
                           Will do something that can not be undone.
                           <NotificationsIcon
                             fontSize="small"
                             color="secondary"
                           />
-                        </React.Fragment>
+                        </>
                       ),
                       agree: "Okidokey!",
                       dismiss: "Nope",

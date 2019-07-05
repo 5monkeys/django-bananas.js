@@ -1,7 +1,7 @@
 import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
-import Toolbar from "@material-ui/core/Toolbar";
 import { withStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import classNames from "classnames";
@@ -10,10 +10,10 @@ import React from "react";
 
 import Branding from "./Branding";
 import Container from "./Container";
+import AdminContext from "./context";
 import Hamburger from "./Hamburger";
 import Navigation from "./Navigation";
 import User from "./User";
-import AdminContext from "./context";
 
 const DEFAULT_NAV = {
   home: HomeIcon,
@@ -274,8 +274,6 @@ NavBar.propTypes = {
 
   variant: PropTypes.string,
   dense: PropTypes.bool,
-  // Used in: getDerivedStateFromProps
-  // eslint-disable-next-line react/no-unused-prop-types
   permanent: PropTypes.bool,
   collapsed: PropTypes.bool,
 
@@ -283,8 +281,6 @@ NavBar.propTypes = {
   branding: PropTypes.string,
   version: PropTypes.string,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
-  // Used in: getDerivedStateFromProps
-  // eslint-disable-next-line react/no-unused-prop-types
   nav: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string.isRequired),
     PropTypes.object,

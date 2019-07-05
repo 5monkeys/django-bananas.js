@@ -3,8 +3,8 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormLabel from "@material-ui/core/FormLabel";
-import Switch from "@material-ui/core/Switch";
 import { withStyles } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
 import PropTypes from "prop-types";
 import React from "react";
 

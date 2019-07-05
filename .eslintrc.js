@@ -2,7 +2,14 @@ const baseRules = require("eslint-config-lydell");
 
 module.exports = {
   root: true,
-  plugins: ["import", "react", "prettier", "simple-import-sort", "jest"],
+  plugins: [
+    "import",
+    "react",
+    "react-hooks",
+    "prettier",
+    "simple-import-sort",
+    "jest",
+  ],
   parser: "babel-eslint",
   env: { es6: true },
   globals: {
@@ -13,10 +20,12 @@ module.exports = {
     setTimeout: false,
     window: false,
   },
-  rules: Object.assign({}, baseRules({ import: true, react: true }), {
+  rules: {
+    ...baseRules({ import: true, react: true }),
     "prettier/prettier": "error",
     "simple-import-sort/sort": "error",
-  }),
+    "react/prop-types": "off",
+  },
   overrides: [
     {
       files: [".*.js", "*.config.js"],
@@ -25,7 +34,10 @@ module.exports = {
     {
       files: ["*.test.js", "{test,__mocks__}/*.js"],
       env: { node: true, jest: true },
-      rules: baseRules({ builtin: false, jest: true }),
+      rules: {
+        ...baseRules({ builtin: false, jest: true }),
+        "jest/no-truthy-falsy": "off",
+      },
     },
     {
       files: ["**/*.js"],
@@ -37,7 +49,7 @@ module.exports = {
   ],
   settings: {
     react: {
-      version: "16",
+      version: "detect",
     },
   },
 };

@@ -1,6 +1,6 @@
 import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
 import { withStyles, withTheme } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import classNames from "classnames";
 import PropTypes from "prop-types";

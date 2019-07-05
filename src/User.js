@@ -5,8 +5,8 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import MenuItem from "./MenuItem";
 import AdminContext from "./context";
+import MenuItem from "./MenuItem";
 
 const styles = theme => ({
   root: {

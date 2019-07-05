@@ -1,8 +1,7 @@
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import {
-  MuiThemeProvider,
   createMuiTheme,
+  MuiThemeProvider,
   withStyles,
 } from "@material-ui/core/styles";
 import {
@@ -10,6 +9,7 @@ import {
   getLuminance,
   lighten,
 } from "@material-ui/core/styles/colorManipulator";
+import Toolbar from "@material-ui/core/Toolbar";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";

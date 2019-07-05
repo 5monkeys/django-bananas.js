@@ -28,7 +28,6 @@ class Boundary extends React.Component {
   }
 
   render() {
-    // eslint-disable-next-line react/prop-types
     const { children } = this.props;
     const { error } = this.state;
     return error != null ? error.message : children;

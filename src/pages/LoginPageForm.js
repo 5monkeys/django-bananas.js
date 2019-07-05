@@ -1,13 +1,13 @@
 import Button from "@material-ui/core/Button";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
 import React from "react";
 
 import AdminContext from "../context";
-import { t } from "..";
+import { t } from "../utils";
 
 const styles = () => ({
   submit: { boxShadow: "none" },
