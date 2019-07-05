@@ -192,4 +192,11 @@ This repo contains an example app in the `app/` folder.
    docker-compose up -d
    ```
 
-(If you develop on this package, you need to run `npm ci` both in the repo root and in `app/` to make `npm test` pass.)
+   Alternatively, you could run outside docker:
+
+   ```
+   npm ci
+   npm start
+   ```
+
+(If you develop on this package, you need to run `npm ci` and run tests outside docker. See package.json.)

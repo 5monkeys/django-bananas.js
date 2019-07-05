@@ -19,7 +19,7 @@ module.exports = {
   }),
   overrides: [
     {
-      files: [".*.js", "*.config.js", "babel-plugin.js"],
+      files: [".*.js", "*.config.js"],
       env: { node: true },
     },
     {
