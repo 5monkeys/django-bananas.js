@@ -112,6 +112,9 @@ exports[`Can render field of type 'boolean' and variant 'switch' 1`] = `
                 type="checkbox"
               />
             </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
           </span>
           <span
             className="MuiSwitch-track"
@@ -147,8 +150,7 @@ exports[`Can render field of type 'choices' and variant 'default' 1`] = `
       onClick={[Function]}
     >
       <div
-        aria-haspopup="true"
-        aria-pressed="false"
+        aria-haspopup="listbox"
         className="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input MuiInputBase-inputSelect"
         id="select-choices"
         onBlur={[Function]}
@@ -195,6 +197,7 @@ exports[`Can render field of type 'date' and variant 'default' 1`] = `
     className="MuiFormControl-root MuiTextField-root"
     format="MMMM do"
     onClick={[Function]}
+    onKeyDown={[Function]}
   >
     <label
       className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
@@ -232,6 +235,7 @@ exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
     className="MuiFormControl-root MuiTextField-root"
     format="MMMM do hh:mm aaaa"
     onClick={[Function]}
+    onKeyDown={[Function]}
   >
     <label
       className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
@@ -314,8 +318,7 @@ exports[`Can render field of type 'multiple_choices' and variant 'default' 1`] =
       onClick={[Function]}
     >
       <div
-        aria-haspopup="true"
-        aria-pressed="false"
+        aria-haspopup="listbox"
         className="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input MuiInputBase-inputSelect"
         id="select-multiple_choices"
         onBlur={[Function]}
