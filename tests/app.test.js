@@ -215,14 +215,14 @@ test("Handles 500", async () => {
 
 test("Handles missing route", async () => {
   const { app } = await renderApp({ anonymous: true });
-  expect(app.loadPage(document.location, null)).rejects.toThrow(
+  await expect(app.loadPage(document.location, null)).rejects.toThrow(
     PageNotFoundError
   );
 });
 
 test("Handles missing page file", async () => {
   const { app } = await renderApp({ anonymous: true });
-  expect(app.loadPageComponent("foobar.js")).rejects.toThrow(
+  await expect(app.loadPageComponent("foobar.js")).rejects.toThrow(
     PageNotImplementedError
   );
 });
