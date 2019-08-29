@@ -167,10 +167,24 @@ export default class Router {
     this.sort();
   }
 
+  multipleParamsRegexp = new RegExp(/\{[^}]+\}/g);
+
+  getAdjustedPathLength = route =>
+    route.path.replace(this.multipleParamsRegexp, "").split("/");
+
   sort() {
-    this.routes = this.routes.sort((route1, route2) =>
-      route1.path < route2.path ? 1 : -1
-    );
+    this.routes = this.routes.sort((route1, route2) => {
+      const path1 = this.getAdjustedPathLength(route1);
+      const path2 = this.getAdjustedPathLength(route2);
+      // If both paths has the same segment length, grade based on ... :
+      return path1.length === path2.length // ... alphabetical order
+        ? path1 < path2
+          ? 1
+          : -1
+        : path1.length < path2.length // ... segment length
+        ? 1
+        : -1;
+    });
   }
 
   on(eventName, handler) {
