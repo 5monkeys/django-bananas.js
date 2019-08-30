@@ -75,6 +75,16 @@ test("Has navigation routes", async () => {
   });
 });
 
+test("Has correctly ordered navigation routes", async () => {
+  const router = await getRouter({ anonymous: false });
+
+  const routeIds = router.routes.reduce((aggr, { id }) => aggr.concat(id), []);
+  const readIndex = routeIds.indexOf("example.user:read");
+  const createIndex = routeIds.indexOf("example.user:create");
+
+  expect(createIndex < readIndex).toBe(true);
+});
+
 test("Can lookup route by id", async () => {
   const router = await getRouter();
 
