@@ -75,11 +75,7 @@ const CustomLoginForm = () => <form>This is a custom login form</form>;
 ReactDOM.render(
   <Bananas.App
     pages={route => import(`./pages/${route}`)}
-    // logLevel="DEBUG"
-    logLevel={{
-      bananas: "INFO",
-      example: "DEBUG",
-    }}
+    logLevel="DEBUG"
     // layout="vertical" // horizontal|vertical
     title="Example"
     theme={exampleAppTheme}
