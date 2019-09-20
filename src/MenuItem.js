@@ -194,6 +194,12 @@ const styles = theme => ({
     }),
   },
 
+  listItemAvatarRoot: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   char: {
     // Circle Avatar variant with first letter of label
     backgroundColor: theme.palette.action.selected,
@@ -266,7 +272,7 @@ const MenuItem = ({
       >
         {showIcon && (
           <div className={classes.avatarItem} data-testid="MenuItemIcon">
-            <ListItemAvatar>
+            <ListItemAvatar classes={{ root: classes.listItemAvatarRoot }}>
               <Avatar
                 classes={{
                   root: classNames(classes.avatar, {
