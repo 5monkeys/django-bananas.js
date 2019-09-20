@@ -16,7 +16,7 @@ const styles = theme => ({
   },
 });
 
-const Hamburger = ({ classes, open, onToggle }) => {
+const Hamburger = ({ classes, open, onToggle, ...rest }) => {
   return (
     <div className={classes.root}>
       {open ? (
@@ -24,6 +24,7 @@ const Hamburger = ({ classes, open, onToggle }) => {
           aria-label="Close drawer"
           color="inherit"
           onClick={onToggle}
+          {...rest}
         >
           <ChevronLeftIcon />
         </IconButton>
