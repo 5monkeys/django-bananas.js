@@ -157,7 +157,7 @@ const NavBar = props => {
     admin.settings.configure({ collapsed: !collapsed });
   };
 
-  const renderHamburger = useMemo(() => (
+  const renderHamburger = () => (
     <>
       <Hidden xsDown>
         {isDrawerVariant && !permanent && (
@@ -173,154 +173,109 @@ const NavBar = props => {
         )}
       </Hidden>
     </>
-  ), []);
-
-  const renderChildren = useMemo(
-    () => (
-      <>
-        <Toolbar
-          classes={{
-            root: classNames(classes.branding, classes.header, {
-              [classes.drawerBranding]: isDrawerVariant,
-              [classes.appbarBranding]: isAppBarVariant,
-            }),
+  );
+  const renderChildren = () => (
+    <>
+      <Toolbar
+        classes={{
+          root: classNames(classes.branding, classes.header, {
+            [classes.drawerBranding]: isDrawerVariant,
+            [classes.appbarBranding]: isAppBarVariant,
+          }),
+        }}
+      >
+        {renderHamburger()}
+        <Branding
+          logo={logo}
+          title={title}
+          subtitle={branding}
+          version={version}
+          className={classNames({
+            [classes.permanentDrawerBrandingButton]:
+              permanent && isDrawerVariant,
+            [classes.permanentAppbarBrandingButton]:
+              permanent && isAppBarVariant,
+          })}
+          onClick={() => {
+            router.route({ id: "home" });
           }}
+        />
+      </Toolbar>
+      <Toolbar
+        className={classNames(classes.navigation, {
+          [classes.drawerBorder]: isDrawerVariant,
+        })}
+      >
+        <div
+          className={classNames(classes.scroll, {
+            [classes.scrollVertical]: isDrawerVariant,
+            [classes.scrollHorizontal]: isAppBarVariant,
+          })}
         >
-          {renderHamburger()}
+          <Navigation
+            horizontal={isAppBarVariant}
+            collapsed={collapsed}
+            dense={dense}
+            nav={nav}
+            showIcons={showIcons}
+            routes={router.navigationRoutes}
+          />
+        </div>
+      </Toolbar>
+      <div
+        className={classNames(classes.user, {
+          [classes.drawerBorder]: isDrawerVariant,
+        })}
+      >
+        <User
+          variant={variant}
+          collapsed={collapsed}
+          icon={nav["bananas.me:list"]}
+        />
+      </div>
+    </>
+  );
+
+  const renderMobileDrawer = () => (
+    <>
+      <AppBar
+        position="relative"
+        elevation={0}
+        dense
+        classes={{
+          root: classNames(classes.appbar, classes.header),
+        }}
+        data-testid="navbar-appbar"
+      >
+        <Box paddingRight={2} display="flex" justifyContent="space-between">
+          <Hamburger
+            edge={"start"}
+            open={mobileDrawerOpen}
+            onToggle={() => setMobileDrawerOpen(true)}
+          />
           <Branding
             logo={logo}
             title={title}
             subtitle={branding}
             version={version}
-            className={classNames({
-              [classes.permanentDrawerBrandingButton]:
-                permanent && isDrawerVariant,
-              [classes.permanentAppbarBrandingButton]:
-                permanent && isAppBarVariant,
-            })}
+            fullWidth={false}
             onClick={() => {
               router.route({ id: "home" });
             }}
           />
-        </Toolbar>
-        <Toolbar
-          className={classNames(classes.navigation, {
-            [classes.drawerBorder]: isDrawerVariant,
-          })}
-        >
-          <div
-            className={classNames(classes.scroll, {
-              [classes.scrollVertical]: isDrawerVariant,
-              [classes.scrollHorizontal]: isAppBarVariant,
-            })}
-          >
-            <Navigation
-              horizontal={isAppBarVariant}
-              collapsed={collapsed}
-              dense={dense}
-              nav={nav}
-              showIcons={showIcons}
-              routes={router.navigationRoutes}
-            />
-          </div>
-        </Toolbar>
-        <div
-          className={classNames(classes.user, {
-            [classes.drawerBorder]: isDrawerVariant,
-          })}
-        >
-          <User
-            variant={variant}
-            collapsed={collapsed}
-            icon={nav["bananas.me:list"]}
-          />
-        </div>
-      </>
-    ),
-    [
-      branding,
-      classes.appbarBranding,
-      classes.branding,
-      classes.drawerBorder,
-      classes.drawerBranding,
-      classes.header,
-      classes.navigation,
-      classes.permanentAppbarBrandingButton,
-      classes.permanentDrawerBrandingButton,
-      classes.scroll,
-      classes.scrollHorizontal,
-      classes.scrollVertical,
-      classes.user,
-      collapsed,
-      dense,
-      isAppBarVariant,
-      isDrawerVariant,
-      logo,
-      nav,
-      permanent,
-      renderHamburger,
-      router,
-      showIcons,
-      title,
-      variant,
-      version,
-    ]
-  );
+        </Box>
+      </AppBar>
 
-  const renderMobileDrawer = React.useMemo(
-    () => (
-      <>
-        <AppBar
-          position="relative"
-          elevation={0}
-          dense
-          classes={{
-            root: classNames(classes.appbar, classes.header),
-          }}
-          data-testid="navbar-appbar"
-        >
-          <Box paddingRight={2} display="flex" justifyContent="space-between">
-            <Hamburger
-              edge={"start"}
-              open={mobileDrawerOpen}
-              onToggle={() => setMobileDrawerOpen(true)}
-            />
-            <Branding
-              logo={logo}
-              title={title}
-              subtitle={branding}
-              version={version}
-              fullWidth={false}
-              onClick={() => {
-                router.route({ id: "home" });
-              }}
-            />
-          </Box>
-        </AppBar>
-
-        <SwipeableDrawer
-          classes={{ paper: classes.mobileDrawer }}
-          onClose={() => setMobileDrawerOpen(false)}
-          onOpen={() => setMobileDrawerOpen(true)}
-          anchor="left"
-          open={mobileDrawerOpen}
-        >
-          {renderChildren()}
-        </SwipeableDrawer>
-      </>
-    ),
-    [
-      branding,
-      classes.appbar,
-      classes.header,
-      classes.mobileDrawer,
-      logo,
-      mobileDrawerOpen,
-      renderChildren,
-      router,
-      title,
-      version,
-    ]
+      <SwipeableDrawer
+        classes={{ paper: classes.mobileDrawer }}
+        onClose={() => setMobileDrawerOpen(false)}
+        onOpen={() => setMobileDrawerOpen(true)}
+        anchor="left"
+        open={mobileDrawerOpen}
+      >
+        {renderChildren()}
+      </SwipeableDrawer>
+    </>
   );
 
   const renderDesktopDrawer = () => {
