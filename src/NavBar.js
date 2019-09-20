@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Box,
   Drawer,
   Hidden,
   SwipeableDrawer,
@@ -107,6 +108,11 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
   },
+  mobileAppbarContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   appbarBranding: {
     background: "transparent",
   },
@@ -145,6 +151,28 @@ class NavBar extends React.Component {
     this.context.admin.settings.configure({ collapsed: !this.props.collapsed });
   };
 
+  renderHamburger() {
+    const { isDrawerVariant, collapsed, permanent } = this.state;
+
+    return (
+      <>
+        <Hidden xsDown>
+          {isDrawerVariant && !permanent && (
+            <Hamburger open={!collapsed} onToggle={this.toggle} />
+          )}
+        </Hidden>
+        <Hidden smUp>
+          {isDrawerVariant && !permanent && (
+            <Hamburger
+              open={!collapsed}
+              onToggle={this.toggleMobileDrawer(false)}
+            />
+          )}
+        </Hidden>
+      </>
+    );
+  }
+
   renderChildren() {
     const {
       classes,
@@ -178,9 +206,7 @@ class NavBar extends React.Component {
             }),
           }}
         >
-          {isDrawerVariant && !permanent && (
-            <Hamburger open={!collapsed} onToggle={this.toggle} />
-          )}
+          {this.renderHamburger()}
           <Branding
             logo={logo}
             title={title}
@@ -245,24 +271,31 @@ class NavBar extends React.Component {
     return (
       <>
         <AppBar
+          position="relative"
           elevation={0}
+          dense
           classes={{
             root: classNames(classes.appbar, classes.header),
           }}
           data-testid="navbar-appbar"
         >
-          <Container className={classes.appbarContainer}>
+          <Box paddingRight={2} display="flex" justifyContent="space-between">
+            <Hamburger
+              edge={"start"}
+              open={mobileDrawerOpen}
+              onToggle={this.toggleMobileDrawer(true)}
+            />
             <Branding
               logo={logo}
               title={title}
               subtitle={branding}
               version={version}
-              className={classes.permanentAppbarBrandingButton}
+              fullWidth={false}
               onClick={() => {
                 this.context.router.route({ id: "home" });
               }}
             />
-          </Container>
+          </Box>
         </AppBar>
 
         <SwipeableDrawer
