@@ -1,5 +1,10 @@
-import AppBar from "@material-ui/core/AppBar";
-import Drawer from "@material-ui/core/Drawer";
+import {
+  AppBar,
+  Drawer,
+  Hidden,
+  SwipeableDrawer,
+  Toolbar,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
