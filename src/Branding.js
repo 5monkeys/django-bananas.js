@@ -8,10 +8,12 @@ import Logo from "./Logo";
 
 const styles = () => ({
   root: {
-    width: "100%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+  },
+  fullWidth: {
+    width: "100%",
   },
   button: {
     justifyContent: "flex-start",
@@ -42,9 +44,12 @@ function Branding({
   subtitle,
   version,
   onClick,
+  fullWidth,
 }) {
   return (
-    <div className={classes.root}>
+    <div
+      className={classNames(classes.root, { [classes.fullWidth]: fullWidth })}
+    >
       <ButtonBase
         className={classNames(classes.button, className)}
         color="inherit"
@@ -74,11 +79,13 @@ Branding.propTypes = {
   subtitle: PropTypes.string,
   version: PropTypes.string,
   onClick: PropTypes.func.isRequired,
+  fullWidth: PropTypes.bool,
 };
 
 Branding.defaultProps = {
   className: undefined,
   logo: true,
+  fullWidth: true,
   title: "",
   subtitle: "",
   version: "",
