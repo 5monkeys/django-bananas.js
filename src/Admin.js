@@ -47,6 +47,9 @@ const styles = theme => {
     horizontalRoot: {
       width: "100%",
       flexDirection: "row",
+      [theme.breakpoints.down("xs")]: {
+        flexDirection: "column",
+      },
     },
     verticalRoot: {
       flexDirection: "column",
