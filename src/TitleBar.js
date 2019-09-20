@@ -35,6 +35,9 @@ const styles = theme => ({
     "&:hover, &:active": {
       boxShadow: "none",
     },
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: 0,
+    },
   },
 });
 
