@@ -6,7 +6,6 @@ import {
   Toolbar,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import classNames from "classnames";
@@ -63,6 +62,9 @@ const styles = theme => ({
     overflowY: "auto",
   },
   /* DRAWER STYLES */
+  mobileDrawer: {
+    width: "70%",
+  },
   drawerRoot: {
     flexShrink: 0,
     whiteSpace: "nowrap",
@@ -121,7 +123,7 @@ const styles = theme => ({
 
 class NavBar extends React.Component {
   static contextType = AdminContext;
-  state = {};
+  state = { mobileDrawerOpen: false };
 
   static getDerivedStateFromProps(props, state) {
     const { variant, permanent, collapsed } = props;
@@ -231,7 +233,52 @@ class NavBar extends React.Component {
     );
   }
 
-  render() {
+  toggleMobileDrawer = open => () => {
+    console.log(`set mobile drawer to be ${open ? "open" : "closed"}`);
+    this.setState({ ...this.state, mobileDrawerOpen: open });
+  };
+
+  renderMobileDrawer() {
+    console.log(this.state);
+    const { classes, logo, title, branding, version } = this.props;
+    const { mobileDrawerOpen } = this.state;
+    return (
+      <>
+        <AppBar
+          elevation={0}
+          classes={{
+            root: classNames(classes.appbar, classes.header),
+          }}
+          data-testid="navbar-appbar"
+        >
+          <Container className={classes.appbarContainer}>
+            <Branding
+              logo={logo}
+              title={title}
+              subtitle={branding}
+              version={version}
+              className={classes.permanentAppbarBrandingButton}
+              onClick={() => {
+                this.context.router.route({ id: "home" });
+              }}
+            />
+          </Container>
+        </AppBar>
+
+        <SwipeableDrawer
+          classes={{ paper: classes.mobileDrawer }}
+          onClose={this.toggleMobileDrawer(false)}
+          onOpen={this.toggleMobileDrawer(true)}
+          anchor="left"
+          open={mobileDrawerOpen}
+        >
+          {this.renderChildren()}
+        </SwipeableDrawer>
+      </>
+    );
+  }
+
+  renderDesktopDrawer() {
     const { classes, variant } = this.props;
     const { collapsed } = this.state;
 
@@ -269,6 +316,15 @@ class NavBar extends React.Component {
             {this.renderChildren()}
           </Container>
         </AppBar>
+      </>
+    );
+  }
+
+  render() {
+    return (
+      <>
+        <Hidden smUp>{this.renderMobileDrawer()}</Hidden>
+        <Hidden xsDown>{this.renderDesktopDrawer()}</Hidden>
       </>
     );
   }
