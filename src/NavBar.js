@@ -174,67 +174,70 @@ const NavBar = props => {
       </Hidden>
     </>
   );
-  const renderChildren = () => (
-    <>
-      <Toolbar
-        classes={{
-          root: classNames(classes.branding, classes.header, {
-            [classes.drawerBranding]: isDrawerVariant,
-            [classes.appbarBranding]: isAppBarVariant,
-          }),
-        }}
-      >
-        {renderHamburger()}
-        <Branding
-          logo={logo}
-          title={title}
-          subtitle={branding}
-          version={version}
-          className={classNames({
-            [classes.permanentDrawerBrandingButton]:
-              permanent && isDrawerVariant,
-            [classes.permanentAppbarBrandingButton]:
-              permanent && isAppBarVariant,
-          })}
-          onClick={() => {
-            router.route({ id: "home" });
+  const renderChildren = (forceCollapsed = collapsed) => {
+    const isCollapsed = forceCollapsed;
+    return (
+      <>
+        <Toolbar
+          classes={{
+            root: classNames(classes.branding, classes.header, {
+              [classes.drawerBranding]: isDrawerVariant,
+              [classes.appbarBranding]: isAppBarVariant,
+            }),
           }}
-        />
-      </Toolbar>
-      <Toolbar
-        className={classNames(classes.navigation, {
-          [classes.drawerBorder]: isDrawerVariant,
-        })}
-      >
-        <div
-          className={classNames(classes.scroll, {
-            [classes.scrollVertical]: isDrawerVariant,
-            [classes.scrollHorizontal]: isAppBarVariant,
+        >
+          {renderHamburger()}
+          <Branding
+            logo={logo}
+            title={title}
+            subtitle={branding}
+            version={version}
+            className={classNames({
+              [classes.permanentDrawerBrandingButton]:
+                permanent && isDrawerVariant,
+              [classes.permanentAppbarBrandingButton]:
+                permanent && isAppBarVariant,
+            })}
+            onClick={() => {
+              router.route({ id: "home" });
+            }}
+          />
+        </Toolbar>
+        <Toolbar
+          className={classNames(classes.navigation, {
+            [classes.drawerBorder]: isDrawerVariant,
           })}
         >
-          <Navigation
-            horizontal={isAppBarVariant}
+          <div
+            className={classNames(classes.scroll, {
+              [classes.scrollVertical]: isDrawerVariant,
+              [classes.scrollHorizontal]: isAppBarVariant,
+            })}
+          >
+            <Navigation
+              horizontal={isAppBarVariant}
+              collapsed={isCollapsed}
+              dense={dense}
+              nav={nav}
+              showIcons={showIcons}
+              routes={router.navigationRoutes}
+            />
+          </div>
+        </Toolbar>
+        <div
+          className={classNames(classes.user, {
+            [classes.drawerBorder]: isDrawerVariant,
+          })}
+        >
+          <User
+            variant={variant}
             collapsed={collapsed}
-            dense={dense}
-            nav={nav}
-            showIcons={showIcons}
-            routes={router.navigationRoutes}
+            icon={nav["bananas.me:list"]}
           />
         </div>
-      </Toolbar>
-      <div
-        className={classNames(classes.user, {
-          [classes.drawerBorder]: isDrawerVariant,
-        })}
-      >
-        <User
-          variant={variant}
-          collapsed={collapsed}
-          icon={nav["bananas.me:list"]}
-        />
-      </div>
-    </>
-  );
+      </>
+    );
+  };
 
   const renderMobileDrawer = () => (
     <>
@@ -273,7 +276,7 @@ const NavBar = props => {
         anchor="left"
         open={mobileDrawerOpen}
       >
-        {renderChildren()}
+        {renderChildren(false)}
       </SwipeableDrawer>
     </>
   );
