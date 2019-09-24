@@ -175,7 +175,10 @@ const NavBar = props => {
       </Hidden>
     </>
   );
-  const renderChildren = (forceCollapsed = collapsed) => {
+  const renderChildren = (
+    forceCollapsed = collapsed,
+    forceDrawerVariant = false
+  ) => {
     const isCollapsed = forceCollapsed;
     return (
       <>
@@ -183,7 +186,9 @@ const NavBar = props => {
           classes={{
             root: classNames(classes.branding, classes.header, {
               [classes.drawerBranding]: isDrawerVariant,
-              [classes.appbarBranding]: isAppBarVariant,
+              [classes.appbarBranding]: forceDrawerVariant
+                ? false
+                : isAppBarVariant,
             }),
           }}
         >
@@ -212,11 +217,13 @@ const NavBar = props => {
           <div
             className={classNames(classes.scroll, {
               [classes.scrollVertical]: isDrawerVariant,
-              [classes.scrollHorizontal]: isAppBarVariant,
+              [classes.scrollHorizontal]: forceDrawerVariant
+                ? false
+                : isAppBarVariant,
             })}
           >
             <Navigation
-              horizontal={isAppBarVariant}
+              horizontal={forceDrawerVariant ? false : isAppBarVariant}
               collapsed={isCollapsed}
               dense={dense}
               nav={nav}
@@ -227,11 +234,11 @@ const NavBar = props => {
         </Toolbar>
         <div
           className={classNames(classes.user, {
-            [classes.drawerBorder]: isDrawerVariant,
+            [classes.drawerBorder]: forceDrawerVariant ? true : isDrawerVariant,
           })}
         >
           <User
-            variant={variant}
+            variant={forceDrawerVariant ? "drawer" : variant}
             collapsed={collapsed}
             icon={nav["bananas.me:list"]}
           />
@@ -277,12 +284,13 @@ const NavBar = props => {
         anchor="left"
         open={mobileDrawerOpen}
       >
-        {renderChildren(false)}
+        {renderChildren(false, true)}
       </SwipeableDrawer>
     </>
   );
 
   const renderDesktopDrawer = () => {
+    console.log("variant is ", variant);
     return variant === "drawer" ? (
       <Drawer
         variant="permanent"

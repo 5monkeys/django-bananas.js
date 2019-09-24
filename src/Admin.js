@@ -552,7 +552,7 @@ class Admin extends React.Component {
               {user ? (
                 <>
                   <NavBar
-                    variant={settings.horizontal ? "drawer" : "appbar"}
+                    variant={isHorizontalLayout ? "drawer" : "appbar"}
                     dense={settings.dense}
                     permanent={!settings.collapsable}
                     collapsed={settings.collapsed}
