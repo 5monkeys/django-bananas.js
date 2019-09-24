@@ -252,7 +252,6 @@ const NavBar = props => {
       <AppBar
         position="relative"
         elevation={0}
-        dense
         classes={{
           root: classNames(classes.appbar, classes.header),
         }}
