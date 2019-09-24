@@ -1,10 +1,5 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {
-  AppBar,
-  IconButton,
-  MuiThemeProvider,
-  withStyles,
-} from "@material-ui/core/styles";
+import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import deprecated from "deprecated-prop-type";
 import Logger from "js-logger";
