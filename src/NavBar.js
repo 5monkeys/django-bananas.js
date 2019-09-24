@@ -62,6 +62,7 @@ const useStyles = makeStyles(theme =>
     },
     scrollVertical: {
       overflowY: "auto",
+      overflowX: "hidden",
     },
     /* DRAWER STYLES */
     mobileDrawer: {
