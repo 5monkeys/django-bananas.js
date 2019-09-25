@@ -6,7 +6,7 @@ import {
   SwipeableDrawer,
   Toolbar,
 } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import classNames from "classnames";
@@ -25,110 +25,108 @@ const DEFAULT_NAV = {
   "bananas.me:list": AccountCircleIcon,
 };
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    branding: {
-      padding: 0,
-      flexGrow: 0,
-      flexShrink: 0,
-      display: "flex",
-      alignItems: "stretch",
-      justifyContent: "flex-start",
-      backgroundColor: theme.palette.primary.dark,
-      color: theme.palette.primary.contrastText,
-      ...theme.mixins.toolbar,
-    },
-    navigation: {
-      flexGrow: 1,
-      position: "relative",
-    },
-    user: {
-      flexGrow: 0,
-      flexShrink: 0,
-    },
-    scroll: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-    },
-    scrollHorizontal: {
-      overflowX: "auto",
-      overflowY: "hidden",
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "center",
-    },
-    scrollVertical: {
-      overflowY: "auto",
-      overflowX: "hidden",
-    },
-    /* DRAWER STYLES */
-    mobileDrawer: {
-      width: "70%",
-    },
-    drawerRoot: {
-      flexShrink: 0,
-      whiteSpace: "nowrap",
-    },
-    drawer: {
-      width: 280,
-      overflow: "visible",
-      borderRight: 0,
-    },
-    drawerBorder: {
-      borderRightWidth: 1,
-      borderRightStyle: "solid",
-      borderRightColor: theme.palette.divider,
-    },
-    drawerExpanded: {
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    drawerCollapsed: {
-      width: 40 + theme.spacing(2) + 1,
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    drawerBranding: {},
-    permanentDrawerBrandingButton: {
-      padding: 0,
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2),
-    },
-    /* APPBAR STYLES */
-    appbar: {
-      backgroundColor: theme.palette.primary.dark,
-    },
-    appbarContainer: {
-      display: "flex",
-      flexDirection: "row",
-    },
-    mobileAppbarContainer: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-    },
-    appbarBranding: {
-      background: "transparent",
-    },
-    permanentAppbarBrandingButton: {
-      padding: 0,
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(2),
-    },
-    pageOffset: {
-      ...theme.mixins.toolbar,
-    },
-    header: {}, // Put last for easier overriding .branding and .appbar
-  })
-);
+const styles = theme => ({
+  branding: {
+    padding: 0,
+    flexGrow: 0,
+    flexShrink: 0,
+    display: "flex",
+    alignItems: "stretch",
+    justifyContent: "flex-start",
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.primary.contrastText,
+    ...theme.mixins.toolbar,
+  },
+  navigation: {
+    flexGrow: 1,
+    position: "relative",
+  },
+  user: {
+    flexGrow: 0,
+    flexShrink: 0,
+  },
+  scroll: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+  },
+  scrollHorizontal: {
+    overflowX: "auto",
+    overflowY: "hidden",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  scrollVertical: {
+    overflowY: "auto",
+    overflowX: "hidden",
+  },
+  /* DRAWER STYLES */
+  mobileDrawer: {
+    width: "70%",
+  },
+  drawerRoot: {
+    flexShrink: 0,
+    whiteSpace: "nowrap",
+  },
+  drawer: {
+    width: 280,
+    overflow: "visible",
+    borderRight: 0,
+  },
+  drawerBorder: {
+    borderRightWidth: 1,
+    borderRightStyle: "solid",
+    borderRightColor: theme.palette.divider,
+  },
+  drawerExpanded: {
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerCollapsed: {
+    width: 40 + theme.spacing(2) + 1,
+    overflowX: "hidden",
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  drawerBranding: {},
+  permanentDrawerBrandingButton: {
+    padding: 0,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
+  /* APPBAR STYLES */
+  appbar: {
+    backgroundColor: theme.palette.primary.dark,
+  },
+  appbarContainer: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  mobileAppbarContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  appbarBranding: {
+    background: "transparent",
+  },
+  permanentAppbarBrandingButton: {
+    padding: 0,
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(2),
+  },
+  pageOffset: {
+    ...theme.mixins.toolbar,
+  },
+  header: {}, // Put last for easier overriding .branding and .appbar
+});
 
 const NavBar = props => {
   const {
@@ -136,6 +134,7 @@ const NavBar = props => {
     dense,
     logo,
     title,
+    classes,
     branding,
     version,
     permanent,
@@ -144,7 +143,6 @@ const NavBar = props => {
   } = props;
 
   const { admin, router } = useContext(AdminContext);
-  const classes = useStyles();
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   // memoize :
@@ -342,6 +340,7 @@ NavBar.propTypes = {
   dense: PropTypes.bool,
   permanent: PropTypes.bool,
   collapsed: PropTypes.bool,
+  classes: PropTypes.object.isRequired,
 
   title: PropTypes.string,
   branding: PropTypes.string,
@@ -368,7 +367,7 @@ NavBar.defaultProps = {
 
 // NavBar.name = "BananasNavBar";
 
-export default NavBar;
+export default withStyles(styles, { name: "BananasNavBar" })(NavBar);
 
 function makeNav(propsNav) {
   const navObject =
