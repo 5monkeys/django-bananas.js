@@ -289,7 +289,6 @@ const NavBar = props => {
   );
 
   const renderDesktopDrawer = () => {
-    console.log("variant is ", variant);
     return variant === "drawer" ? (
       <Drawer
         variant="permanent"
