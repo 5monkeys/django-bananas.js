@@ -42,6 +42,9 @@ const styles = theme => {
     horizontalRoot: {
       width: "100%",
       flexDirection: "row",
+      [theme.breakpoints.down("xs")]: {
+        flexDirection: "column",
+      },
     },
     verticalRoot: {
       flexDirection: "column",
@@ -544,7 +547,7 @@ class Admin extends React.Component {
               {user ? (
                 <>
                   <NavBar
-                    variant={settings.horizontal ? "drawer" : "appbar"}
+                    variant={isHorizontalLayout ? "drawer" : "appbar"}
                     dense={settings.dense}
                     permanent={!settings.collapsable}
                     collapsed={settings.collapsed}

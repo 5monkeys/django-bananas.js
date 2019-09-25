@@ -76,7 +76,7 @@ ReactDOM.render(
   <Bananas.App
     pages={route => import(`./pages/${route}`)}
     logLevel="DEBUG"
-    // layout="vertical" // horizontal|vertical
+    layout="vertical" // horizontal|vertical
     title="Example"
     theme={exampleAppTheme}
     // pageTheme={examplePageTheme}
@@ -84,7 +84,7 @@ ReactDOM.render(
     // branding="Admin"
     // version="v0.1"
     // logo={true} // true|URL|node
-    // permanent: true,
+    // permanent={true}
     // collapsed: false,
     // dense: true,
     // icons={null}

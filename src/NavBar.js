@@ -1,12 +1,17 @@
-import AppBar from "@material-ui/core/AppBar";
-import Drawer from "@material-ui/core/Drawer";
-import { withStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
+import {
+  AppBar,
+  Box,
+  Drawer,
+  Hidden,
+  SwipeableDrawer,
+  Toolbar,
+} from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useContext, useMemo, useState } from "react";
 
 import Branding from "./Branding";
 import Container from "./Container";
@@ -20,160 +25,174 @@ const DEFAULT_NAV = {
   "bananas.me:list": AccountCircleIcon,
 };
 
-const styles = theme => ({
-  branding: {
-    padding: 0,
-    flexGrow: 0,
-    flexShrink: 0,
-    display: "flex",
-    alignItems: "stretch",
-    justifyContent: "flex-start",
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.primary.contrastText,
-    ...theme.mixins.toolbar,
-  },
-  navigation: {
-    flexGrow: 1,
-    position: "relative",
-  },
-  user: {
-    flexGrow: 0,
-    flexShrink: 0,
-  },
-  scroll: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-  },
-  scrollHorizontal: {
-    overflowX: "auto",
-    overflowY: "hidden",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  scrollVertical: {
-    overflowY: "auto",
-  },
-  /* DRAWER STYLES */
-  drawerRoot: {
-    flexShrink: 0,
-    whiteSpace: "nowrap",
-  },
-  drawer: {
-    width: 280,
-    overflow: "visible",
-    borderRight: 0,
-  },
-  drawerBorder: {
-    borderRightWidth: 1,
-    borderRightStyle: "solid",
-    borderRightColor: theme.palette.divider,
-  },
-  drawerExpanded: {
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerCollapsed: {
-    width: 40 + theme.spacing(2) + 1,
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  drawerBranding: {},
-  permanentDrawerBrandingButton: {
-    padding: 0,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  },
-  /* APPBAR STYLES */
-  appbar: {
-    backgroundColor: theme.palette.primary.dark,
-  },
-  appbarContainer: {
-    display: "flex",
-    flexDirection: "row",
-  },
-  appbarBranding: {
-    background: "transparent",
-  },
-  permanentAppbarBrandingButton: {
-    padding: 0,
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(2),
-  },
-  pageOffset: {
-    ...theme.mixins.toolbar,
-  },
-  header: {}, // Put last for easier overriding .branding and .appbar
-});
+const useStyles = makeStyles(theme =>
+  createStyles({
+    branding: {
+      padding: 0,
+      flexGrow: 0,
+      flexShrink: 0,
+      display: "flex",
+      alignItems: "stretch",
+      justifyContent: "flex-start",
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.primary.contrastText,
+      ...theme.mixins.toolbar,
+    },
+    navigation: {
+      flexGrow: 1,
+      position: "relative",
+    },
+    user: {
+      flexGrow: 0,
+      flexShrink: 0,
+    },
+    scroll: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+    },
+    scrollHorizontal: {
+      overflowX: "auto",
+      overflowY: "hidden",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+    },
+    scrollVertical: {
+      overflowY: "auto",
+      overflowX: "hidden",
+    },
+    /* DRAWER STYLES */
+    mobileDrawer: {
+      width: "70%",
+    },
+    drawerRoot: {
+      flexShrink: 0,
+      whiteSpace: "nowrap",
+    },
+    drawer: {
+      width: 280,
+      overflow: "visible",
+      borderRight: 0,
+    },
+    drawerBorder: {
+      borderRightWidth: 1,
+      borderRightStyle: "solid",
+      borderRightColor: theme.palette.divider,
+    },
+    drawerExpanded: {
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    drawerCollapsed: {
+      width: 40 + theme.spacing(2) + 1,
+      overflowX: "hidden",
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+    drawerBranding: {},
+    permanentDrawerBrandingButton: {
+      padding: 0,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+    },
+    /* APPBAR STYLES */
+    appbar: {
+      backgroundColor: theme.palette.primary.dark,
+    },
+    appbarContainer: {
+      display: "flex",
+      flexDirection: "row",
+    },
+    mobileAppbarContainer: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    appbarBranding: {
+      background: "transparent",
+    },
+    permanentAppbarBrandingButton: {
+      padding: 0,
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(2),
+    },
+    pageOffset: {
+      ...theme.mixins.toolbar,
+    },
+    header: {}, // Put last for easier overriding .branding and .appbar
+  })
+);
 
-class NavBar extends React.Component {
-  static contextType = AdminContext;
-  state = {};
+const NavBar = props => {
+  const {
+    variant,
+    dense,
+    logo,
+    title,
+    branding,
+    version,
+    permanent,
+    collapsed,
+    nav: passedNav,
+  } = props;
 
-  static getDerivedStateFromProps(props, state) {
-    const { variant, permanent, collapsed } = props;
-    const isDrawerVariant = variant === "drawer";
-    const isAppBarVariant = variant === "appbar";
+  const { admin, router } = useContext(AdminContext);
+  const classes = useStyles();
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
-    return {
-      ...state,
-      isDrawerVariant,
-      isAppBarVariant,
-      permanent,
-      collapsed,
-      nav: makeNav(props.nav),
-      showIcons: Boolean(props.nav) && !Array.isArray(props.nav),
-    };
-  }
+  // memoize :
+  const nav = useMemo(() => makeNav(passedNav), [passedNav]);
+  const showIcons = Boolean(props.nav) && !Array.isArray(props.nav);
 
-  toggle = () => {
-    this.context.admin.settings.configure({ collapsed: !this.props.collapsed });
+  const isDrawerVariant = variant === "drawer";
+  const isAppBarVariant = variant === "appbar";
+
+  const toggle = () => {
+    admin.settings.configure({ collapsed: !collapsed });
   };
 
-  renderChildren() {
-    const {
-      classes,
-      variant,
-      dense,
-      logo,
-      title,
-      branding,
-      version,
-    } = this.props;
-
-    const {
-      isDrawerVariant,
-      isAppBarVariant,
-      collapsed,
-      permanent,
-      nav,
-      showIcons,
-    } = this.state;
-
-    const { router } = this.context;
-    const routes = router.navigationRoutes;
-
+  const renderHamburger = () => (
+    <>
+      <Hidden xsDown>
+        {isDrawerVariant && !permanent && (
+          <Hamburger open={!collapsed} onToggle={toggle} />
+        )}
+      </Hidden>
+      <Hidden smUp>
+        {isDrawerVariant && !permanent && (
+          <Hamburger
+            open={!collapsed}
+            onToggle={() => setMobileDrawerOpen(false)}
+          />
+        )}
+      </Hidden>
+    </>
+  );
+  const renderChildren = (
+    forceCollapsed = collapsed,
+    forceDrawerVariant = false
+  ) => {
+    const isCollapsed = forceCollapsed;
     return (
       <>
         <Toolbar
           classes={{
             root: classNames(classes.branding, classes.header, {
               [classes.drawerBranding]: isDrawerVariant,
-              [classes.appbarBranding]: isAppBarVariant,
+              [classes.appbarBranding]: forceDrawerVariant
+                ? false
+                : isAppBarVariant,
             }),
           }}
         >
-          {isDrawerVariant && !permanent && (
-            <Hamburger open={!collapsed} onToggle={this.toggle} />
-          )}
+          {renderHamburger()}
           <Branding
             logo={logo}
             title={title}
@@ -186,7 +205,7 @@ class NavBar extends React.Component {
                 permanent && isAppBarVariant,
             })}
             onClick={() => {
-              this.context.router.route({ id: "home" });
+              router.route({ id: "home" });
             }}
           />
         </Toolbar>
@@ -198,38 +217,78 @@ class NavBar extends React.Component {
           <div
             className={classNames(classes.scroll, {
               [classes.scrollVertical]: isDrawerVariant,
-              [classes.scrollHorizontal]: isAppBarVariant,
+              [classes.scrollHorizontal]: forceDrawerVariant
+                ? false
+                : isAppBarVariant,
             })}
           >
             <Navigation
-              horizontal={isAppBarVariant}
-              collapsed={collapsed}
+              horizontal={forceDrawerVariant ? false : isAppBarVariant}
+              collapsed={isCollapsed}
               dense={dense}
               nav={nav}
               showIcons={showIcons}
-              routes={routes}
+              routes={router.navigationRoutes}
             />
           </div>
         </Toolbar>
         <div
           className={classNames(classes.user, {
-            [classes.drawerBorder]: isDrawerVariant,
+            [classes.drawerBorder]: forceDrawerVariant ? true : isDrawerVariant,
           })}
         >
           <User
-            variant={variant}
+            variant={forceDrawerVariant ? "drawer" : variant}
             collapsed={collapsed}
             icon={nav["bananas.me:list"]}
           />
         </div>
       </>
     );
-  }
+  };
 
-  render() {
-    const { classes, variant } = this.props;
-    const { collapsed } = this.state;
+  const renderMobileDrawer = () => (
+    <>
+      <AppBar
+        position="relative"
+        elevation={0}
+        classes={{
+          root: classNames(classes.appbar, classes.header),
+        }}
+        data-testid="navbar-appbar"
+      >
+        <Box paddingRight={2} display="flex" justifyContent="space-between">
+          <Hamburger
+            edge={"start"}
+            open={mobileDrawerOpen}
+            onToggle={() => setMobileDrawerOpen(true)}
+          />
+          <Branding
+            logo={logo}
+            title={title}
+            subtitle={branding}
+            version={version}
+            fullWidth={false}
+            onClick={() => {
+              router.route({ id: "home" });
+            }}
+          />
+        </Box>
+      </AppBar>
 
+      <SwipeableDrawer
+        classes={{ paper: classes.mobileDrawer }}
+        onClose={() => setMobileDrawerOpen(false)}
+        onOpen={() => setMobileDrawerOpen(true)}
+        anchor="left"
+        open={mobileDrawerOpen}
+      >
+        {renderChildren(false, true)}
+      </SwipeableDrawer>
+    </>
+  );
+
+  const renderDesktopDrawer = () => {
     return variant === "drawer" ? (
       <Drawer
         variant="permanent"
@@ -247,7 +306,7 @@ class NavBar extends React.Component {
         }}
         data-testid="navbar-drawer"
       >
-        {this.renderChildren()}
+        {renderChildren()}
       </Drawer>
     ) : (
       <>
@@ -261,17 +320,24 @@ class NavBar extends React.Component {
           data-testid="navbar-appbar"
         >
           <Container className={classes.appbarContainer}>
-            {this.renderChildren()}
+            {renderChildren()}
           </Container>
         </AppBar>
       </>
     );
-  }
-}
+  };
+
+  return (
+    <>
+      <Hidden smUp>{renderMobileDrawer()}</Hidden>
+      <Hidden implementation="css" xsDown>
+        {renderDesktopDrawer()}
+      </Hidden>
+    </>
+  );
+};
 
 NavBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-
   variant: PropTypes.string,
   dense: PropTypes.bool,
   permanent: PropTypes.bool,
@@ -300,7 +366,9 @@ NavBar.defaultProps = {
   nav: undefined,
 };
 
-export default withStyles(styles, { name: "BananasNavBar" })(NavBar);
+// NavBar.name = "BananasNavBar";
+
+export default NavBar;
 
 function makeNav(propsNav) {
   const navObject =
