@@ -330,7 +330,9 @@ const NavBar = props => {
   return (
     <>
       <Hidden smUp>{renderMobileDrawer()}</Hidden>
-      <Hidden xsDown>{renderDesktopDrawer()}</Hidden>
+      <Hidden implementation="css" xsDown>
+        {renderDesktopDrawer()}
+      </Hidden>
     </>
   );
 };
