@@ -1,5 +1,6 @@
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { FORM_ERROR } from "final-form";
 import arrayMutators from "final-form-arrays";
 import PropTypes from "prop-types";
 import React from "react";
@@ -7,6 +8,34 @@ import { Form as FForm } from "react-final-form";
 
 import AdminContext from "../context";
 import FormContext from "./FormContext";
+
+/*
+Turn this:
+    {"detail": "User already exists"}
+
+And this:
+    {"__all__": "User already exists"}
+
+Also this:
+    {"non_field_errors": ["User already exists"]}
+
+Into this, with `FORM_ERROR` from final-form:
+    {[FORM_ERROR]: ["Passwords must match"], "<field_name>": ["This field is required"]}
+*/
+function normalizeFormErrorData(data) {
+  let normalizedData = data;
+  if (data != null && typeof data === "object") {
+    const { non_field_errors = [], __all__ = [], detail, ...errors } = data;
+    normalizedData = {
+      [FORM_ERROR]: non_field_errors
+        .concat(__all__)
+        .concat(detail)
+        .filter(Boolean),
+      ...errors,
+    };
+  }
+  return normalizedData;
+}
 
 class Form extends React.Component {
   static contextType = AdminContext;
@@ -36,7 +65,7 @@ class Form extends React.Component {
         this.context.admin.error(
           errorMessages[status] || `${status} : ${statusText}`
         );
-        return obj;
+        return normalizeFormErrorData(obj);
       });
   };
 
