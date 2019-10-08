@@ -46,14 +46,22 @@ class Form extends React.Component {
   }
 
   handleSubmit = values => {
-    const { route, params, onSubmit } = this.props;
-    const endpoint = data =>
-      this.context.api[route]({ ...params, data: data || values });
+    const { route, params, onSubmit, onSuccess } = this.props;
+    const endpoint = (data, passedParams = {}) =>
+      this.context.api[route]({
+        ...params,
+        ...passedParams,
+        data: data || values,
+      });
     const promise = onSubmit
       ? Promise.resolve(onSubmit({ endpoint, values }))
       : endpoint().then(() => {
           // TODO: store data from server in the form
-          this.context.admin.success("Changes have been saved!");
+          if (onSuccess !== undefined) {
+            onSuccess();
+          } else {
+            this.context.admin.success("Changes have been saved!");
+          }
           return false;
         });
 
@@ -101,11 +109,13 @@ Form.propTypes = {
   route: PropTypes.string.isRequired,
   params: PropTypes.object,
   onSubmit: PropTypes.func,
+  onSuccess: PropTypes.func,
   formProps: PropTypes.object,
 };
 
 Form.defaultProps = {
   onSubmit: undefined,
+  onSuccess: undefined,
   params: {},
   formProps: {},
 };

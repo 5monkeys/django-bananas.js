@@ -72,3 +72,84 @@ test.each([
     expect(tree.toJSON()).toMatchSnapshot();
   }
 );
+
+const CustomFieldsByType = {
+  string: {
+    default: { component: () => "text" },
+    date: { component: () => "date" },
+    "date-time": { component: () => "date-time" },
+  },
+  boolean: {
+    default: { component: () => "boolean", type: "checkbox" },
+  },
+  enum: {
+    default: { component: () => "enum", type: "select" },
+  },
+  array: {
+    default: { component: () => "array", type: "select" },
+  },
+};
+
+test.each([
+  ["boolean", "checkbox", "boolean"],
+  ["boolean", "switch", "boolean"],
+  ["date", "default", "date"],
+  ["datetime", "default", "date-time"],
+  ["integer", "default", "text"],
+  ["multiple_choices", "default", "array"],
+  ["text", "default", "text"],
+])(
+  "Can render field of type '%s' and variant '%s' with custom field mapping",
+  async (name, variant, child) => {
+    const api = await getAPIClient();
+    const tree = renderer.create(
+      <TestContext api={api}>
+        <Form route="example.user:form.create">
+          <AutoField
+            fieldsByType={CustomFieldsByType}
+            name={name}
+            variant={variant}
+          />
+        </Form>
+      </TestContext>
+    );
+    expect(tree.toJSON().children[0]).toMatch(child);
+  }
+);
+
+const DateTimeComponent = () => "date-time";
+
+const CustomPartialFieldsByType = {
+  string: {
+    "date-time": { component: DateTimeComponent },
+  },
+};
+
+test.each([
+  ["boolean", "checkbox", BooleanField],
+  ["boolean", "switch", BooleanField],
+  ["choices", "default", ChoiceField],
+  ["date", "default", DateField],
+  ["datetime", "default", DateTimeComponent],
+  ["integer", "default", TextField],
+  ["multiple_choices", "default", MultipleChoiceField],
+  ["text", "default", TextField],
+])(
+  "Can render field of type '%s' and variant '%s' with partial fieldsByType",
+  async (name, variant, fieldComponent) => {
+    const api = await getAPIClient();
+    const tree = renderer.create(
+      <TestContext api={api}>
+        <Form route="example.user:form.create">
+          <AutoField
+            fieldsByType={CustomPartialFieldsByType}
+            name={name}
+            variant={variant}
+          />
+        </Form>
+      </TestContext>
+    );
+    expect(tree.root.findByType(fieldComponent)).toBeTruthy();
+    expect(tree.toJSON()).toMatchSnapshot();
+  }
+);
