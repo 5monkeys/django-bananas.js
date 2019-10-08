@@ -39,19 +39,35 @@ class AutoField extends React.Component {
     const {
       name,
       fieldProps: fieldPropsOverride,
-      variant,
+      fieldsByType: passedFieldsByType,
+      FinalFormFieldProps,
       ...rest
     } = this.props;
     const schema = fieldFromSchema(this.context.schema, name);
     if (typeof schema === "undefined") {
       throw new Error(`No schema found for field "${name}".`);
     }
+
+    const mergedFieldsByType = {
+      ...fieldsByType,
+      ...passedFieldsByType,
+      string: {
+        ...fieldsByType.string,
+        ...(passedFieldsByType.string || {}),
+      },
+    };
+
+    const fieldMapping = {
+      ...fieldsByType,
+      ...mergedFieldsByType,
+    };
+
     const fieldType = schema.enum ? "enum" : schema.type;
-    const fields = fieldsByType[fieldType] || fieldsByType.string;
+    const fields = fieldMapping[fieldType] || fieldMapping.string;
     const { component: Field, type } = fields[schema.format] || fields.default;
 
     return (
-      <FField name={name} type={type} {...rest} novalidate>
+      <FField name={name} type={type} novalidate {...FinalFormFieldProps}>
         {({ meta, input }) => {
           const fieldProps = schema
             ? {
@@ -64,9 +80,9 @@ class AutoField extends React.Component {
             <Field
               meta={meta}
               input={input}
-              variant={variant}
               schema={schema}
               fieldProps={{ ...fieldProps, ...fieldPropsOverride }}
+              {...rest}
             />
           );
         }}
@@ -77,13 +93,15 @@ class AutoField extends React.Component {
 
 AutoField.propTypes = {
   name: PropTypes.string.isRequired,
-  variant: PropTypes.string,
   fieldProps: PropTypes.object,
+  fieldsByType: PropTypes.object,
+  FinalFormFieldProps: PropTypes.object,
 };
 
 AutoField.defaultProps = {
-  variant: undefined,
   fieldProps: {},
+  fieldsByType: {},
+  FinalFormFieldProps: {},
 };
 
 export default AutoField;
