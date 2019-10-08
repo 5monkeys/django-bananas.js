@@ -49,24 +49,23 @@ class Form extends React.Component {
     const { route, params, onSubmit } = this.props;
     const endpoint = data =>
       this.context.api[route]({ ...params, data: data || values });
-    if (onSubmit) {
-      return onSubmit({ endpoint, values });
-    }
-    return endpoint()
-      .then(() => {
-        // TODO: store data from server in the form
-        this.context.admin.success("Changes have been saved!");
-        return false;
-      })
-      .catch(({ response: { statusText, status, obj } }) => {
-        const errorMessages = {
-          400: "Please correct the errors on this form.",
-        };
-        this.context.admin.error(
-          errorMessages[status] || `${status} : ${statusText}`
-        );
-        return normalizeFormErrorData(obj);
-      });
+    const promise = onSubmit
+      ? Promise.resolve(onSubmit({ endpoint, values }))
+      : endpoint().then(() => {
+          // TODO: store data from server in the form
+          this.context.admin.success("Changes have been saved!");
+          return false;
+        });
+
+    return promise.catch(({ response: { statusText, status, obj } }) => {
+      const errorMessages = {
+        400: "Please correct the errors on this form.",
+      };
+      this.context.admin.error(
+        errorMessages[status] || `${status} : ${statusText}`
+      );
+      return normalizeFormErrorData(obj);
+    });
   };
 
   render() {
