@@ -47,8 +47,12 @@ class Form extends React.Component {
 
   handleSubmit = values => {
     const { route, params, onSubmit } = this.props;
-    const endpoint = data =>
-      this.context.api[route]({ ...params, data: data || values });
+    const endpoint = (data, passedParams = {}) =>
+      this.context.api[route]({
+        ...params,
+        ...passedParams,
+        data: data || values,
+      });
     const promise = onSubmit
       ? Promise.resolve(onSubmit({ endpoint, values }))
       : endpoint().then(() => {
