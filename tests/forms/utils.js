@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import AdminContext from "../../src/context";
+import { AdminContext } from "../../src";
 
 export const TestContext = ({ api, admin, children }) => (
   <AdminContext.Provider value={{ api: api.operations, admin }}>

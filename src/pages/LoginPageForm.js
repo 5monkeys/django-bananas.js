@@ -1,13 +1,13 @@
 import Button from "@material-ui/core/Button";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
 import React from "react";
 
 import AdminContext from "../context";
-import { t } from "..";
+import { t } from "../utils";
 
 const styles = () => ({
   submit: { boxShadow: "none" },
@@ -16,9 +16,9 @@ const styles = () => ({
 const DialogContent = withStyles(theme => ({
   root: {
     margin: 0,
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     "& > * + * ": {
-      marginTop: theme.spacing.unit * 2,
+      marginTop: theme.spacing(2),
     },
   },
 }))(MuiDialogContent);
@@ -27,7 +27,7 @@ const DialogActions = withStyles(theme => ({
   root: {
     borderTop: `1px solid ${theme.palette.divider}`,
     margin: 0,
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   },
 }))(MuiDialogActions);
 

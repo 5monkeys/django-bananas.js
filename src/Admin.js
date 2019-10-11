@@ -1,15 +1,12 @@
-/* eslint-disable react/no-unused-state */ import CssBaseline from "@material-ui/core/CssBaseline";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import deprecated from "deprecated-prop-type";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
 import { AlertController } from "./Alert";
-import LoadingScreen from "./LoadingScreen";
-import { MessagesController } from "./Messages";
-import NavBar from "./NavBar";
-import { Page, PageLoadController } from "./Page";
 import APIClient from "./api";
 import AdminContext from "./context";
 import {
@@ -18,12 +15,15 @@ import {
   PageNotFoundError,
   PageNotImplementedError,
 } from "./errors";
+import LoadingScreen from "./LoadingScreen";
+import { MessagesController } from "./Messages";
+import NavBar from "./NavBar";
+import { Page, PageLoadController } from "./Page";
 import { ErrorPage, LoginPage } from "./pages";
 import Router from "./router";
 import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
-import { ComponentProxy } from "./utils";
-import { t } from ".";
+import { ComponentProxy, getFromSchema, t } from "./utils";
 
 Logger.useDefaults();
 const logger = Logger.get("bananas");
@@ -42,6 +42,9 @@ const styles = theme => {
     horizontalRoot: {
       width: "100%",
       flexDirection: "row",
+      [theme.breakpoints.down("xs")]: {
+        flexDirection: "column",
+      },
     },
     verticalRoot: {
       flexDirection: "column",
@@ -62,7 +65,7 @@ class Admin extends React.Component {
     const propSettings = {
       editable: props.editableSettings,
       horizontal: props.layout === "horizontal",
-      icons: props.icons !== null,
+      icons: Boolean(props.nav) && !Array.isArray(props.nav),
       collapsable: !(props.permanent || false),
       collapsed: props.collapsed || false,
       dense: props.dense || false,
@@ -173,7 +176,11 @@ class Admin extends React.Component {
     this.setTitle();
 
     // Initialize API client
-    const apiBase = this.props.api;
+    const apiProp =
+      typeof this.props.api === "string"
+        ? { url: this.props.api }
+        : this.props.api;
+    const { url: apiBase, ...rest } = apiProp;
     const apiUrl = `${apiBase}/v1.0/schema.json`;
     let swagger = undefined;
     try {
@@ -181,6 +188,10 @@ class Admin extends React.Component {
         url: apiUrl,
         errorHandler: this.onAPIClientError.bind(this),
         progressHandler: this.onAPIClientProgress.bind(this),
+        // Allow overriding `errorHandler` and `progressHandler` if you want to
+        // indicate errors with something other than snackbars or progress with
+        // something other than the standard progress bar.
+        ...rest,
       });
     } catch (error) {
       logger.error("Critical Error: Failed to initialize API client!", error);
@@ -223,6 +234,11 @@ class Admin extends React.Component {
         await this.authorize();
       }
       this.router.reroute();
+    }
+
+    // Allow adding extra things to the AdminContext.
+    if (this.props.customizeContext) {
+      this.setContext(this.props.customizeContext(this.state.context));
     }
 
     // Finalize boot
@@ -375,7 +391,7 @@ class Admin extends React.Component {
 
     // Initialize page component props
     const pageProps = {
-      key: `${id}:${location.search}:${location.hash}`,
+      key: `${id}:${location.search}`,
       route: {
         id,
         params,
@@ -422,6 +438,13 @@ class Admin extends React.Component {
       try {
         this.admin.loading();
         const data = await this.api[operationId]({ ...params, ...filter });
+        data.schema = this.api[operationId].response;
+        data.getTitle = path => {
+          if (data.schema == null) {
+            throw new TypeError(`Cannot get title because .schema is missing.`);
+          }
+          return getFromSchema(data.schema, `${path}.title`);
+        };
         this.admin.loading(false);
         return data;
       } catch (error) {
@@ -481,7 +504,7 @@ class Admin extends React.Component {
     return new Promise((resolve, reject) => {
       this.api["bananas.login:create"]({ data: { username, password } }).then(
         response => {
-          logger.info("Successfull login...reboot");
+          logger.info("Successful login...reboot");
           const user = response.obj;
           resolve(user);
           this.admin.dismissMessages();
@@ -524,11 +547,19 @@ class Admin extends React.Component {
               {user ? (
                 <>
                   <NavBar
-                    variant={settings.horizontal ? "drawer" : "appbar"}
+                    variant={isHorizontalLayout ? "drawer" : "appbar"}
                     dense={settings.dense}
                     permanent={!settings.collapsable}
                     collapsed={settings.collapsed}
-                    icons={settings.icons ? this.props.icons : null}
+                    nav={
+                      settings.icons
+                        ? this.props.nav
+                        : Array.isArray(this.props.nav)
+                        ? this.props.nav
+                        : this.props.nav
+                        ? Object.keys(this.props.nav)
+                        : null
+                    }
                     logo={this.props.logo}
                     title={this.props.title}
                     branding={this.props.branding}
@@ -569,12 +600,20 @@ const BananasAdmin = withStyles(styles, { name: "BananasAdmin" })(Admin);
 
 class App extends React.Component {
   static propTypes = {
-    api: PropTypes.string.isRequired,
+    api: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.shape({
+        url: PropTypes.string.isRequired,
+      }).isRequired,
+    ]).isRequired,
     pages: PropTypes.func.isRequired,
     prefix: PropTypes.string,
-    logLevel: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    logLevel: PropTypes.oneOfType([
+      PropTypes.oneOf(["INFO", "DEBUG", "WARN", "ERROR", "OFF"]),
+      PropTypes.object,
+    ]),
 
-    layout: PropTypes.string,
+    layout: PropTypes.oneOf(["horizontal", "vertical"]),
     permanent: PropTypes.bool,
     collapsed: PropTypes.bool,
     dense: PropTypes.bool,
@@ -587,37 +626,48 @@ class App extends React.Component {
       PropTypes.string,
       PropTypes.node,
     ]),
-    icons: PropTypes.object,
+    icons: deprecated(PropTypes.object, 'Please use "nav" instead.'),
+    nav: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.string.isRequired),
+      PropTypes.object,
+    ]),
 
     theme: PropTypes.object,
     pageTheme: PropTypes.object,
     loginForm: PropTypes.func,
     editableSettings: PropTypes.bool,
+    customizeContext: PropTypes.func,
   };
 
   static defaultProps = {
     prefix: "",
     logLevel: "WARN",
 
-    layout: "horizontal", // horizontal|vertical
+    layout: "horizontal",
     dense: false,
     permanent: false,
     collapsed: false,
 
     title: "Bananas",
     branding: "Bananas",
-    version: "v1.3.0", // TODO: Get package version
+    version: "v2.0.0", // TODO: Get package version
     logo: true,
     icons: undefined,
+    nav: undefined,
 
     theme: themes.default,
     pageTheme: undefined,
     loginForm: undefined,
     editableSettings: false,
+    customizeContext: undefined,
   };
 
   render() {
-    const { props } = this;
+    const {
+      // Default `nav` to the legacy `icons` prop, and remove `icons` from props.
+      props: { icons, nav = icons, ...rest },
+    } = this;
+    const props = { nav, ...rest };
     const theme = createBananasTheme(props.theme);
     const pageTheme = props.pageTheme
       ? createBananasTheme(props.pageTheme)

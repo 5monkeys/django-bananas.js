@@ -1,13 +1,13 @@
-import fetchMock from "fetch-mock";
-import Logger from "js-logger";
-import React from "react";
 import {
   cleanup,
   fireEvent,
   render,
   wait,
   waitForElement,
-} from "react-testing-library";
+} from "@testing-library/react";
+import fetchMock from "fetch-mock";
+import Logger from "js-logger";
+import React from "react";
 
 import Bananas from "../src";
 import { PageNotFoundError, PageNotImplementedError } from "../src/errors";
@@ -15,7 +15,7 @@ import { mockAPI, user } from "./api.mock";
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
-const renderApp = async ({ anonymous } = {}) => {
+const renderApp = async ({ anonymous = false, props = {} } = {}) => {
   mockAPI({ anonymous });
 
   const helpers = render(
@@ -27,6 +27,7 @@ const renderApp = async ({ anonymous } = {}) => {
       branding="Test Branding"
       version="v1.2.3"
       editableSettings
+      {...props}
     />
   );
 
@@ -45,7 +46,12 @@ const renderApp = async ({ anonymous } = {}) => {
   return { ...helpers, app };
 };
 
-afterEach(cleanup);
+afterEach(() => {
+  // Make sure that we always start on the dashboard page
+  window.history.pushState({}, "", "/");
+  fetchMock.reset();
+  cleanup();
+});
 
 test("Has App", () => {
   expect(Bananas.App).toBeDefined();
@@ -226,7 +232,7 @@ test("Can show and dismiss messages", async () => {
     app,
     container,
     getByText,
-    getByTestId,
+    getAllByTestId,
     queryByTestId,
   } = await renderApp();
 
@@ -245,8 +251,8 @@ test("Can show and dismiss messages", async () => {
   app.admin.error("ERROR_MSG");
   await waitForElement(() => getByText("ERROR_MSG"), { container });
 
-  // Click X icon and expect message to go away
-  const closeButton = getByTestId("message-close-button");
+  // Click X icon and expect error message to go away, the other ones goes away by clickAway
+  const closeButton = getAllByTestId("message-close-button")[0];
   fireEvent.click(closeButton);
   await wait(
     () =>
@@ -407,4 +413,92 @@ test("Can change password", async () => {
 
   // Expect success message to show
   await waitForElement(() => getByText("Password changed successfully."));
+});
+
+test("A hash change will trigger rerender", async () => {
+  const { app, container, getByText } = await renderApp({ anonymous: false });
+
+  // Mock Users API call
+  const userListRoute = app.router.getRoute("example.user:list");
+  fetchMock.mock(`http://foo.bar/api/v1.0${userListRoute.path}`, { body: [] });
+
+  app.router.reroute({ id: "example.user:list" });
+  await waitForElement(() => getByText("Hash: none"), { container });
+
+  app.router.reroute({ id: "example.user:list", hash: "#foo" });
+  await waitForElement(() => getByText("Hash: foo"), { container });
+
+  app.router.reroute({ id: "example.user:list", hash: "#bar" });
+  await waitForElement(() => getByText("Hash: bar"), { container });
+});
+
+test("Can customize menu", async () => {
+  const { getByTestId, queryAllByTestId } = await renderApp({
+    props: {
+      nav: {
+        "example.user:list": null,
+        home: () => <span data-testid="CustomMenuItemIcon" />,
+      },
+    },
+  });
+
+  expect(getByTestId("CustomMenuItemIcon")).toBeTruthy();
+  const items = queryAllByTestId("MenuItemText").map(
+    element => element.textContent
+  );
+  expect(items[0]).toBe("Användare");
+  expect(items[1]).toBe("Dashboard");
+});
+
+test("Can customize menu with array", async () => {
+  const { getByTestId, queryAllByTestId } = await renderApp({
+    props: {
+      nav: ["example.user:list"],
+    },
+  });
+
+  expect(getByTestId("MenuItemIcon")).toBeTruthy();
+  const items = queryAllByTestId("MenuItemText").map(
+    element => element.textContent
+  );
+  expect(items[0]).toBe("Användare");
+});
+
+test("Can customize HTTP headers", async () => {
+  await renderApp({
+    anonymous: false,
+    props: {
+      api: {
+        url: "http://foo.bar/api",
+        requestInterceptor: request => {
+          request.headers.Authorization = "secret";
+          return request;
+        },
+      },
+    },
+  });
+
+  expect(fetchMock.called()).toBe(true);
+  fetchMock.calls().forEach(([, options]) => {
+    expect(options.headers.Authorization).toBe("secret");
+  });
+});
+
+test("Can customize context", async () => {
+  const websocketClient = {};
+
+  await renderApp({
+    anonymous: false,
+    props: {
+      customizeContext: context => ({
+        ...context,
+        userFullName: context.user.full_name,
+        websocketClient,
+      }),
+    },
+  });
+
+  // `./pages/index.js` sets `window.__adminContext` to the current `AdminContext`.
+  expect(window.__adminContext.userFullName).toBe("Monkey Kong");
+  expect(window.__adminContext.websocketClient).toBe(websocketClient);
 });

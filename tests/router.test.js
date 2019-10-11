@@ -1,4 +1,4 @@
-import createHistory from "history/createMemoryHistory";
+import { createMemoryHistory } from "history";
 import Logger from "js-logger";
 
 import Router from "../src/router";
@@ -9,7 +9,7 @@ const nofAPIRoutes = 13;
 const nofInternalRoutes = 1;
 
 const getRouter = async ({ anonymous } = {}) => {
-  const router = new Router({ history: createHistory() });
+  const router = new Router({ history: createMemoryHistory() });
   const api = await getAPIClient({ anonymous });
   router.initialize(api);
   return router;
@@ -73,6 +73,16 @@ test("Has navigation routes", async () => {
   expect(router.navigationRoutes[1]).toMatchObject({
     id: "example.user:list",
   });
+});
+
+test("Has correctly ordered navigation routes", async () => {
+  const router = await getRouter({ anonymous: false });
+
+  const routeIds = router.routes.reduce((aggr, { id }) => aggr.concat(id), []);
+  const readIndex = routeIds.indexOf("example.user:read");
+  const createIndex = routeIds.indexOf("example.user:create");
+
+  expect(createIndex < readIndex).toBe(true);
 });
 
 test("Can lookup route by id", async () => {

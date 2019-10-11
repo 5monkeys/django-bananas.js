@@ -13,8 +13,8 @@ import React from "react";
 
 const styles = theme => ({
   paper: {
-    margin: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
+    padding: theme.spacing(2),
   },
   formRoot: {
     display: "flex",

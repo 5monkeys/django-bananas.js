@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { blue } from "@material-ui/core/colors";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import AppleIcon from "@material-ui/icons/Lens";
 import PeopleIcon from "@material-ui/icons/People";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Bananas from "django-bananas";
@@ -9,8 +10,8 @@ import themes from "django-bananas/themes";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import Gravatar from "./Gravatar";
 import settings from "./bananas.settings";
+import Gravatar from "./Gravatar";
 
 const exampleAppTheme = themes.default.extend({
   palette: {
@@ -73,14 +74,9 @@ const CustomLoginForm = () => <form>This is a custom login form</form>;
 
 ReactDOM.render(
   <Bananas.App
-    {...settings}
     pages={route => import(`./pages/${route}`)}
-    // logLevel="DEBUG"
-    logLevel={{
-      bananas: "INFO",
-      example: "DEBUG",
-    }}
-    // layout="vertical" // horizontal|vertical
+    logLevel="DEBUG"
+    layout="vertical" // horizontal|vertical
     title="Example"
     theme={exampleAppTheme}
     // pageTheme={examplePageTheme}
@@ -88,17 +84,20 @@ ReactDOM.render(
     // branding="Admin"
     // version="v0.1"
     // logo={true} // true|URL|node
-    // permanent: true,
+    // permanent={true}
     // collapsed: false,
     // dense: true,
     // icons={null}
-    icons={{
+    nav={{
       // home: DashboardIcon,
       "bananas.me:list": Gravatar,
       // "bananas.me:list": SettingsIcon,
+      "fruit.banana:list": undefined,
+      "fruit.apple:list": AppleIcon,
       "example.user:list": PeopleIcon,
     }}
     editableSettings
+    {...settings}
   />,
   document.getElementById("root")
 );

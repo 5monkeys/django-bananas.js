@@ -1,6 +1,6 @@
 import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
 import { withStyles, withTheme } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -18,15 +18,15 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    paddingRight: theme.spacing.unit * 2,
+    paddingRight: theme.spacing(2),
   },
   title: {
     flexGrow: 0,
     flexShrink: 0,
   },
   back: {
-    marginLeft: theme.spacing.unit / -2,
-    marginRight: theme.spacing.unit * 2,
+    marginLeft: -theme.spacing(2),
+    marginRight: theme.spacing(2),
     boxShadow: "none",
     borderWidth: "1.5pt",
     borderStyle: "solid",
@@ -34,6 +34,9 @@ const styles = theme => ({
     backgroundColor: "transparent",
     "&:hover, &:active": {
       boxShadow: "none",
+    },
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: 0,
     },
   },
 });
@@ -145,5 +148,5 @@ TitleBar.defaultProps = {
 };
 
 export default withStyles(styles, { name: "BananasTitleBar" })(
-  withTheme()(TitleBar)
+  withTheme(TitleBar)
 );

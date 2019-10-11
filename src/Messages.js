@@ -1,7 +1,8 @@
+import { amber, blue, green } from "@material-ui/core/colors";
 import IconButton from "@material-ui/core/IconButton";
+import Slide from "@material-ui/core/Slide";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
-import { amber, blue, green } from "@material-ui/core/colors";
 import { withStyles } from "@material-ui/core/styles";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CloseIcon from "@material-ui/icons/Close";
@@ -37,7 +38,7 @@ const styles = theme => ({
   },
   icontype: {
     opacity: 0.9,
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing(1),
   },
   message: {
     display: "flex",
@@ -60,7 +61,7 @@ class Message extends React.Component {
   };
 
   handleClose = (e, reason) => {
-    if (this.props.type === "error" && reason === "clickaway") {
+    if (reason === "clickaway") {
       return;
     }
     this.setState({ open: false });
@@ -78,6 +79,7 @@ class Message extends React.Component {
           vertical: "bottom",
           horizontal: "right",
         }}
+        TransitionComponent={Slide}
         onClose={this.handleClose}
         onExited={remove}
         open={open}

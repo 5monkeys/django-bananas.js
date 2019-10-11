@@ -3,7 +3,7 @@ import React from "react";
 
 import { Content, Link, TitleBar, Tools } from "../../../../src";
 
-const UserListPage = ({ data, title }) => (
+const UserListPage = ({ data, title, route: { hash } }) => (
   <>
     <TitleBar title={`${title} (users)`}>
       <Tools>
@@ -11,6 +11,7 @@ const UserListPage = ({ data, title }) => (
       </Tools>
     </TitleBar>
     <Content>
+      <div>Hash: {hash || "none"}</div>
       {data.obj.map(user => (
         <Link key={user.id} route="example.user:read" params={{ id: user.id }}>
           {user.username}

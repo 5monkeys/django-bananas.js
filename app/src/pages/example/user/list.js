@@ -1,5 +1,6 @@
 import {
   Badge,
+  Box,
   Button,
   Fab,
   IconButton,
@@ -34,13 +35,13 @@ const styles = theme => ({
   },
   addButton: {
     boxShadow: "none",
-    paddingRight: theme.spacing.unit * 2,
+    paddingRight: theme.spacing(2),
   },
   addIcon: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing(1),
   },
   users: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
   },
   userHover: {
     cursor: "pointer",
@@ -48,6 +49,11 @@ const styles = theme => ({
   evenToolbar: {
     "& > *": {
       width: "33%",
+    },
+  },
+  spacedContent: {
+    "& > *": {
+      margin: theme.spacing(0.5),
     },
   },
 });
@@ -99,6 +105,7 @@ class UsersPage extends React.Component {
                 </IconButton>
               </Tools>
             </TitleBar>
+
             <TitleBar
               title="Filters"
               color="paper"
@@ -130,7 +137,7 @@ class UsersPage extends React.Component {
               <Typography>
                 <strong>Hash:</strong> {hash}
               </Typography>
-              <Paper className={classes.users}>
+              <Paper className={classes.users} elevation={2}>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -165,29 +172,7 @@ class UsersPage extends React.Component {
                   </TableFooter>
                 </Table>
               </Paper>
-            </Content>
-            <ToolBar color="paper" justify="center">
-              <Tools>
-                <Link path="/">
-                  <Button variant="contained" color="primary">
-                    Dashboard
-                  </Button>
-                </Link>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() =>
-                    context.router.route(
-                      {
-                        query: { username: "stormtrooper", age: "40" },
-                      },
-                      { patch: true }
-                    )
-                  }
-                >
-                  Query Param
-                </Button>
-
+              <Box className={classes.spacedContent} marginTop={3}>
                 <Button
                   variant="outlined"
                   color="secondary"
@@ -227,13 +212,13 @@ class UsersPage extends React.Component {
                     context.admin.alert({
                       title: "Do you want to do this?",
                       message: (
-                        <React.Fragment>
+                        <>
                           Will do something that can not be undone.
                           <NotificationsIcon
                             fontSize="small"
                             color="secondary"
                           />
-                        </React.Fragment>
+                        </>
                       ),
                       agree: "Okidokey!",
                       dismiss: "Nope",
@@ -287,6 +272,61 @@ class UsersPage extends React.Component {
                   }}
                 >
                   500
+                </Button>
+              </Box>
+              <Box marginTop={3}>
+                <Typography variant="h5">
+                  Try out with one more box...
+                </Typography>
+                <Typography variant="body1">
+                  ...To really see how the scroll works.
+                </Typography>
+              </Box>
+              <Box marginTop={3}>
+                <Typography variant="h5">
+                  Try out with one more box...
+                </Typography>
+                <Typography variant="body1">
+                  ...To really see how the scroll works.
+                </Typography>
+              </Box>
+              <Box marginTop={3}>
+                <Typography variant="h5">
+                  Try out with one more box...
+                </Typography>
+                <Typography variant="body1">
+                  ...To really see how the scroll works.
+                </Typography>
+              </Box>
+              <Box marginTop={3}>
+                <Typography variant="h5">
+                  Try out with one more box...
+                </Typography>
+                <Typography variant="body1">
+                  ...To really see how the scroll works.
+                </Typography>
+              </Box>
+            </Content>
+            <ToolBar color="paper" justify="center">
+              <Tools>
+                <Link path="/">
+                  <Button variant="contained" color="primary">
+                    Dashboard
+                  </Button>
+                </Link>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() =>
+                    context.router.route(
+                      {
+                        query: { username: "stormtrooper", age: "40" },
+                      },
+                      { patch: true }
+                    )
+                  }
+                >
+                  Query Param
                 </Button>
               </Tools>
             </ToolBar>

@@ -1,4 +1,4 @@
-import { DateTimePicker } from "material-ui-pickers";
+import { DateTimePicker } from "@material-ui/pickers";
 import React from "react";
 
 const DateTimeField = ({ input: { onChange, ...inputProps }, fieldProps }) => {

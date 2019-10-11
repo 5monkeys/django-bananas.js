@@ -15,14 +15,17 @@ const styles = theme => ({
     flexDirection: "column",
     flexGrow: 1,
     width: "100%",
-    height: "100%",
   },
 });
 
 class ThemedPage extends React.Component {
   static propTypes = {
     controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
-    component: PropTypes.func,
+    component: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.func,
+      PropTypes.node,
+    ]),
     theme: PropTypes.object,
   };
 
@@ -47,28 +50,24 @@ class Page extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
     controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
-    component: PropTypes.func,
+    component: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.object,
+      PropTypes.node,
+    ]),
   };
 
   static defaultProps = {
     component: undefined,
   };
 
-  constructor(props) {
-    super(props);
-
-    // Destruct named props to filter out props to pass over to page component
-    const { classes, component, controller, ...pageProps } = props;
-
-    this.state = {
-      PageComponent: component,
-      pageProps,
-    };
-  }
-
   render() {
-    const { classes, controller } = this.props;
-    const { PageComponent, pageProps } = this.state;
+    const {
+      classes,
+      controller,
+      component: PageComponent,
+      ...pageProps
+    } = this.props;
     return (
       <div className={classes.root}>
         <PageLoadController ref={controller} />

@@ -46,7 +46,9 @@ class APIClient extends Swagger {
             request.method = argHash.method;
             delete argHash.parameters.__method__;
           }
-          return request;
+          return this.requestInterceptor
+            ? this.requestInterceptor(request)
+            : request;
         },
         responseInterceptor: response => {
           // Intercept response and catch API errors
@@ -63,6 +65,9 @@ class APIClient extends Swagger {
           } else {
             this.progressHandler({ done: true });
           }
+          return this.responseInterceptor
+            ? this.responseInterceptor(response)
+            : response;
         },
       })
       .catch(error => {
@@ -141,6 +146,11 @@ Swagger.makeApisTagOperation = client => {
               }
               return parameters;
             }, {});
+            const response200 = spec.responses[200];
+            call.response =
+              response200 != null && response200.schema != null
+                ? simplifySchema(response200.schema)
+                : undefined;
 
             return {
               ...originals,
@@ -160,3 +170,13 @@ Swagger.makeApisTagOperation = client => {
 };
 
 export default APIClient;
+
+function simplifySchema(schema) {
+  if (schema.type === "object") {
+    return schema.properties;
+  }
+  if (schema.type === "array") {
+    return simplifySchema(schema.items);
+  }
+  return schema;
+}

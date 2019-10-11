@@ -1,5 +1,5 @@
 const settings = {
-  api: "http://localhost:8001/api",
+  api: "http://django2:8001/api",
 };
 
 export default settings;

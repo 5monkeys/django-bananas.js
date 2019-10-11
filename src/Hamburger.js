@@ -10,12 +10,13 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: theme.spacing.unit / 2,
-    paddingRight: theme.spacing.unit / 2,
+    paddingLeft: theme.spacing(0.5),
+    paddingRight: theme.spacing(0.5),
+    marginRight: "1px",
   },
 });
 
-const Hamburger = ({ classes, open, onToggle }) => {
+const Hamburger = ({ classes, open, onToggle, ...rest }) => {
   return (
     <div className={classes.root}>
       {open ? (
@@ -23,6 +24,7 @@ const Hamburger = ({ classes, open, onToggle }) => {
           aria-label="Close drawer"
           color="inherit"
           onClick={onToggle}
+          {...rest}
         >
           <ChevronLeftIcon />
         </IconButton>

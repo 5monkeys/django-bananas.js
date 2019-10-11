@@ -1,12 +1,41 @@
 import DateFnsUtils from "@date-io/date-fns";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { FORM_ERROR } from "final-form";
 import arrayMutators from "final-form-arrays";
-import { MuiPickersUtilsProvider } from "material-ui-pickers";
 import PropTypes from "prop-types";
 import React from "react";
 import { Form as FForm } from "react-final-form";
 
-import { AdminContext } from "..";
+import AdminContext from "../context";
 import FormContext from "./FormContext";
+
+/*
+Turn this:
+    {"detail": "User already exists"}
+
+And this:
+    {"__all__": "User already exists"}
+
+Also this:
+    {"non_field_errors": ["User already exists"]}
+
+Into this, with `FORM_ERROR` from final-form:
+    {[FORM_ERROR]: ["Passwords must match"], "<field_name>": ["This field is required"]}
+*/
+function normalizeFormErrorData(data) {
+  let normalizedData = data;
+  if (data != null && typeof data === "object") {
+    const { non_field_errors = [], __all__ = [], detail, ...errors } = data;
+    normalizedData = {
+      [FORM_ERROR]: non_field_errors
+        .concat(__all__)
+        .concat(detail)
+        .filter(Boolean),
+      ...errors,
+    };
+  }
+  return normalizedData;
+}
 
 class Form extends React.Component {
   static contextType = AdminContext;
@@ -17,27 +46,34 @@ class Form extends React.Component {
   }
 
   handleSubmit = values => {
-    const { route, params, onSubmit } = this.props;
-    const endpoint = data =>
-      this.context.api[route]({ ...params, data: data || values });
-    if (onSubmit) {
-      return onSubmit({ endpoint, values });
-    }
-    return endpoint()
-      .then(() => {
-        // TODO: store data from server in the form
-        this.context.admin.success("Changes have been saved!");
-        return false;
-      })
-      .catch(({ response: { statusText, status, obj } }) => {
-        const errorMessages = {
-          400: "Please correct the errors on this form.",
-        };
-        this.context.admin.error(
-          errorMessages[status] || `${status} : ${statusText}`
-        );
-        return obj;
+    const { route, params, onSubmit, onSuccess } = this.props;
+    const endpoint = (data, passedParams = {}) =>
+      this.context.api[route]({
+        ...params,
+        ...passedParams,
+        data: data || values,
       });
+    const promise = onSubmit
+      ? Promise.resolve(onSubmit({ endpoint, values }))
+      : endpoint().then(() => {
+          // TODO: store data from server in the form
+          if (onSuccess !== undefined) {
+            onSuccess();
+          } else {
+            this.context.admin.success("Changes have been saved!");
+          }
+          return false;
+        });
+
+    return promise.catch(({ response: { statusText, status, obj } }) => {
+      const errorMessages = {
+        400: "Please correct the errors on this form.",
+      };
+      this.context.admin.error(
+        errorMessages[status] || `${status} : ${statusText}`
+      );
+      return normalizeFormErrorData(obj);
+    });
   };
 
   render() {
@@ -73,11 +109,13 @@ Form.propTypes = {
   route: PropTypes.string.isRequired,
   params: PropTypes.object,
   onSubmit: PropTypes.func,
+  onSuccess: PropTypes.func,
   formProps: PropTypes.object,
 };
 
 Form.defaultProps = {
   onSubmit: undefined,
+  onSuccess: undefined,
   params: {},
   formProps: {},
 };

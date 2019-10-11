@@ -3,6 +3,4 @@
 coverage
 dist
 node_modules
-.next
 *.snap
-dist

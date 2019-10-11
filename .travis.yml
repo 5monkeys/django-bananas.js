@@ -1,11 +1,8 @@
 language: node_js
 node_js:
-  - "10"
+  - "12"
 install:
   - npm ci
-  - cd app
-  - cp src/_bananas.settings.js src/bananas.settings.js
-  - npm ci
-  - cd ..
+  - cp app/src/_bananas.settings.js app/src/bananas.settings.js
 after_success:
-  - npm run publishCoverageReport
+  - npm run coveralls
