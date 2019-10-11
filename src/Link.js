@@ -50,6 +50,7 @@ export default class Link extends React.Component {
       href,
       children,
       patch,
+      passHref,
       ...rest
     } = this.props;
 
@@ -63,7 +64,7 @@ export default class Link extends React.Component {
       isAnchor = true;
     } else {
       child = Children.only(children);
-      isAnchor = child.type === "a";
+      isAnchor = child.type === "a" || passHref;
     }
 
     if (isAnchor) {
@@ -110,6 +111,7 @@ Link.propTypes = {
   query: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   hash: PropTypes.string,
   patch: PropTypes.bool,
+  passHref: PropTypes.bool,
 };
 
 Link.defaultProps = {
@@ -119,4 +121,5 @@ Link.defaultProps = {
   query: "",
   hash: "",
   patch: false,
+  passHref: false,
 };
