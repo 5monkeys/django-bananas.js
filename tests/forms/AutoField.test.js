@@ -153,3 +153,24 @@ test.each([
     expect(tree.toJSON()).toMatchSnapshot();
   }
 );
+
+const modifiedTextField = props => (
+  <div>
+    <TextField {...props} />
+  </div>
+);
+
+test("Can use FieldComponent prop to render a custom component", async () => {
+  const api = await getAPIClient();
+  const tree = renderer.create(
+    <Boundary>
+      <TestContext api={api}>
+        <Form route="example.user:form.create">
+          <AutoField name="text" FieldComponent={modifiedTextField} />
+        </Form>
+      </TestContext>
+    </Boundary>
+  );
+  expect(tree.toJSON()).toMatchSnapshot();
+  expect(tree.root.findByType(modifiedTextField)).toBeTruthy();
+});

@@ -33,6 +33,15 @@ const styles = theme => ({
   },
 });
 
+const RawInput = ({ input, fieldProps: { label, helperText, ...rest } }) => (
+  <label>
+    {label}
+    {helperText && ` (${helperText})`}:
+    <br />
+    <input {...input} type="email" {...rest} />
+  </label>
+);
+
 class UserForm extends React.Component {
   static contextType = AdminContext;
 
@@ -57,8 +66,11 @@ class UserForm extends React.Component {
             <AutoField name="username" />
             <AutoField name="first_name" />
             <AutoField name="last_name" />
-            <AutoField name="email" />
-            {/* <AutoField name="new_password" /> */}
+            <Typography>
+              ... And a raw input utilizing the FieldComponent prop to supply a
+              custom component:
+            </Typography>
+            <AutoField name="email" FieldComponent={RawInput} />
           </Box>
         </Content>
         <ToolBar color="paper" justify="end">
