@@ -77,12 +77,12 @@ class Form extends React.Component {
   };
 
   render() {
-    const { route, children, formProps, ...props } = this.props;
+    const { route, children, formProps, mutators, ...props } = this.props;
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <FForm
           {...props}
-          mutators={{ ...arrayMutators }}
+          mutators={{ ...arrayMutators, ...mutators }}
           onSubmit={this.handleSubmit}
         >
           {({ handleSubmit, ...childProps }) => (
