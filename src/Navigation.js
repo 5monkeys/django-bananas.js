@@ -201,6 +201,7 @@ function Navigation(props) {
             }
           >
             {nestedRoutes.map(({ id, path, icon, title, children }) => {
+              const variant = horizontal ? "appbar" : "drawer";
               const isSelected =
                 path.length > 1
                   ? currentUrl.startsWith(path)
@@ -214,7 +215,7 @@ function Navigation(props) {
                     <MenuItem
                       key={id}
                       route={id}
-                      variant={horizontal ? "appbar" : "drawer"}
+                      variant={variant}
                       title={title}
                       icon={showIcons ? icon : null}
                       dense={dense}
@@ -233,7 +234,7 @@ function Navigation(props) {
                           <MenuItem
                             key={i}
                             route={c.id}
-                            variant={horizontal ? "appbar" : "drawer"}
+                            variant={variant}
                             title={c.title}
                             icon={showIcons ? c.icon : null}
                             dense
