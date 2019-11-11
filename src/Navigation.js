@@ -1,5 +1,5 @@
-import { List, ListSubheader } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { Collapse, List, ListSubheader, MenuList } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -7,158 +7,189 @@ import React from "react";
 import AdminContext from "./context";
 import MenuItem from "./MenuItem";
 
-const styles = theme => ({
-  root: {
-    "&$verticalRoot > $list + $list": {
-      borderTopWidth: 1,
-      borderTopStyle: "solid",
-      borderTopColor: theme.palette.action.selected,
+const useStyles = makeStyles(theme =>
+  createStyles({
+    root: {
+      "&$verticalRoot > $list + $list": {
+        borderTopWidth: 1,
+        borderTopStyle: "solid",
+        borderTopColor: theme.palette.action.selected,
+      },
+      "&$horizontalRoot": {
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        "& $list:first-child": {
+          marginLeft: "auto",
+        },
+        "& $list:last-child": {
+          marginRight: "auto",
+        },
+      },
     },
-    "&$horizontalRoot": {
-      width: "100%",
-      height: "100%",
+    nestedMenuList: {
+      background: theme.palette.action.hover,
+      paddingTop: 0,
+      paddingBottom: 0,
+      "& > *": {
+        paddingLeft: `${theme.spacing(2)}px !important`,
+      },
+      "&$dense > *": {
+        paddingLeft: "0 !important",
+      },
+    },
+    verticalRoot: {},
+    horizontalRoot: {},
+
+    // List
+    list: {
+      "&:first-child": {
+        paddingTop: 0,
+      },
+      "&:last-child": {
+        paddingBottom: 0,
+      },
+    },
+    horizontal: {
       display: "flex",
       flexDirection: "row",
-      justifyContent: "flex-start",
+    },
+    vertical: {
+      "&multiple": {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+      },
+    },
+    dense: {},
+    multiple: {},
+
+    // Subheader
+    subheader: {
+      backgroundColor: theme.palette.background.paper,
+      textTransform: "uppercase",
+      fontSize: `${0.75}rem`,
+      overflow: "hidden",
+      height: theme.spacing(4),
+      display: "flex",
       alignItems: "center",
-      "& $list:first-child": {
-        marginLeft: "auto",
-      },
-      "& $list:last-child": {
-        marginRight: "auto",
-      },
     },
-  },
-  verticalRoot: {},
-  horizontalRoot: {},
-
-  // List
-  list: {
-    "&:first-child": {
-      paddingTop: 0,
+    subheaderCollapsed: {
+      height: 0,
+      transition: theme.transitions.create("height", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
     },
-    "&:last-child": {
-      paddingBottom: 0,
+    subheaderExpanded: {
+      transition: theme.transitions.create("height", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
     },
-  },
-  horizontal: {
-    display: "flex",
-    flexDirection: "row",
-  },
-  vertical: {
-    "&multiple": {
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
+  })
+);
+
+const nestRoutes = passedRoutes => {
+  // separate parents and children
+  const splitRoutes = passedRoutes.reduce(
+    ({ parents, children }, r) => {
+      return r.parent
+        ? { children: [...children, r], parents }
+        : { parents: [...parents, r], children };
     },
-  },
-  dense: {},
-  multiple: {},
+    { children: [], parents: [] }
+  );
+  // if there are children, nest them ...
+  if (splitRoutes.children) {
+    return splitRoutes.parents.reduce((aggr, pa) => {
+      // find corresponding parent
+      // TODO : Handle orphans and deeper nesting of menu
+      const p = splitRoutes.children.filter(c => c.parent === pa.name);
+      return [...aggr, { ...pa, children: p }];
+    }, []);
+  }
+  // ... and if not, return the parents. which means all of the routes.
+  return splitRoutes.parents;
+};
 
-  // Subheader
-  subheader: {
-    backgroundColor: theme.palette.background.paper,
-    textTransform: "uppercase",
-    fontSize: `${0.75}rem`,
-    overflow: "hidden",
-    height: 32,
-    display: "flex",
-    alignItems: "center",
-  },
-  subheaderCollapsed: {
-    height: 0,
-    transition: theme.transitions.create("height", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  subheaderExpanded: {
-    transition: theme.transitions.create("height", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-});
+function Navigation(props) {
+  const { router } = React.useContext(AdminContext);
+  const classes = useStyles();
 
-class Navigation extends React.Component {
-  static contextType = AdminContext;
+  const currentUrl = router.history.location.pathname;
+  const { routes, collapsed, horizontal, dense, nav, showIcons } = props;
 
-  render() {
-    const currentUrl = this.context.router.history.location.pathname;
-    const {
-      routes,
-      collapsed,
-      horizontal,
-      dense,
-      nav,
-      showIcons,
-      classes,
-    } = this.props;
+  const navKeys = Object.keys(nav);
 
-    const navKeys = Object.keys(nav);
+  // Put items listed in `nav` first, then keep the original (alphabetical) order.
+  const indexMap = routes.reduce((result, route, index) => {
+    const navIndex = navKeys.indexOf(route.id);
+    result[route.id] = navIndex >= 0 ? navIndex : index + navKeys.length;
+    return result;
+  }, {});
 
-    // Put items listed in `nav` first, then keep the original (alphabetical) order.
-    const indexMap = routes.reduce((result, route, index) => {
-      const navIndex = navKeys.indexOf(route.id);
-      result[route.id] = navIndex >= 0 ? navIndex : index + navKeys.length;
-      return result;
-    }, {});
+  const sortedRoutes = routes
+    .slice()
+    .sort((a, b) => indexMap[a.id] - indexMap[b.id]);
 
-    const sortedRoutes = routes
-      .slice()
-      .sort((a, b) => indexMap[a.id] - indexMap[b.id]);
+  console.log(sortedRoutes);
 
-    const groupedRoutes = sortedRoutes.reduce((result, route) => {
-      const { app } = route;
-      let appRoutes = result[app];
-      if (appRoutes === undefined) {
-        appRoutes = [];
-        result[app] = appRoutes;
-      }
-      appRoutes.push(route);
-      return result;
-    }, {});
+  const groupedRoutes = sortedRoutes.reduce((result, route) => {
+    const { app } = route;
+    let appRoutes = result[app];
+    if (appRoutes === undefined) {
+      appRoutes = [];
+      result[app] = appRoutes;
+    }
+    appRoutes.push(route);
+    return result;
+  }, {});
 
-    const apps = Object.keys(groupedRoutes);
-    const multipleApps = apps.length > 2;
+  const apps = Object.keys(groupedRoutes);
+  const multipleApps = apps.length > 2;
 
-    return (
-      <div
-        className={classNames(classes.root, {
-          [classes.verticalRoot]: !horizontal,
-          [classes.horizontalRoot]: horizontal,
-        })}
-      >
-        {apps.map(app => {
-          const appRoutes = groupedRoutes[app];
-          return (
-            <List
-              key={app}
-              disablePadding
-              className={classNames(classes.list, {
-                [classes.horizontal]: horizontal,
-                [classes.vertical]: !horizontal,
-                [classes.dense]: horizontal && dense,
-                [classes.multiple]: multipleApps,
-              })}
-              subheader={
-                app &&
-                multipleApps &&
-                !horizontal && (
-                  <ListSubheader
-                    className={classNames(classes.subheader, {
-                      [classes.subheaderCollapsed]: collapsed,
-                      [classes.subheaderExpanded]: !collapsed,
-                    })}
-                  >
-                    {app}
-                  </ListSubheader>
-                )
-              }
-            >
-              {appRoutes.map(
-                ({ id, path, title }) =>
-                  // Only show "Dashboard" item in vertical+icon mode
-                  ((!horizontal &&
+  const navigationItems = React.useMemo(
+    () =>
+      apps.map(app => {
+        const appRoutes = groupedRoutes[app];
+        // bypass nesting and just flatten the routes if the horizontal view is active
+        const nestedRoutes = horizontal ? appRoutes : nestRoutes(appRoutes);
+        return (
+          <List
+            key={app}
+            disablePadding
+            className={classNames(classes.list, {
+              [classes.horizontal]: horizontal,
+              [classes.vertical]: !horizontal,
+              [classes.dense]: horizontal && dense,
+              [classes.multiple]: multipleApps,
+            })}
+            subheader={
+              app &&
+              multipleApps &&
+              !horizontal && (
+                <ListSubheader
+                  className={classNames(classes.subheader, {
+                    [classes.subheaderCollapsed]: collapsed,
+                    [classes.subheaderExpanded]: !collapsed,
+                  })}
+                >
+                  {app}
+                </ListSubheader>
+              )
+            }
+          >
+            {nestedRoutes.map(({ id, path, title, children }) => {
+              const isSelected =
+                path.length > 1
+                  ? currentUrl.startsWith(path)
+                  : currentUrl === path;
+              return (
+                <>
+                  {((!horizontal &&
                     (showIcons || (!showIcons && id !== "home"))) ||
                     (horizontal && id !== "home")) && (
                     <MenuItem
@@ -168,25 +199,77 @@ class Navigation extends React.Component {
                       title={title}
                       icon={showIcons ? nav[id] : null}
                       dense={dense}
-                      selected={
-                        path.length > 1
-                          ? currentUrl.startsWith(path)
-                          : currentUrl === path
-                      }
+                      selected={isSelected}
                       collapsed={collapsed}
                     />
-                  )
-              )}
-            </List>
-          );
-        })}
-      </div>
-    );
-  }
+                  )}
+                  {Boolean(children && children.length) && (
+                    <Collapse in={isSelected}>
+                      <MenuList
+                        className={classNames(classes.nestedMenuList, {
+                          [classes.dense]: collapsed || dense,
+                        })}
+                      >
+                        {children.map((c, i) => (
+                          <MenuItem
+                            key={i}
+                            route={c.id}
+                            variant={horizontal ? "appbar" : "drawer"}
+                            title={c.title}
+                            icon={showIcons ? nav[c.id] : null}
+                            dense
+                            selected={
+                              path.length > 1
+                                ? currentUrl.includes(c.path)
+                                : currentUrl === path
+                            }
+                            collapsed={collapsed}
+                          />
+                        ))}
+                      </MenuList>
+                    </Collapse>
+                  )}
+                </>
+              );
+            })}
+          </List>
+        );
+      }),
+    [
+      apps,
+      classes.dense,
+      classes.horizontal,
+      classes.list,
+      classes.multiple,
+      classes.nestedMenuList,
+      classes.subheader,
+      classes.subheaderCollapsed,
+      classes.subheaderExpanded,
+      classes.vertical,
+      collapsed,
+      currentUrl,
+      dense,
+      groupedRoutes,
+      horizontal,
+      multipleApps,
+      nav,
+      showIcons,
+    ]
+  );
+
+  return (
+    <div
+      className={classNames(classes.root, {
+        [classes.verticalRoot]: !horizontal,
+        [classes.horizontalRoot]: horizontal,
+      })}
+    >
+      {navigationItems}
+    </div>
+  );
 }
 
 Navigation.propTypes = {
-  classes: PropTypes.object.isRequired,
   routes: PropTypes.array.isRequired,
   collapsed: PropTypes.bool,
   horizontal: PropTypes.bool,
@@ -201,4 +284,4 @@ Navigation.defaultProps = {
   showIcons: false,
 };
 
-export default withStyles(styles)(Navigation);
+export default Navigation;
