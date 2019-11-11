@@ -98,7 +98,7 @@ ReactDOM.render(
       "bananas.me:list": Gravatar,
       // home: DashboardIcon,
       // "bananas.me:list": SettingsIcon,
-      "fruit.banana:list": { parent: "peach" },
+      "fruit.banana:list": { parent: "peach", icon: PeopleIcon },
       "example.user:list": PeopleIcon,
     }}
     editableSettings

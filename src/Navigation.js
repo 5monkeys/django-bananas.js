@@ -92,6 +92,22 @@ const useStyles = makeStyles(theme =>
   })
 );
 
+const transformRoutes = (routes, navProps) => {
+  const navKeys = Object.keys(navProps);
+  return routes.reduce((aggr, route) => {
+    if (navKeys.includes(route.id)) {
+      const np = navProps[route.id];
+      if (np.$$typeof) {
+        // {"example:user:list": {icon: IconComponent, parent: "Home"}}
+        return [...aggr, { ...route, icon: np }];
+      }
+      // {"example:user:list": Icon}
+      return [...aggr, { ...route, ...np }];
+    }
+    return [...aggr, route];
+  }, []);
+};
+
 const nestRoutes = passedRoutes => {
   // separate parents and children
   const splitRoutes = passedRoutes.reduce(
@@ -135,8 +151,6 @@ function Navigation(props) {
     .slice()
     .sort((a, b) => indexMap[a.id] - indexMap[b.id]);
 
-  console.log(sortedRoutes);
-
   const groupedRoutes = sortedRoutes.reduce((result, route) => {
     const { app } = route;
     let appRoutes = result[app];
@@ -156,7 +170,11 @@ function Navigation(props) {
       apps.map(app => {
         const appRoutes = groupedRoutes[app];
         // bypass nesting and just flatten the routes if the horizontal view is active
-        const nestedRoutes = horizontal ? appRoutes : nestRoutes(appRoutes);
+        const appRoutesWithProps = transformRoutes(appRoutes, nav);
+        const nestedRoutes = horizontal
+          ? appRoutesWithProps
+          : nestRoutes(appRoutesWithProps);
+
         return (
           <List
             key={app}
@@ -182,11 +200,12 @@ function Navigation(props) {
               )
             }
           >
-            {nestedRoutes.map(({ id, path, title, children }) => {
+            {nestedRoutes.map(({ id, path, icon, title, children }) => {
               const isSelected =
                 path.length > 1
                   ? currentUrl.startsWith(path)
                   : currentUrl === path;
+
               return (
                 <>
                   {((!horizontal &&
@@ -197,7 +216,7 @@ function Navigation(props) {
                       route={id}
                       variant={horizontal ? "appbar" : "drawer"}
                       title={title}
-                      icon={showIcons ? nav[id] : null}
+                      icon={showIcons ? icon : null}
                       dense={dense}
                       selected={isSelected}
                       collapsed={collapsed}
@@ -216,7 +235,7 @@ function Navigation(props) {
                             route={c.id}
                             variant={horizontal ? "appbar" : "drawer"}
                             title={c.title}
-                            icon={showIcons ? nav[c.id] : null}
+                            icon={showIcons ? c.icon : null}
                             dense
                             selected={
                               path.length > 1
