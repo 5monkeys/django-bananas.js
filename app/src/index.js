@@ -3,6 +3,7 @@ import { blue } from "@material-ui/core/colors";
 import AppleIcon from "@material-ui/icons/ColorLens";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import FaceIcon from "@material-ui/icons/Face";
+import EmotIcon from "@material-ui/icons/InsertEmoticon";
 import PeopleIcon from "@material-ui/icons/People";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Bananas from "django-bananas";
@@ -90,14 +91,15 @@ ReactDOM.render(
     // dense: true,
     // icons={null}
     nav={{
-      "fruit.apple:granny_smith": FaceIcon,
-      // home: DashboardIcon,
-      "bananas.me:list": Gravatar,
-      // "bananas.me:list": SettingsIcon,
-      "fruit.banana:list": undefined,
-      "fruit.apple:list": AppleIcon,
-      "example.user:list": PeopleIcon,
+      "fruit.peach:list": EmotIcon,
       "fruit.apple:red_delicious": FaceIcon,
+      "fruit.apple:granny_smith": FaceIcon,
+      "fruit.apple:list": AppleIcon,
+      "bananas.me:list": Gravatar,
+      // home: DashboardIcon,
+      // "bananas.me:list": SettingsIcon,
+      "fruit.banana:list": { parent: "peach" },
+      "example.user:list": PeopleIcon,
     }}
     editableSettings
     {...settings}
