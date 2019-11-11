@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { blue } from "@material-ui/core/colors";
+import AppleIcon from "@material-ui/icons/ColorLens";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import AppleIcon from "@material-ui/icons/Lens";
+import FaceIcon from "@material-ui/icons/Face";
 import PeopleIcon from "@material-ui/icons/People";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Bananas from "django-bananas";
@@ -89,12 +90,14 @@ ReactDOM.render(
     // dense: true,
     // icons={null}
     nav={{
+      "fruit.apple:granny_smith": FaceIcon,
       // home: DashboardIcon,
       "bananas.me:list": Gravatar,
       // "bananas.me:list": SettingsIcon,
       "fruit.banana:list": undefined,
       "fruit.apple:list": AppleIcon,
       "example.user:list": PeopleIcon,
+      "fruit.apple:red_delicious": FaceIcon,
     }}
     editableSettings
     {...settings}
