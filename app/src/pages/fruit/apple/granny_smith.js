@@ -9,8 +9,8 @@ export default () => (
     </Typography>
     <Typography gutterBottom>
       The Granny Smith is a tip-bearing apple cultivar, which originated in
-      Australia in 1868.[1] It is named after Maria Ann Smith, who propagated
-      the cultivar from a chance seedling. The tree is thought to be a hybrid of
+      Australia in 1868. It is named after Maria Ann Smith, who propagated the
+      cultivar from a chance seedling. The tree is thought to be a hybrid of
       Malus sylvestris, the European wild apple, with the Domesticated apple
       Malus pumila as the polleniser.[citation needed]
     </Typography>
