@@ -502,3 +502,19 @@ test("Can customize context", async () => {
   expect(window.__adminContext.userFullName).toBe("Monkey Kong");
   expect(window.__adminContext.websocketClient).toBe(websocketClient);
 });
+
+test("Can customize user", async () => {
+  await renderApp({
+    anonymous: false,
+    props: {
+      customizeUser: usr => ({
+        ...usr,
+        newFunction: () => {
+          return "Monkey business.";
+        },
+      }),
+    },
+  });
+  // `./pages/index.js` sets `window.__adminContext` to the current `AdminContext`.
+  expect(window.__adminContext.user.newFunction()).toBe("Monkey business.");
+});
