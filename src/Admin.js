@@ -23,7 +23,7 @@ import { ErrorPage, LoginPage } from "./pages";
 import Router from "./router";
 import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
-import { ComponentProxy, getFromSchema, t } from "./utils";
+import { ComponentProxy, getFromSchema, makeUser, t } from "./utils";
 
 Logger.useDefaults();
 const logger = Logger.get("bananas");
@@ -284,7 +284,9 @@ class Admin extends React.Component {
 
       endpoint().then(
         response => {
-          const user = { ...response.obj };
+          const user = (this.props.customizeUser || (usr => usr))(
+            makeUser(response.obj)
+          );
           const current = this.state.context.user;
           if (JSON.stringify(user) !== JSON.stringify(current)) {
             logger.info("Authorized User:", user);
@@ -637,6 +639,7 @@ class App extends React.Component {
     loginForm: PropTypes.func,
     editableSettings: PropTypes.bool,
     customizeContext: PropTypes.func,
+    customizeUser: PropTypes.func,
   };
 
   static defaultProps = {
@@ -660,6 +663,7 @@ class App extends React.Component {
     loginForm: undefined,
     editableSettings: false,
     customizeContext: undefined,
+    customizeUser: undefined,
   };
 
   render() {

@@ -2,15 +2,16 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import { AdminContext } from "../../src";
+import { makeUser } from "../../src/utils";
 
 export const TestContext = ({ user, children }) => (
   <AdminContext.Provider value={{ user }}>{children}</AdminContext.Provider>
 );
 
 export const contextData = {
-  user: {
+  user: makeUser({
     permissions: ["has.permission", "also.has.this"],
-  },
+  }),
 };
 
 TestContext.propTypes = {

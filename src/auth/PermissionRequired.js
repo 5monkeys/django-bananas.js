@@ -2,29 +2,13 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import { AdminContext } from "..";
-
-export const permissionRequired = (permission, user) => {
-  return user.permissions.indexOf(permission) !== -1;
-};
-
-export const permissionsRequired = (permissions, user, all = true) => {
-  for (const permission of permissions) {
-    if (permissionRequired(permission, user)) {
-      if (!all) {
-        return true;
-      }
-    } else if (all) {
-      return false;
-    }
-  }
-  return all;
-};
+import { hasPermissions } from "../utils";
 
 const PermissionRequired = ({ permission, allMustMatch, children }) => {
   const { user } = React.useContext(AdminContext);
   const passes = Array.isArray(permission)
-    ? permissionsRequired(permission, user, allMustMatch)
-    : permissionRequired(permission, user);
+    ? hasPermissions(permission, user, allMustMatch)
+    : user.hasPermission(permission);
   return passes && <>{children}</>;
 };
 

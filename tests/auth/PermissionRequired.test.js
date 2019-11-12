@@ -2,11 +2,8 @@ import { cleanup, render } from "@testing-library/react";
 import Logger from "js-logger";
 import React from "react";
 
-import PermissionRequired, {
-  permissionRequired,
-  permissionsRequired,
-} from "../../src/auth/PermissionRequired";
-import { contextData, TestContext } from "./utils";
+import PermissionRequired from "../../src/auth/PermissionRequired";
+import { TestContext } from "./utils";
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
@@ -21,7 +18,6 @@ test("Ensure component doesn't show if user lacks permission", async () => {
     </TestContext>
   );
   expect(() => getByText("Don't show me")).toThrow();
-  expect(permissionRequired("lacks.permission", contextData.user)).toBeFalsy();
 });
 
 test("Ensure component shows with multiple permissions", async () => {
@@ -34,7 +30,6 @@ test("Ensure component shows with multiple permissions", async () => {
   );
   const text = getByText("Please show me");
   expect(text).toBeTruthy();
-  expect(permissionRequired("has.permission", contextData.user)).toBeTruthy();
 });
 
 test("Ensure component doesn't show if user has only one permission and allMustMatch is default (true)", async () => {
@@ -46,12 +41,6 @@ test("Ensure component doesn't show if user has only one permission and allMustM
     </TestContext>
   );
   expect(() => getByText("Don't show me")).toThrow();
-  expect(
-    permissionsRequired(
-      ["has.permission", "lacks.permission"],
-      contextData.user
-    )
-  ).toBeFalsy();
 });
 
 test("Ensure component shows if user only has one permission and allMustMatch is false", async () => {
@@ -66,13 +55,6 @@ test("Ensure component shows if user only has one permission and allMustMatch is
     </TestContext>
   );
   expect(getByText("Don't show me")).toBeTruthy();
-  expect(
-    permissionsRequired(
-      ["has.permission", "lacks.permission"],
-      contextData.user,
-      false
-    )
-  ).toBeTruthy();
 });
 
 test("Ensure component doesn't show if user lacks all permissions and allMustMatch is false", async () => {
@@ -87,11 +69,4 @@ test("Ensure component doesn't show if user lacks all permissions and allMustMat
     </TestContext>
   );
   expect(() => getByText("Don't show me")).toThrow();
-  expect(
-    permissionsRequired(
-      ["lacks.this.permission", "lacks.permission"],
-      contextData.user,
-      false
-    )
-  ).toBeFalsy();
 });

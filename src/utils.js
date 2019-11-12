@@ -223,3 +223,25 @@ function getFromSchemaHelper(schema, pathItems, location) {
 
   return getFromSchemaHelper(schema[key], restPath, [...location, key]);
 }
+
+export const makeUser = responseData => {
+  return {
+    ...responseData,
+    hasPermission(permission) {
+      return this.permissions.indexOf(permission) !== -1;
+    },
+  };
+};
+
+export const hasPermissions = (permissions, user, all = true) => {
+  for (const permission of permissions) {
+    if (user.hasPermission(permission)) {
+      if (!all) {
+        return true;
+      }
+    } else if (all) {
+      return false;
+    }
+  }
+  return all;
+};
