@@ -1,13 +1,13 @@
 import App from "./Admin";
+import Container from "./Container";
+import Content from "./Content";
+import Link from "./Link";
+import TitleBar from "./TitleBar";
+import ToolBar from "./ToolBar";
+import Tools from "./Tools";
+import AdminContext from "./context";
+import LoginForm from "./pages/LoginPageForm";
 
-export { default as AdminContext } from "./context";
-export { default as TitleBar } from "./TitleBar";
-export { default as ToolBar } from "./ToolBar";
-export { default as Tools } from "./Tools";
-export { default as Content } from "./Content";
-export { default as Container } from "./Container";
-export { default as Link } from "./Link";
-export { default as LoginForm } from "./pages/LoginPageForm";
 export { t, Translate } from "./utils";
 
 const Bananas = {
@@ -15,3 +15,14 @@ const Bananas = {
 };
 
 export default Bananas;
+export {
+  App,
+  Container,
+  Content,
+  Link,
+  TitleBar,
+  ToolBar,
+  Tools,
+  AdminContext,
+  LoginForm,
+};

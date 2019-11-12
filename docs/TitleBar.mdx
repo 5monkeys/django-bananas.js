@@ -1,0 +1,34 @@
+---
+name: TitleBar
+menu: Component API
+---
+
+import { Props } from "docz";
+import { Button, Fab } from "@material-ui/core";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+
+import { Playground } from "./docs";
+import { TitleBar as _TitleBar } from "../src/TitleBar";
+import { TitleBar } from "../src/";
+
+# TitleBar
+
+## Props
+
+<Props of={_TitleBar} />
+
+## Details
+
+### back
+...
+
+## Usage
+
+<Playground>
+    <TitleBar back=".." title="Users">
+        <Fab color="primary" size="small" variant="extended">
+            <PersonAddIcon fontSize="small" style={{ marginRight: 8 }} />
+            Add User
+        </Fab>
+    </TitleBar>
+</Playground>

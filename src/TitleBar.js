@@ -120,18 +120,24 @@ const TitleBar = ({
 };
 
 TitleBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-  overrides: PropTypes.object,
+  /** Choices: primary | secondary | paper */
+  color: PropTypes.string,
+  /** Title text */
+  title: PropTypes.string,
+  /** Shows a back button. Supports operation ID or path for a specific route */
+  back: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  /** Less padding for a tighter look */
+  dense: PropTypes.bool,
+  /** Choices: start | center | end | between | around | evenly */
+  justify: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  color: PropTypes.string,
-  title: PropTypes.string,
-  back: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  dense: PropTypes.bool,
-  justify: PropTypes.string, // start|center|end|between|around|evenly
+  /** Custom claasses overrides TODO: Use regular classes */
+  overrides: PropTypes.object,
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
 };
 
 TitleBar.defaultProps = {
@@ -144,6 +150,9 @@ TitleBar.defaultProps = {
   justify: "between",
 };
 
-export default withStyles(styles, { name: "BananasTitleBar" })(
+const BananasTitleBar = withStyles(styles, { name: "BananasTitleBar" })(
   withTheme()(TitleBar)
 );
+
+export default BananasTitleBar;
+export { TitleBar, BananasTitleBar };

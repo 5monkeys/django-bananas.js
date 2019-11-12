@@ -569,18 +569,26 @@ const BananasAdmin = withStyles(styles, { name: "BananasAdmin" })(Admin);
 
 class App extends React.Component {
   static propTypes = {
+    /** API URL */
     api: PropTypes.string.isRequired,
     pages: PropTypes.func.isRequired,
     prefix: PropTypes.string,
     logLevel: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 
+    /** Choices: horizontal | vertical */
     layout: PropTypes.string,
+    /** Force navigation drawer to not be collapsable */
     permanent: PropTypes.bool,
+    /** Shows non-permanent navigation drawer as initially collapsed */
     collapsed: PropTypes.bool,
+    /** Smaller fonts/icons and less padding for a tighter look */
     dense: PropTypes.bool,
 
+    /** Sets trailing part of the document title: <current page title> | My Admin-App Title */
     title: PropTypes.string,
+    /** Shown in the navigation header next to the logo */
     branding: PropTypes.string,
+    /** Shown in the navigation header next to the logo */
     version: PropTypes.string,
     logo: PropTypes.oneOfType([
       PropTypes.bool,

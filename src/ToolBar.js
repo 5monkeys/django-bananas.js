@@ -58,6 +58,41 @@ const styles = theme => ({
 });
 
 class ToolBar extends React.Component {
+  static propTypes = {
+    /** Choices: primary | secondary | paper */
+    color: PropTypes.string,
+    /** Choices: start | center | end | between | around | evenly */
+    justify: PropTypes.string,
+    /** Adds either a top or bottom border. Useful when using paper color. */
+    border: PropTypes.string,
+    /** Less padding for a tighter look */
+    dense: PropTypes.bool,
+    /** Styles nested Button elements to be flat and adjusts colors depending on background luminance. */
+    autoStyle: PropTypes.bool,
+    /** Darkens or lightens nested Button elements that are using the same color. */
+    emphasize: PropTypes.bool,
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node,
+    ]),
+    overrides: PropTypes.object,
+    classes: PropTypes.object.isRequired,
+    /** Shortcut to provide custom theme */
+    theme: PropTypes.object,
+  };
+
+  static defaultProps = {
+    theme: undefined,
+    autoStyle: true,
+    emphasize: true,
+    overrides: {},
+    children: null,
+    color: "primary",
+    border: "top",
+    dense: false,
+    justify: "end",
+  };
+
   getTheme() {
     if (!this.theme) {
       const { theme, color } = this.props;
@@ -320,32 +355,7 @@ class ToolBar extends React.Component {
   }
 }
 
-ToolBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object,
-  autoStyle: PropTypes.bool,
-  emphasize: PropTypes.bool,
-  overrides: PropTypes.object,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-  color: PropTypes.string,
-  border: PropTypes.string,
-  dense: PropTypes.bool,
-  justify: PropTypes.string, // start|center|end|between|around|evenly
-};
+const BananasToolBar = withStyles(styles, { name: "BananasToolBar" })(ToolBar);
 
-ToolBar.defaultProps = {
-  theme: undefined,
-  autoStyle: true,
-  emphasize: true,
-  overrides: {},
-  children: null,
-  color: "primary",
-  border: "top",
-  dense: false,
-  justify: "end",
-};
-
-export default withStyles(styles, { name: "BananasToolBar" })(ToolBar);
+export default BananasToolBar;
+export { BananasToolBar, ToolBar };

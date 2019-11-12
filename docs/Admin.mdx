@@ -1,0 +1,77 @@
+---
+name: App
+menu: Component API
+---
+
+import { Playground, Props } from "docz"
+import App from "../src/Admin"
+
+# App
+
+## Props
+
+<Props of={App} />
+
+## Details
+
+### layout
+
+Defines location of the navigation bar. Use `horizontal` layout for a side drawer, or `vertical` for a top bar.
+
+### logo
+Use *boolean* `false` to not render a logo, or `true` to show the default *Bananas* logo.
+Use a *string* for an image URL or a *function/component* for full control.
+
+``` jsx
+<Bananas.App
+  // ...
+  logo={true|false}
+  logo={"https://foo.bar/logo.svg"}
+  logo={MyLogo}
+/>
+```
+
+### permanent & collapsed
+The `permanent` and `collapsed` settings is only applicable for `horizontal` layout. Permanent makes the drawer non-collapsable, and collapsable defines the initial state of the drawer.
+
+### loginForm
+Set `loginForm` to a react component if you need a custom login form other than the built-in default form/endpoint.
+
+### logLevel
+Global log level:
+``` jsx
+<Bananas.App
+  // ...
+  logLevel="DEBUG",
+/>
+```
+
+Log level per application label:
+``` jsx
+<Bananas.App
+  // ...
+  logLevel={{
+    bananas: "WARN",
+    myapp: "DEBUG",
+  }}
+/>
+```
+
+### prefix
+Prefix sets the base url for the router. Use this if the admin app is mounted on a sub-path, i.e. `/bananas/`.
+
+## Usage
+
+```jsx
+import Bananas from "django-bananas";
+import React from "react";
+import ReactDOM from "react-dom";
+
+ReactDOM.render(
+  <Bananas.App
+    api="http://localhost:8000/api"
+    pages={route => import(`./pages/${route}`)}
+  />,
+  document.getElementById("root")
+);
+```

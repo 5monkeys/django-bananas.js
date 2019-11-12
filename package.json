@@ -23,6 +23,8 @@
     "jest": "jest --verbose",
     "coverage": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "docz:dev": "docz dev",
+    "docz:build": "docz build",
     "buildwatch": "babel src --watch --out-dir dist",
     "build": "babel --delete-dir-on-start src --out-dir dist && cp LICENSE README.md dist/ && sed \"/\\\"private\\\":\\s*true/d\" package.json > dist/package.json",
     "test": "npm run eslint && npm run coverage && npm run build"
@@ -49,7 +51,7 @@
     "@material-ui/core": ">=3.9.0",
     "@material-ui/icons": ">=3.0.0",
     "material-ui-pickers": "^2.2.4",
-    "react": ">=16.6.0",
+    "react": ">=16.8.6",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
@@ -63,6 +65,7 @@
     "@babel/preset-react": "7.0.0",
     "@material-ui/core": "3.9.0",
     "@material-ui/icons": "3.0.1",
+    "ajv": "^6.10.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.0.1",
     "babel-jest": "24.1.0",
@@ -70,6 +73,8 @@
     "classnames": "2.2.6",
     "coveralls": "3.0.3",
     "doctoc": "1.4.0",
+    "docz": "next",
+    "docz-theme-default": "next",
     "eslint": "5.10.0",
     "eslint-config-lydell": "12.0.0",
     "eslint-plugin-import": "2.14.0",
@@ -82,10 +87,10 @@
     "jest": "24.1.0",
     "jest-dom": "^3.1.3",
     "prettier": "1.15.3",
-    "react": "16.6.3",
-    "react-dom": "16.6.3",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
     "react-jss": "8.6.1",
-    "react-test-renderer": "16.6.3",
+    "react-test-renderer": "16.8.6",
     "react-testing-library": "6.0.0",
     "regexp-tree": "0.1.0"
   }

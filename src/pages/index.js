@@ -1,3 +1,5 @@
-export { default as ErrorPage } from "./ErrorPage";
-export { default as LoginPage } from "./LoginPage";
-export { default as MePage } from "./MePage";
+import ErrorPage from "./ErrorPage";
+import LoginPage from "./LoginPage";
+import MePage from "./MePage";
+
+export { ErrorPage, LoginPage, MePage };

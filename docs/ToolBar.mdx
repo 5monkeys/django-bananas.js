@@ -1,0 +1,33 @@
+---
+name: ToolBar
+menu: Component API
+---
+
+import { Props } from "docz";
+import { Button } from "@material-ui/core";
+
+import { Playground } from "./docs";
+import { ToolBar as _ToolBar } from "../src/ToolBar";
+import { ToolBar } from "../src/";
+
+# ToolBar
+
+## Usage
+
+<Playground>
+    <ToolBar>
+        <Button variant="contained" color="primary">Save</Button>
+    </ToolBar>
+</Playground>
+
+## Details
+
+### autoStyle
+Styles nested `Button` elements. Flattes and adjusts colors depending on `color` luminance.
+
+### emphasize
+Darkens *(or lightens)* nested `Button` elements that are using the same `color`.
+
+## Props
+
+<Props of={_ToolBar} />

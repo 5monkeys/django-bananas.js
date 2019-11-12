@@ -1,0 +1,46 @@
+---
+name: Container
+menu: Component API
+---
+
+import { Button } from "@material-ui/core";
+
+import { Playground } from "./docs";
+import { TitleBar, Content, Container, ToolBar, Tools } from "../src/";
+
+# Container
+
+The `Container` component centers its `children` within a fixed width that can be defined using `overrides` in your theme. Container is used in built-in components like `TitleBar`, `ToolBar` and `Content` and is therefore rarely needed stand-alone.
+
+## Usage
+
+```jsx
+import themes from "django-bananas/themes";
+
+const myTheme = themes.default.extend({
+  overrides: {
+    BananasContainer: {
+      root: {
+        width: "100%",
+        maxWidth: 500,
+        margin: "0 auto",
+      },
+    },
+  },
+});
+```
+
+### Example with theme override
+
+<Playground contain={500} height={250}>
+    <TitleBar title="My Page" />
+    <Content>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </Content>
+    <ToolBar>
+        <Tools>
+            <Button variant="contained" color="secondary">Cancel</Button>
+            <Button variant="contained" color="primary">Save</Button>
+        </Tools>
+    </ToolBar>
+</Playground>
