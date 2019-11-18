@@ -9,10 +9,12 @@ import {
   ensureTrailingSlash,
   fromQuery,
   getCookie,
+  hasPermissions,
   interpolateString,
   nthIndexOf,
   toQuery,
 } from "../src/utils";
+import { contextData } from "./auth/utils";
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
@@ -119,4 +121,40 @@ test("Can interpolate strings", () => {
 test("Can generate Material UI color shapes", () => {
   const green = "#34A77B";
   expect(createColor(green)).toEqual(django);
+});
+
+test("Default permission checks work as expected", () => {
+  expect(contextData.user.hasPermission("lacks.permission")).toBeFalsy();
+  expect(contextData.user.hasPermission("has.permission")).toBeTruthy();
+  expect(
+    hasPermissions(["has.permission", "lacks.permission"], contextData.user)
+  ).toBeFalsy();
+  expect(
+    hasPermissions(
+      ["has.permission", "lacks.permission"],
+      contextData.user,
+      false
+    )
+  ).toBeTruthy();
+  expect(
+    hasPermissions(
+      ["lacks.this.permission", "lacks.permission"],
+      contextData.user,
+      false
+    )
+  ).toBeFalsy();
+});
+
+test("Can customize permission check on user object", () => {
+  contextData.user.hasPermission = () => {
+    return false;
+  };
+  expect(contextData.user.hasPermission("has.permission")).toBeFalsy();
+  expect(
+    hasPermissions(
+      ["has.permission", "lacks.permission"],
+      contextData.user,
+      false
+    )
+  ).toBeFalsy();
 });
