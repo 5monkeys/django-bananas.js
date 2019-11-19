@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
+import Badge from "@material-ui/core/Badge";
 import { blue } from "@material-ui/core/colors";
 import AppleIcon from "@material-ui/icons/ColorLens";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import FaceIcon from "@material-ui/icons/Face";
 import EmotIcon from "@material-ui/icons/InsertEmoticon";
+import MailIcon from "@material-ui/icons/Mail";
 import PeopleIcon from "@material-ui/icons/People";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Bananas from "django-bananas";
@@ -22,6 +24,11 @@ const exampleAppTheme = themes.default.extend({
     },
   },
   overrides: {
+    BananasMenuItem: {
+      avatar: {
+        overflow: "visible",
+      },
+    },
     BananasNavBar: {
       header: {
         /* Example: Change NavBar header color */
@@ -72,6 +79,14 @@ const examplePageTheme = exampleAppTheme.extend({
 });
 */
 
+const CustomIconComponent = () => {
+  return (
+    <Badge color="secondary" badgeContent={4} invisible={false}>
+      <MailIcon />
+    </Badge>
+  );
+};
+
 const CustomLoginForm = () => <form>This is a custom login form</form>;
 
 ReactDOM.render(
@@ -91,7 +106,7 @@ ReactDOM.render(
     // dense: true,
     // icons={null}
     nav={{
-      "fruit.peach:list": EmotIcon,
+      "fruit.peach:list": CustomIconComponent,
       "fruit.apple:red_delicious": FaceIcon,
       "fruit.apple:granny_smith": FaceIcon,
       "fruit.apple:list": AppleIcon,
