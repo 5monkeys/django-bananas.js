@@ -357,7 +357,6 @@ NavBar.defaultProps = {
   dense: false,
   permanent: false,
   collapsed: false,
-
   title: "",
   branding: "",
   version: "",
