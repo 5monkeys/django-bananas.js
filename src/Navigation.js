@@ -7,6 +7,10 @@ import React from "react";
 import AdminContext from "./context";
 import MenuItem from "./MenuItem";
 
+const hasSelectedChild = (url, children) => {
+  return Boolean(children.filter(child => url.includes(child.path)).length);
+};
+
 const useStyles = makeStyles(theme =>
   createStyles({
     root: {
@@ -204,7 +208,8 @@ function Navigation(props) {
               const variant = horizontal ? "appbar" : "drawer";
               const isSelected =
                 path.length > 1
-                  ? currentUrl.startsWith(path)
+                  ? hasSelectedChild(currentUrl, children) ||
+                    currentUrl.startsWith(path)
                   : currentUrl === path;
 
               return (
