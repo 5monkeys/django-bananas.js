@@ -7,7 +7,7 @@ import React from "react";
 import AdminContext from "./context";
 import MenuItem from "./MenuItem";
 
-const hasSelectedChild = (url, children) => {
+const hasSelectedChild = (url, children = []) => {
   return Boolean(children.filter(child => url.includes(child.path)).length);
 };
 
@@ -101,7 +101,9 @@ const transformRoutes = (routes, navProps) => {
   return routes.reduce((aggr, route) => {
     if (navKeys.includes(route.id)) {
       const np = navProps[route.id];
-      if (np.$$typeof) {
+      // differentiate between the value being an Object or an react component
+      console.log(route.id, np, typeof np);
+      if ((np && typeof np === "function") || (np && np.$$typeof)) {
         // {"example:user:list": {icon: IconComponent, parent: "Home"}}
         return [...aggr, { ...route, icon: np }];
       }
@@ -208,17 +210,18 @@ function Navigation(props) {
               const variant = horizontal ? "appbar" : "drawer";
               const isSelected =
                 path.length > 1
-                  ? hasSelectedChild(currentUrl, children) ||
-                    currentUrl.startsWith(path)
+                  ? Boolean(
+                      children !== undefined &&
+                        hasSelectedChild(currentUrl, children)
+                    ) || currentUrl.startsWith(path)
                   : currentUrl === path;
 
               return (
-                <>
+                <React.Fragment key={id}>
                   {((!horizontal &&
                     (showIcons || (!showIcons && id !== "home"))) ||
                     (horizontal && id !== "home")) && (
                     <MenuItem
-                      key={id}
                       route={id}
                       variant={variant}
                       title={title}
@@ -235,9 +238,9 @@ function Navigation(props) {
                           [classes.dense]: collapsed || dense,
                         })}
                       >
-                        {children.map((c, i) => (
+                        {children.map(c => (
                           <MenuItem
-                            key={i}
+                            key={c.id}
                             route={c.id}
                             variant={variant}
                             title={c.title}
@@ -254,7 +257,7 @@ function Navigation(props) {
                       </MenuList>
                     </Collapse>
                   )}
-                </>
+                </React.Fragment>
               );
             })}
           </List>

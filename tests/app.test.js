@@ -464,6 +464,20 @@ test("Can customize menu with array", async () => {
   expect(items[0]).toBe("Användare");
 });
 
+test("Can customize menu with with settings object", async () => {
+  const { findByText, queryAllByTestId } = await renderApp({
+    props: {
+      nav: [{ "example.user:list": { icon: <div>{"testIcon"}</div> } }],
+    },
+  });
+
+  const items = queryAllByTestId("MenuItemText").map(
+    element => element.textContent
+  );
+  expect(findByText("testIcon")).toBeTruthy();
+  expect(items[0]).toBe("Användare");
+});
+
 test("Can customize HTTP headers", async () => {
   await renderApp({
     anonymous: false,
