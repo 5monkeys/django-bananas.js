@@ -67,6 +67,7 @@ export default class Router {
         const path = this.getPath(endpoint, method, action);
         const template = this.getTemplate(id, path, action);
         const app = this.getAppLabel(tags);
+        const apiView = this.getAPIView(id);
         const title = this.getTitle(summary, id);
         const params = parameters.filter(
           param => param.required && param.in === "path"
@@ -78,6 +79,7 @@ export default class Router {
           action,
           template,
           app,
+          apiView,
           title,
           navigation: tags.includes("navigation"),
           parameters: {
@@ -141,6 +143,8 @@ export default class Router {
         path: route.path,
         app: route.app || "",
         title: route.title,
+        name: route.action === "list" ? route.apiView : route.action,
+        parent: route.action === "list" ? null : route.apiView,
       }));
 
     logger.debug("Initialized Router:", this.routes);
@@ -270,14 +274,13 @@ export default class Router {
     return app.split(":")[1];
   }
 
-  getTitle(summary, id) {
+  getAPIView(id) {
+    return id.substring(id.indexOf(".") + 1, id.indexOf(":"));
+  }
+
+  getTitle(summary, apiView) {
     return (
-      summary ||
-      (id &&
-        capitalize(
-          id.substring(id.indexOf(".") + 1, id.indexOf(":")).replace("_", " ")
-        )) ||
-      null
+      summary || (apiView && capitalize(apiView.replace("_", " "))) || null
     );
   }
 

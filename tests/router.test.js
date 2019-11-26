@@ -94,6 +94,7 @@ test("Can lookup route by id", async () => {
     operationId: "example_user_list",
     path: "/example/user/",
     action: "list",
+    apiView: "user",
     template: "example/user/list.js",
     app: "example",
     title: "Användare",

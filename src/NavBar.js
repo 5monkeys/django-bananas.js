@@ -357,15 +357,12 @@ NavBar.defaultProps = {
   dense: false,
   permanent: false,
   collapsed: false,
-
   title: "",
   branding: "",
   version: "",
   logo: true,
   nav: undefined,
 };
-
-// NavBar.name = "BananasNavBar";
 
 export default withStyles(styles, { name: "BananasNavBar" })(NavBar);
 
@@ -381,7 +378,8 @@ function makeNav(propsNav) {
         { ...propsNav };
 
   // This might seem unnecessary, but is needed to allow moving the default nav
-  // items.
+  // items. Nesting partly overrides this behaviour. Putting the children under their
+  // respective parent.
   const defaultNav = Object.keys(DEFAULT_NAV).reduce((result, key) => {
     if (!{}.hasOwnProperty.call(navObject, key)) {
       result[key] = DEFAULT_NAV[key];
