@@ -102,7 +102,6 @@ const transformRoutes = (routes, navProps) => {
     if (navKeys.includes(route.id)) {
       const np = navProps[route.id];
       // differentiate between the value being an Object or an react component
-      console.log(route.id, np, typeof np);
       if ((np && typeof np === "function") || (np && np.$$typeof)) {
         // {"example:user:list": {icon: IconComponent, parent: "Home"}}
         return [...aggr, { ...route, icon: np }];

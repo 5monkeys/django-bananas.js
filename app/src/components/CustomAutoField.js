@@ -23,7 +23,6 @@ const fieldsByType = {
 };
 
 const CustomAutoField = props => {
-  console.log("autofield received props: ", props);
   return <AutoField fieldsByType={fieldsByType} {...props} />;
 };
 
