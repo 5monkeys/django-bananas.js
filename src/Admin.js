@@ -631,6 +631,7 @@ class App extends React.Component {
     icons: deprecated(PropTypes.object, 'Please use "nav" instead.'),
     nav: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.string.isRequired),
+      PropTypes.arrayOf(PropTypes.object.isRequired),
       PropTypes.object,
     ]),
 
