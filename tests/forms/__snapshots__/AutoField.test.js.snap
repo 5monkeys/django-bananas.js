@@ -32,6 +32,15 @@ exports[`Can render field of type 'boolean' and variant 'checkbox' 1`] = `
           <span
             className="MuiIconButton-label"
           >
+            <input
+              checked={false}
+              className="PrivateSwitchBase-input-22"
+              data-indeterminate={false}
+              disabled={false}
+              name="boolean"
+              onChange={[Function]}
+              type="checkbox"
+            />
             <svg
               aria-hidden="true"
               className="MuiSvgIcon-root"
@@ -43,15 +52,6 @@ exports[`Can render field of type 'boolean' and variant 'checkbox' 1`] = `
                 d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
               />
             </svg>
-            <input
-              checked={false}
-              className="PrivateSwitchBase-input-22"
-              data-indeterminate={false}
-              disabled={false}
-              name="boolean"
-              onChange={[Function]}
-              type="checkbox"
-            />
           </span>
         </span>
         <span
@@ -97,6 +97,15 @@ exports[`Can render field of type 'boolean' and variant 'checkbox' with partial 
           <span
             className="MuiIconButton-label"
           >
+            <input
+              checked={false}
+              className="PrivateSwitchBase-input-22"
+              data-indeterminate={false}
+              disabled={false}
+              name="boolean"
+              onChange={[Function]}
+              type="checkbox"
+            />
             <svg
               aria-hidden="true"
               className="MuiSvgIcon-root"
@@ -108,16 +117,10 @@ exports[`Can render field of type 'boolean' and variant 'checkbox' with partial 
                 d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
               />
             </svg>
-            <input
-              checked={false}
-              className="PrivateSwitchBase-input-22"
-              data-indeterminate={false}
-              disabled={false}
-              name="boolean"
-              onChange={[Function]}
-              type="checkbox"
-            />
           </span>
+          <span
+            className="MuiTouchRipple-root"
+          />
         </span>
         <span
           className="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
@@ -165,9 +168,6 @@ exports[`Can render field of type 'boolean' and variant 'switch' 1`] = `
             <span
               className="MuiIconButton-label"
             >
-              <span
-                className="MuiSwitch-thumb"
-              />
               <input
                 checked={false}
                 className="PrivateSwitchBase-input-22 MuiSwitch-input"
@@ -176,7 +176,13 @@ exports[`Can render field of type 'boolean' and variant 'switch' 1`] = `
                 onChange={[Function]}
                 type="checkbox"
               />
+              <span
+                className="MuiSwitch-thumb"
+              />
             </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
           </span>
           <span
             className="MuiSwitch-track"
@@ -228,9 +234,6 @@ exports[`Can render field of type 'boolean' and variant 'switch' with partial fi
             <span
               className="MuiIconButton-label"
             >
-              <span
-                className="MuiSwitch-thumb"
-              />
               <input
                 checked={false}
                 className="PrivateSwitchBase-input-22 MuiSwitch-input"
@@ -238,6 +241,9 @@ exports[`Can render field of type 'boolean' and variant 'switch' with partial fi
                 name="boolean"
                 onChange={[Function]}
                 type="checkbox"
+              />
+              <span
+                className="MuiSwitch-thumb"
               />
             </span>
           </span>
@@ -275,10 +281,10 @@ exports[`Can render field of type 'choices' and variant 'default' 1`] = `
       onClick={[Function]}
     >
       <div
-        aria-haspopup="true"
-        aria-pressed="false"
+        aria-haspopup="listbox"
+        aria-labelledby=" mui-component-select-choices"
         className="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input MuiInputBase-inputSelect"
-        id="select-choices"
+        id="mui-component-select-choices"
         onBlur={[Function]}
         onClick={[Function]}
         onFocus={[Function]}
@@ -296,6 +302,7 @@ exports[`Can render field of type 'choices' and variant 'default' 1`] = `
       </div>
       <input
         name="choices"
+        onAnimationStart={[Function]}
         type="hidden"
         value=""
       />
@@ -334,10 +341,10 @@ exports[`Can render field of type 'choices' and variant 'default' with partial f
       onClick={[Function]}
     >
       <div
-        aria-haspopup="true"
-        aria-pressed="false"
+        aria-haspopup="listbox"
+        aria-labelledby=" mui-component-select-choices"
         className="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input MuiInputBase-inputSelect"
-        id="select-choices"
+        id="mui-component-select-choices"
         onBlur={[Function]}
         onClick={[Function]}
         onFocus={[Function]}
@@ -355,6 +362,7 @@ exports[`Can render field of type 'choices' and variant 'default' with partial f
       </div>
       <input
         name="choices"
+        onAnimationStart={[Function]}
         type="hidden"
         value=""
       />
@@ -382,10 +390,11 @@ exports[`Can render field of type 'date' and variant 'default' 1`] = `
     className="MuiFormControl-root MuiTextField-root"
     format="MMMM do"
     onClick={[Function]}
+    onKeyDown={[Function]}
   >
     <label
-      className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-      data-shrink={true}
+      className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated"
+      data-shrink={false}
     >
       Date *
     </label>
@@ -395,9 +404,11 @@ exports[`Can render field of type 'date' and variant 'default' 1`] = `
     >
       <input
         aria-invalid={false}
+        autoFocus={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
         name="date"
+        onAnimationStart={[Function]}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -419,6 +430,7 @@ exports[`Can render field of type 'date' and variant 'default' with partial fiel
     className="MuiFormControl-root MuiTextField-root"
     format="MMMM do"
     onClick={[Function]}
+    onKeyDown={[Function]}
   >
     <label
       className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
@@ -432,9 +444,11 @@ exports[`Can render field of type 'date' and variant 'default' with partial fiel
     >
       <input
         aria-invalid={false}
+        autoFocus={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
         name="date"
+        onAnimationStart={[Function]}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -456,10 +470,11 @@ exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
     className="MuiFormControl-root MuiTextField-root"
     format="MMMM do hh:mm aaaa"
     onClick={[Function]}
+    onKeyDown={[Function]}
   >
     <label
-      className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
-      data-shrink={true}
+      className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated"
+      data-shrink={false}
     >
       Datetime *
     </label>
@@ -469,9 +484,11 @@ exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
     >
       <input
         aria-invalid={false}
+        autoFocus={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
         name="datetime"
+        onAnimationStart={[Function]}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -512,9 +529,11 @@ exports[`Can render field of type 'integer' and variant 'default' 1`] = `
     >
       <input
         aria-invalid={false}
+        autoFocus={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
         name="integer"
+        onAnimationStart={[Function]}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -546,9 +565,11 @@ exports[`Can render field of type 'integer' and variant 'default' with partial f
     >
       <input
         aria-invalid={false}
+        autoFocus={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
         name="integer"
+        onAnimationStart={[Function]}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -580,10 +601,10 @@ exports[`Can render field of type 'multiple_choices' and variant 'default' 1`] =
       onClick={[Function]}
     >
       <div
-        aria-haspopup="true"
-        aria-pressed="false"
+        aria-haspopup="listbox"
+        aria-labelledby=" mui-component-select-multiple_choices"
         className="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input MuiInputBase-inputSelect"
-        id="select-multiple_choices"
+        id="mui-component-select-multiple_choices"
         onBlur={[Function]}
         onClick={[Function]}
         onFocus={[Function]}
@@ -601,6 +622,7 @@ exports[`Can render field of type 'multiple_choices' and variant 'default' 1`] =
       </div>
       <input
         name="multiple_choices"
+        onAnimationStart={[Function]}
         type="hidden"
         value=""
       />
@@ -639,10 +661,10 @@ exports[`Can render field of type 'multiple_choices' and variant 'default' with 
       onClick={[Function]}
     >
       <div
-        aria-haspopup="true"
-        aria-pressed="false"
+        aria-haspopup="listbox"
+        aria-labelledby=" mui-component-select-multiple_choices"
         className="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input MuiInputBase-inputSelect"
-        id="select-multiple_choices"
+        id="mui-component-select-multiple_choices"
         onBlur={[Function]}
         onClick={[Function]}
         onFocus={[Function]}
@@ -660,6 +682,7 @@ exports[`Can render field of type 'multiple_choices' and variant 'default' with 
       </div>
       <input
         name="multiple_choices"
+        onAnimationStart={[Function]}
         type="hidden"
         value=""
       />
@@ -698,9 +721,11 @@ exports[`Can render field of type 'text' and variant 'default' 1`] = `
     >
       <input
         aria-invalid={false}
+        autoFocus={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
         name="text"
+        onAnimationStart={[Function]}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -732,9 +757,11 @@ exports[`Can render field of type 'text' and variant 'default' with partial fiel
     >
       <input
         aria-invalid={false}
+        autoFocus={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
         name="text"
+        onAnimationStart={[Function]}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -767,9 +794,11 @@ exports[`Can use FieldComponent prop to render a custom component 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="text"
+          onAnimationStart={[Function]}
           onBlur={[Function]}
           onChange={[Function]}
           onFocus={[Function]}
