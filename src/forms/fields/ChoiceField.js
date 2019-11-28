@@ -10,7 +10,7 @@ import React from "react";
 const ChoiceField = ({ input, schema, fieldProps }) => (
   <FormControl error={fieldProps.error}>
     <InputLabel htmlFor="name-error">{fieldProps.label}</InputLabel>
-    <Select {...input} value={input.value || []}>
+    <Select {...input} value={input.value || ""}>
       {!schema.required && (
         <MenuItem value="">
           <em>None</em>
