@@ -348,6 +348,7 @@ NavBar.propTypes = {
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
   nav: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string.isRequired),
+    PropTypes.arrayOf(PropTypes.object.isRequired),
     PropTypes.object,
   ]),
 };

@@ -115,7 +115,10 @@ test("Can render dashboard and navigate using menu", async () => {
   expect(usersMenuItem).toBeTruthy();
 
   // Mock Users API call
-  const users = [{ id: 1, username: "user1" }, { id: 2, username: "user2" }];
+  const users = [
+    { id: 1, username: "user1" },
+    { id: 2, username: "user2" },
+  ];
   fetchMock.mock(`http://foo.bar/api/v1.0${userListRoute.path}`, {
     body: users,
   });
@@ -215,14 +218,14 @@ test("Handles 500", async () => {
 
 test("Handles missing route", async () => {
   const { app } = await renderApp({ anonymous: true });
-  expect(app.loadPage(document.location, null)).rejects.toThrow(
+  await expect(app.loadPage(document.location, null)).rejects.toThrow(
     PageNotFoundError
   );
 });
 
 test("Handles missing page file", async () => {
   const { app } = await renderApp({ anonymous: true });
-  expect(app.loadPageComponent("foobar.js")).rejects.toThrow(
+  await expect(app.loadPageComponent("foobar.js")).rejects.toThrow(
     PageNotImplementedError
   );
 });
