@@ -131,9 +131,10 @@ class Messages extends React.Component {
   }
 }
 
-const BananasMessages = withStyles({ root: {} }, { name: "BananasMessages" })(
-  Messages
-);
+const BananasMessages = withStyles(
+  { root: {} },
+  { name: "BananasMessages" }
+)(Messages);
 
 class MessagesController extends React.Component {
   state = {
