@@ -534,7 +534,6 @@ class Admin extends React.Component {
 
     const isHorizontalLayout = settings.horizontal;
     const isVerticalLayout = !settings.horizontal;
-
     return (
       <>
         <div
