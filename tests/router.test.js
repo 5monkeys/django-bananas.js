@@ -5,7 +5,7 @@ import Router from "../src/router";
 import getAPIClient from "./api.mock";
 
 Logger.get("bananas").setLevel(Logger.OFF);
-const nofAPIRoutes = 13;
+const nofAPIRoutes = 14;
 const nofInternalRoutes = 1;
 
 const getRouter = async ({ anonymous } = {}) => {
@@ -64,7 +64,7 @@ test("Has reverse routes", async () => {
 test("Has navigation routes", async () => {
   const router = await getRouter();
 
-  expect(router.navigationRoutes).toHaveLength(2);
+  expect(router.navigationRoutes).toHaveLength(3);
 
   // Assert navigation sort order
   expect(router.navigationRoutes[0]).toMatchObject({

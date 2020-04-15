@@ -176,10 +176,14 @@ function Navigation(props) {
         const appRoutes = groupedRoutes[app];
         // bypass nesting and just flatten the routes if the horizontal view is active
         const appRoutesWithProps = transformRoutes(appRoutes, nav);
+        const appSettings = nav[app];
         const nestedRoutes = horizontal
           ? appRoutesWithProps
           : nestRoutes(appRoutesWithProps);
-
+        const showSubheader =
+          appSettings && appSettings.showSubheader !== undefined
+            ? appSettings.showSubheader
+            : true;
         return (
           <List
             key={app}
@@ -192,6 +196,7 @@ function Navigation(props) {
             })}
             subheader={
               app &&
+              showSubheader &&
               multipleApps &&
               !horizontal && (
                 <ListSubheader
@@ -205,7 +210,7 @@ function Navigation(props) {
               )
             }
           >
-            {nestedRoutes.map(({ id, path, icon, title, children }) => {
+            {nestedRoutes.map(({ id, path, icon, title, children, hidden }) => {
               const variant = horizontal ? "appbar" : "drawer";
               const isSelected =
                 path.length > 1
@@ -215,7 +220,7 @@ function Navigation(props) {
                     ) || currentUrl.startsWith(path)
                   : currentUrl === path;
 
-              return (
+              return hidden !== true ? (
                 <React.Fragment key={id}>
                   {((!horizontal &&
                     (showIcons || (!showIcons && id !== "home"))) ||
@@ -257,7 +262,7 @@ function Navigation(props) {
                     </Collapse>
                   )}
                 </React.Fragment>
-              );
+              ) : null;
             })}
           </List>
         );

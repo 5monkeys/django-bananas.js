@@ -610,6 +610,25 @@
                     "crud"
                 ]
             }
+        },
+        "/test/route/": {
+            "get": {
+                "description": "",
+                "operationId": "test.route:list",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "summary": "A test route for listing",
+                "tags": [
+                    "app:test",
+                    "navigation",
+                    "crud"
+                ]
+            },
+            "parameters": []
         }
     },
     "produces": [

@@ -532,3 +532,35 @@ test("Can customize user", async () => {
   // `./pages/index.js` sets `window.__adminContext` to the current `AdminContext`.
   expect(window.__adminContext.user.newFunction()).toBe("Monkey business.");
 });
+
+test("Can hide menu items", async () => {
+  const { queryAllByTestId } = await renderApp({
+    props: {
+      nav: {
+        "example.user:list": {
+          hidden: true,
+        },
+      },
+    },
+  });
+  const items = queryAllByTestId("MenuItemText").map(
+    element => element.textContent
+  );
+  expect(items.indexOf("Användare")).toBe(-1);
+});
+
+test("Can hide submenu labels", async () => {
+  const { queryAllByTestId } = await renderApp({
+    props: {
+      nav: {
+        example: {
+          showSubheader: false,
+        },
+      },
+    },
+  });
+  const items = queryAllByTestId("MenuSubheader").map(
+    element => element.textContent
+  );
+  expect(items.indexOf("example")).toBe(-1);
+});

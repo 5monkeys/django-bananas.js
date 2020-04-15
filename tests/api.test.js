@@ -3,7 +3,7 @@ import fetchMock from "fetch-mock";
 import getAPIClient from "./api.mock";
 
 const { Response } = fetchMock.config;
-const nofAPIEndpoints = 16;
+const nofAPIEndpoints = 17;
 
 test("Client is NOT authenticated", async () => {
   const client = await getAPIClient({ anonymous: true });
