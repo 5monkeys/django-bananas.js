@@ -91,7 +91,7 @@ Use a *string* for an image URL or a *function/component* for full control.
   // ...
   logo={true|false}
   logo={"https://foo.bar/logo.svg"}
-  logo={MyLogo}
+  logo={<MyLogo />}
 />
 ```
 

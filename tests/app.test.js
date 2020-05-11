@@ -564,3 +564,17 @@ test("Can hide submenu labels", async () => {
   );
   expect(items.indexOf("example")).toBe(-1);
 });
+
+const TestLogo = () => {
+  return <div data-testid="custom_logo">Logo as component</div>;
+};
+
+test("Can render logo as component", async () => {
+  const { findByTestId } = await renderApp({
+    props: {
+      logo: <TestLogo />,
+    },
+  });
+
+  expect(findByTestId("custom_logo")).toBeTruthy();
+});
