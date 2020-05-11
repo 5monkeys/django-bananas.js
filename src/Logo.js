@@ -63,7 +63,7 @@ const Logo = ({ src, classes }) => {
   } else if (typeof src === "string") {
     return <img className={classes.imgLogo} src={src} />;
   } else if (src) {
-    return <src />;
+    return src;
   }
 
   return null;
