@@ -507,7 +507,7 @@ class Admin extends React.Component {
       this.api["bananas.login:create"]({ data: { username, password } }).then(
         response => {
           logger.info("Successful login...reboot");
-          const user = response.obj;
+          const user = makeUser(response.obj);
           resolve(user);
           this.admin.dismissMessages();
           this.reboot(user);

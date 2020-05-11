@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@material-ui/core";
+import { Box, Button, Tooltip, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import {
   AdminContext,
@@ -11,6 +11,7 @@ import { Form } from "django-bananas/forms";
 import PropTypes from "prop-types";
 import React from "react";
 
+import PermissionRequired from "../../../../../src/auth/PermissionRequired";
 import AutoField from "../../../components/CustomAutoField";
 
 const styles = theme => ({
@@ -78,6 +79,17 @@ class UserForm extends React.Component {
             <Button type="submit" variant="contained" color="primary">
               Save
             </Button>
+            <PermissionRequired permission={"auth.delete_user"}>
+              <Tooltip
+                title={
+                  "only visible if you have the permission 'auth.delete_user'"
+                }
+              >
+                <Button type="submit" variant="contained" color="secondary">
+                  Special save
+                </Button>
+              </Tooltip>
+            </PermissionRequired>
           </Tools>
         </ToolBar>
       </Form>
