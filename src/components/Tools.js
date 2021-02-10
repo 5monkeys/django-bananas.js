@@ -1,9 +1,9 @@
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
     flexDirection: "row",
@@ -14,19 +14,15 @@ const styles = theme => ({
       marginLeft: theme.spacing(1),
     },
   },
-});
+}));
 
-class Tools extends React.Component {
-  render() {
-    const { classes, children, className } = this.props;
-    return (
-      <div className={classNames(classes.root, className)}>{children}</div>
-    );
-  }
-}
+const Tools = ({ children, className }) => {
+  const classes = useStyles();
+
+  return <div className={classNames(classes.root, className)}>{children}</div>;
+};
 
 Tools.propTypes = {
-  classes: PropTypes.object.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
@@ -39,4 +35,4 @@ Tools.defaultProps = {
   className: undefined,
 };
 
-export default withStyles(styles, { name: "BananasTools" })(Tools);
+export default Tools;

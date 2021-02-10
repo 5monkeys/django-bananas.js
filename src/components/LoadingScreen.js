@@ -1,6 +1,6 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -8,7 +8,7 @@ import React from "react";
 
 import Logo from "../components/Logo";
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     position: "relative",
     top: 0,
@@ -45,84 +45,63 @@ const styles = theme => ({
     margin: 0,
     marginTop: -36 - theme.spacing(3),
   },
-});
+}));
 
-class LoadingScreen extends React.Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-    loading: PropTypes.bool,
-    color: PropTypes.string,
-    logo: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.string,
-      PropTypes.node,
-    ]),
-    backdrop: PropTypes.bool,
-    role: PropTypes.string,
-  };
+const LoadingScreen = ({ loading, color, logo, backdrop, role, ...rest }) => {
+  const classes = useStyles();
+  const screen = (
+    <div
+      data-testid={role}
+      className={classNames(classes.root, {
+        [classes.backdrop]: backdrop,
+        [classes.backdropPrimary]: backdrop && color === "primary",
+        [classes.backdropSecondary]: backdrop && color === "secondary",
+        [classes.backdropPaper]: backdrop && color === "paper",
+      })}
+    >
+      <div className={classes.logo}>{logo && <Logo src={logo} />}</div>
+      {loading && (
+        <CircularProgress
+          {...rest}
+          className={classNames(classes.spinner, {
+            [classes.spinnerContrast]: !color,
+          })}
+        />
+      )}
+    </div>
+  );
 
-  static defaultProps = {
-    loading: true,
-    color: undefined,
-    logo: undefined,
-    backdrop: false,
-    role: undefined,
-  };
+  return backdrop ? (
+    <Fade
+      in={loading}
+      timeout={{
+        enter: 750,
+        exit: 250,
+      }}
+      mountOnEnter
+      unmountOnExit
+    >
+      {screen}
+    </Fade>
+  ) : (
+    screen
+  );
+};
 
-  renderScreen() {
-    const {
-      classes,
-      loading,
-      color,
-      logo,
-      backdrop,
-      role,
-      ...rest
-    } = this.props;
-    return (
-      <div
-        data-testid={role}
-        className={classNames(classes.root, {
-          [classes.backdrop]: backdrop,
-          [classes.backdropPrimary]: backdrop && color === "primary",
-          [classes.backdropSecondary]: backdrop && color === "secondary",
-          [classes.backdropPaper]: backdrop && color === "paper",
-        })}
-      >
-        <div className={classes.logo}>{logo && <Logo src={logo} />}</div>
-        {loading && (
-          <CircularProgress
-            {...rest}
-            className={classNames(classes.spinner, {
-              [classes.spinnerContrast]: !color,
-            })}
-          />
-        )}
-      </div>
-    );
-  }
+LoadingScreen.propTypes = {
+  loading: PropTypes.bool,
+  color: PropTypes.string,
+  logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
+  backdrop: PropTypes.bool,
+  role: PropTypes.string,
+};
 
-  render() {
-    const { loading, backdrop } = this.props;
-    return backdrop ? (
-      <Fade
-        in={loading}
-        timeout={{
-          enter: 750,
-          exit: 250,
-        }}
-        mountOnEnter
-        unmountOnExit
-      >
-        {this.renderScreen()}
-      </Fade>
-    ) : (
-      this.renderScreen()
-    );
-  }
-}
+LoadingScreen.defaultProps = {
+  loading: true,
+  color: undefined,
+  logo: undefined,
+  backdrop: false,
+  role: undefined,
+};
 
-const BananasLoadingScreen = withStyles(styles, {
-  name: "BananasLoadingScreen",
-})(LoadingScreen);
-export default BananasLoadingScreen;
+export default LoadingScreen;

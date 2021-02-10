@@ -3,7 +3,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Slide from "@material-ui/core/Slide";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from "@material-ui/icons/Error";
@@ -20,7 +20,7 @@ const typeIcon = {
   info: InfoIcon,
 };
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   success: {
     backgroundColor: green[500],
   },
@@ -44,96 +44,86 @@ const styles = theme => ({
     display: "flex",
     alignItems: "center",
   },
-});
+}));
 
-class Message extends React.Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-    message: PropTypes.node.isRequired,
-    open: PropTypes.bool.isRequired,
-    remove: PropTypes.func.isRequired,
-    type: PropTypes.oneOf(["success", "warning", "error", "info"]).isRequired,
-    id: PropTypes.number.isRequired,
-  };
+const Message = ({ message, open: passedOpen, id, type, remove }) => {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
 
-  state = {
-    open: true,
-  };
+  React.useEffect(() => {
+    setOpen(passedOpen);
+  }, [passedOpen]);
 
-  handleClose = (e, reason) => {
+  const handleClose = (e, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    this.setState({ open: false });
+    setOpen(false);
   };
 
-  render() {
-    const { classes, message, id, type, remove } = this.props;
-    const open = this.state.open && this.props.open;
-    const Icon = typeIcon[type];
+  const Icon = typeIcon[type];
 
-    return (
-      <Snackbar
-        key={message + id}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        TransitionComponent={Slide}
-        onClose={this.handleClose}
-        onExited={remove}
-        open={open}
-        autoHideDuration={type !== "error" ? 6000 : undefined} // don't autohide errors.
-        data-testid="Message"
-      >
-        <SnackbarContent
-          className={classes[type]}
-          aria-describedby="client-snackbar"
-          message={
-            <span id="client-snackbar" className={classes.message}>
-              <Icon className={classNames(classes.icon, classes.icontype)} />
-              {message}
-            </span>
-          }
-          action={[
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={classes.close}
-              onClick={this.handleClose}
-              data-testid="message-close-button"
-            >
-              <CloseIcon className={classes.icon} />
-            </IconButton>,
-          ]}
-        />
-      </Snackbar>
-    );
-  }
-}
+  return (
+    <Snackbar
+      key={message + id}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      TransitionComponent={Slide}
+      onClose={handleClose}
+      onExited={remove}
+      open={open}
+      autoHideDuration={type !== "error" ? 6000 : undefined} // don't autohide errors.
+      data-testid="Message"
+    >
+      <SnackbarContent
+        className={classes[type]}
+        aria-describedby="client-snackbar"
+        message={
+          <span id="client-snackbar" className={classes.message}>
+            <Icon className={classNames(classes.icon, classes.icontype)} />
+            {message}
+          </span>
+        }
+        action={[
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            className={classes.close}
+            onClick={handleClose}
+            data-testid="message-close-button"
+          >
+            <CloseIcon className={classes.icon} />
+          </IconButton>,
+        ]}
+      />
+    </Snackbar>
+  );
+};
 
-const BananasMessage = withStyles(styles, { name: "BananasMessage" })(Message);
+Message.propTypes = {
+  message: PropTypes.node.isRequired,
+  open: PropTypes.bool.isRequired,
+  remove: PropTypes.func.isRequired,
+  type: PropTypes.oneOf(["success", "warning", "error", "info"]).isRequired,
+  id: PropTypes.number.isRequired,
+};
 
-class Messages extends React.Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-    messages: PropTypes.array.isRequired,
-  };
+const Messages = ({ messages }) => {
+  const classes = useStyles();
 
-  render() {
-    const { classes, messages } = this.props;
-    const snackbars = messages.map(msg => (
-      <BananasMessage key={msg.id + msg.message} {...msg} />
-    ));
+  const snackbars = messages.map(msg => (
+    <Message key={msg.id + msg.message} {...msg} />
+  ));
 
-    return snackbars ? <div className={classes.root}>{snackbars}</div> : null;
-  }
-}
+  return snackbars ? <div className={classes.root}>{snackbars}</div> : null;
+};
 
-const BananasMessages = withStyles({ root: {} }, { name: "BananasMessages" })(
-  Messages
-);
+Messages.propTypes = {
+  messages: PropTypes.array.isRequired,
+};
 
 class MessagesController extends React.Component {
   state = {
@@ -201,13 +191,9 @@ class MessagesController extends React.Component {
 
   render() {
     const { messages } = this.state;
-    return <BananasMessages messages={messages} />;
+    return <Messages messages={messages} />;
   }
 }
 
-export default BananasMessages;
-export {
-  BananasMessage as Message,
-  BananasMessages as Messages,
-  MessagesController,
-};
+export default Messages;
+export { Message, Messages, MessagesController };

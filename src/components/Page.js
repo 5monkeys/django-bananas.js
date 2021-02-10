@@ -1,4 +1,4 @@
-import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -7,7 +7,7 @@ import { MultiMeter } from "../utils";
 import LoadingScreen from "./LoadingScreen";
 import ProgressBar from "./ProgressBar";
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
     position: "relative",
@@ -16,70 +16,60 @@ const styles = theme => ({
     flexGrow: 1,
     width: "100%",
   },
-});
+}));
 
-class ThemedPage extends React.Component {
-  static propTypes = {
-    controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
-    component: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.func,
-      PropTypes.node,
-    ]),
-    theme: PropTypes.object,
-  };
+const ThemedPage = ({ theme, ...rest }) => {
+  return theme ? (
+    <MuiThemeProvider theme={theme}>
+      <Page {...rest} />
+    </MuiThemeProvider>
+  ) : (
+    <Page {...rest} />
+  );
+};
 
-  static defaultProps = {
-    component: undefined,
-    theme: undefined,
-  };
+ThemedPage.propTypes = {
+  controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
+  component: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.func,
+    PropTypes.node,
+  ]),
+  theme: PropTypes.object,
+};
 
-  render() {
-    const { theme, ...rest } = this.props;
-    return theme ? (
-      <MuiThemeProvider theme={theme}>
-        <BananasPage {...rest} />
-      </MuiThemeProvider>
-    ) : (
-      <BananasPage {...rest} />
-    );
-  }
-}
+ThemedPage.defaultProps = {
+  component: undefined,
+  theme: undefined,
+};
 
-class Page extends React.Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-    controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
-    component: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.object,
-      PropTypes.node,
-    ]),
-  };
+const Page = ({ controller, component: PageComponent, ...pageProps }) => {
+  const classes = useStyles();
 
-  static defaultProps = {
-    component: undefined,
-  };
+  return (
+    <div className={classes.root}>
+      <PageLoadController ref={controller} />
+      {PageComponent && (
+        <ErrorBoundary key={pageProps ? pageProps.key : undefined}>
+          <PageComponent {...pageProps} />
+        </ErrorBoundary>
+      )}
+    </div>
+  );
+};
 
-  render() {
-    const {
-      classes,
-      controller,
-      component: PageComponent,
-      ...pageProps
-    } = this.props;
-    return (
-      <div className={classes.root}>
-        <PageLoadController ref={controller} />
-        {PageComponent && (
-          <ErrorBoundary key={pageProps ? pageProps.key : undefined}>
-            <PageComponent {...pageProps} />
-          </ErrorBoundary>
-        )}
-      </div>
-    );
-  }
-}
+Page.propTypes = {
+  controller: PropTypes.shape({ current: PropTypes.object }).isRequired,
+  component: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.object,
+    PropTypes.node,
+  ]),
+};
+
+Page.defaultProps = {
+  component: undefined,
+};
 
 class PageLoadController extends React.Component {
   static expose = ["progress", "loading"];
@@ -116,6 +106,5 @@ class PageLoadController extends React.Component {
   }
 }
 
-const BananasPage = withStyles(styles, { name: "BananasPage" })(Page);
 export default ThemedPage;
 export { ThemedPage as Page, PageLoadController };

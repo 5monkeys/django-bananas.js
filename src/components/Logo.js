@@ -1,9 +1,9 @@
 import { SvgIcon } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   gInner: {
     fill: theme.palette.primary.contrastText,
   },
@@ -19,9 +19,10 @@ const styles = theme => ({
   bananas: {
     fill: theme.palette.primary.contrastText,
   },
-});
+}));
 
-const Logo = ({ src, classes }) => {
+const Logo = ({ src }) => {
+  const classes = useStyles();
   if (src === true) {
     return (
       <SvgIcon
@@ -45,7 +46,6 @@ const Logo = ({ src, classes }) => {
 };
 
 Logo.propTypes = {
-  classes: PropTypes.object.isRequired,
   src: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
 };
 
@@ -53,4 +53,4 @@ Logo.defaultProps = {
   src: null,
 };
 
-export default withStyles(styles)(Logo);
+export default Logo;

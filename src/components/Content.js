@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
@@ -9,7 +9,7 @@ import { useAdmin } from "../contexts/AdminContext";
 
 const logger = Logger.get("bananas");
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     position: "relative",
     flexGrow: 1,
@@ -25,10 +25,11 @@ const styles = theme => ({
   padded: {
     padding: theme.spacing(3),
   },
-});
+}));
 
-const Content = ({ classes, children, disablePadding, contained, ...rest }) => {
+const Content = ({ children, disablePadding, contained, ...rest }) => {
   const { router } = useAdmin();
+  const classes = useStyles();
 
   const scrollElement = React.useRef();
 
@@ -96,7 +97,6 @@ const Content = ({ classes, children, disablePadding, contained, ...rest }) => {
 };
 
 Content.propTypes = {
-  classes: PropTypes.object.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
@@ -112,4 +112,4 @@ Content.defaultProps = {
   contained: true,
 };
 
-export default withStyles(styles, { name: "BananasContent" })(Content);
+export default Content;

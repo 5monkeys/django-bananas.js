@@ -1,11 +1,11 @@
+import { makeStyles } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
-import { withStyles } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
 import PropTypes from "prop-types";
 import React from "react";
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
     flexDirection: "row",
@@ -14,9 +14,10 @@ const styles = theme => ({
     paddingRight: theme.spacing(0.5),
     marginRight: "1px",
   },
-});
+}));
 
-const Hamburger = ({ classes, open, onToggle, ...rest }) => {
+const Hamburger = ({ open, onToggle, ...rest }) => {
+  const classes = useStyles();
   return (
     <div className={classes.root}>
       {open ? (
@@ -38,7 +39,6 @@ const Hamburger = ({ classes, open, onToggle, ...rest }) => {
 };
 
 Hamburger.propTypes = {
-  classes: PropTypes.object.isRequired,
   onToggle: PropTypes.func.isRequired,
   open: PropTypes.bool,
 };
@@ -47,4 +47,4 @@ Hamburger.defaultProps = {
   open: false,
 };
 
-export default withStyles(styles, { name: "BananasHamburger" })(Hamburger);
+export default Hamburger;

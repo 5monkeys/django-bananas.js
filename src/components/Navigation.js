@@ -4,7 +4,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import AdminContext from "../contexts/AdminContext";
+import { useAdmin } from "../contexts/AdminContext";
 import MenuItem from "./MenuItem";
 
 const hasSelectedChild = (url, children = []) => {
@@ -137,7 +137,7 @@ const nestRoutes = passedRoutes => {
 };
 
 function Navigation(props) {
-  const { router } = React.useContext(AdminContext);
+  const { router } = useAdmin();
   const classes = useStyles();
 
   const currentUrl = router.history.location.pathname;

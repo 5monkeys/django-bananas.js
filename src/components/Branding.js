@@ -1,12 +1,12 @@
 import { ButtonBase, Typography } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
 import Logo from "../components/Logo";
 
-const styles = () => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
     flexDirection: "row",
@@ -34,10 +34,9 @@ const styles = () => ({
   textLogo: {
     fontWeight: "bold",
   },
-});
+}));
 
 function Branding({
-  classes,
   className,
   logo,
   title,
@@ -46,6 +45,7 @@ function Branding({
   onClick,
   fullWidth,
 }) {
+  const classes = useStyles();
   return (
     <div
       className={classNames(classes.root, { [classes.fullWidth]: fullWidth })}
@@ -72,7 +72,6 @@ function Branding({
 }
 
 Branding.propTypes = {
-  classes: PropTypes.object.isRequired,
   className: PropTypes.string,
   logo: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.node]),
   title: PropTypes.string,
@@ -91,4 +90,4 @@ Branding.defaultProps = {
   version: "",
 };
 
-export default withStyles(styles)(Branding);
+export default Branding;
