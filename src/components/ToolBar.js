@@ -227,19 +227,21 @@ class ToolBar extends React.Component {
   };
 
   renderAppBar() {
+    /* eslint-disable no-unused-vars */
     const {
       classes,
-      theme,
+      theme: _theme,
       autoStyle,
-      emphasize,
+      emphasize: _emphasize,
       overrides,
-      children,
+      children: _children,
       color,
-      border,
-      dense,
-      justify,
+      border: _border,
+      dense: _dense,
+      justify: _justify,
       ...rest
     } = this.props;
+    /* eslint-enable no-unused-vars */
 
     return (
       <AppBar

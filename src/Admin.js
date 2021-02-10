@@ -258,8 +258,8 @@ class Admin extends React.Component {
   }
 
   shutdown() {
-    return new Promise(async resolve => {
-      await this.unmountPage();
+    return new Promise(resolve => {
+      this.unmountPage();
 
       this.swagger = undefined;
       this.api = undefined;

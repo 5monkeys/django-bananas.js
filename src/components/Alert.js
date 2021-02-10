@@ -26,6 +26,8 @@ const Transition = React.forwardRef((props, ref) => (
   <Slide direction="down" ref={ref} {...props} />
 ));
 
+Transition.displayName = "RefTransition";
+
 class Alert extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,

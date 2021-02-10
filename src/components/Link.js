@@ -48,8 +48,9 @@ export default class Link extends React.Component {
       path,
       query,
       href,
+      //eslint-disable-next-line
+      patch: _patch,
       children,
-      patch,
       passHref,
       ...rest
     } = this.props;
