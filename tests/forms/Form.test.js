@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, wait } from "@testing-library/react";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import fetchMock from "fetch-mock";
 import Logger from "js-logger";
 import React from "react";
@@ -26,7 +26,7 @@ test("Ensure the default 'onSubmit' is firing a correct request", async () => {
   const matcher = "http://foo.bar/api/v1.0/example/user/form/";
   fetchMock.post(matcher, { body: { text: "foo" } });
   fireEvent.click(button);
-  await wait(() => success.calls);
+  await waitFor(() => success.calls);
   expect(success).toHaveBeenCalledWith("Changes have been saved!");
   expect(fetchMock.called(matcher)).toBe(true);
 });
@@ -54,7 +54,7 @@ test("Ensure the default 'onSubmit' can handle errors", async () => {
     status: 400,
   });
   fireEvent.click(button);
-  await wait(() => error.calls);
+  await waitFor(() => error.calls);
   expect(error).toHaveBeenCalledWith("Please correct the errors on this form.");
   expect(fetchMock.called(matcher)).toBe(true);
   expect(queryByText("bazrror")).not.toBeNull();

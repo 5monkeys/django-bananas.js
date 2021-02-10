@@ -34,7 +34,7 @@ class Boundary extends React.Component {
 
 beforeAll(() => {
   jest.useFakeTimers("modern"); // tell Jest to use a different timer implementation.
-  jest.setSystemTime(new Date("2019-07-04T15:49:55.441Z").getTime());
+  jest.setSystemTime(new Date("20 Aug 2020 00:12:00").getTime());
 });
 
 afterAll(() => {
