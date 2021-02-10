@@ -1,5 +1,4 @@
 import Logger from "js-logger";
-import MockDate from "mockdate";
 import React from "react";
 import renderer from "react-test-renderer";
 
@@ -14,9 +13,8 @@ import getAPIClient from "../api.mock";
 import { TestContext } from "./utils";
 
 // Set a fixed current date and timezone to make snapshots stable and tests work
-// both locally and on Travis.
+// both locally and on CI.
 // This won’t affect other files.
-MockDate.set("2019-07-04T15:49:55.441Z", 120);
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
@@ -33,6 +31,15 @@ class Boundary extends React.Component {
     return error != null ? error.message : children;
   }
 }
+
+beforeAll(() => {
+  jest.useFakeTimers("modern"); // tell Jest to use a different timer implementation.
+  jest.setSystemTime(new Date("2019-07-04T15:49:55.441Z").getTime());
+});
+
+afterAll(() => {
+  jest.useRealTimers();
+});
 
 test("Get a friendly reminder about FormContext, if missing", () => {
   expect(
