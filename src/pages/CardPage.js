@@ -1,12 +1,11 @@
-import { Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
-import Content from "../Content";
-import TitleBar from "../TitleBar";
+import TitleBar from "../components/TitleBar";
 
 const styles = () => ({
   root: {
@@ -28,7 +27,7 @@ const styles = () => ({
 const CardPage = ({ classes, children, title, subtitle }) => (
   <>
     <TitleBar title={title} />
-    <Content>
+    <Box>
       <div className={classes.root}>
         <Card elevation={5} className={classes.card}>
           <CardContent>
@@ -44,7 +43,7 @@ const CardPage = ({ classes, children, title, subtitle }) => (
           </CardContent>
         </Card>
       </div>
-    </Content>
+    </Box>
   </>
 );
 

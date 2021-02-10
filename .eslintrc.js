@@ -1,7 +1,6 @@
-const baseRules = require("eslint-config-lydell");
-
 module.exports = {
   root: true,
+  extends: ["eslint:recommended", "plugin:react/recommended"],
   plugins: [
     "import",
     "react",
@@ -21,10 +20,10 @@ module.exports = {
     window: false,
   },
   rules: {
-    ...baseRules({ import: true, react: true }),
     "prettier/prettier": "error",
     "simple-import-sort/sort": "error",
     "react/prop-types": "off",
+    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
   },
   overrides: [
     {
@@ -32,16 +31,17 @@ module.exports = {
       env: { node: true },
     },
     {
-      files: ["*.test.js", "{test,__mocks__}/*.js"],
+      files: ["tests/**/*.js", "*.test.js", "{test,__mocks__}/*.js"],
       env: { node: true, jest: true },
       rules: {
-        ...baseRules({ builtin: false, jest: true }),
         "jest/no-truthy-falsy": "off",
+        "react/display-name": "off",
       },
     },
     {
       files: ["**/*.js"],
       rules: {
+        "consistent-return": "off",
         "import/no-unresolved": ["error", { ignore: ["django-bananas"] }],
         "no-invalid-this": "off",
       },

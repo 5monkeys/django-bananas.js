@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 const AdminContext = React.createContext({
   admin: undefined,
@@ -8,3 +8,4 @@ const AdminContext = React.createContext({
 });
 
 export default AdminContext;
+export const useAdmin = () => useContext(AdminContext);

@@ -6,19 +6,19 @@ import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
-import { AlertController } from "./Alert";
 import APIClient from "./api";
-import AdminContext from "./context";
+import { AlertController } from "./components/Alert";
+import LoadingScreen from "./components/LoadingScreen";
+import { MessagesController } from "./components/Messages";
+import NavBar from "./components/NavBar";
+import { Page, PageLoadController } from "./components/Page";
+import AdminContext from "./contexts/AdminContext";
 import {
   AnonymousUserError,
   PageError,
   PageNotFoundError,
   PageNotImplementedError,
 } from "./errors";
-import LoadingScreen from "./LoadingScreen";
-import { MessagesController } from "./Messages";
-import NavBar from "./NavBar";
-import { Page, PageLoadController } from "./Page";
 import { ErrorPage, LoginPage } from "./pages";
 import Router from "./router";
 import Settings from "./settings";
