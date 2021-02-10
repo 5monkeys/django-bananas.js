@@ -21,7 +21,8 @@ module.exports = {
   },
   rules: {
     "prettier/prettier": "error",
-    "simple-import-sort/sort": "error",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
     "react/prop-types": "off",
     "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
   },
