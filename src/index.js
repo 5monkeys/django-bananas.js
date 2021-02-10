@@ -1,6 +1,7 @@
 import App from "./Admin";
 
 export { default as AdminContext } from "./contexts/AdminContext";
+export { useAdmin } from "./contexts/AdminContext";
 export { default as TitleBar } from "./components/TitleBar";
 export { default as ToolBar } from "./components/ToolBar";
 export { default as Tools } from "./components/Tools";
