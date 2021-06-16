@@ -96,7 +96,7 @@ export default class Router {
                   `{${param.name}}`,
                   param.type === "integer"
                     ? `(\\d+)` // Named: `(?<${param.name}>\\d+)`
-                    : `([\\w\\d_-]+)` // Named: `(?<${param.name}>[\\w\\d_-]+)`
+                    : `([\\.\\%\\w\\d_-]+)` // Named: `(?<${param.name}>[\\.\\%\\w\\d_-]+)`
                 ),
               `^${path}$`
             )
