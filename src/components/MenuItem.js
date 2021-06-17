@@ -4,14 +4,14 @@ import {
   ListItemAvatar,
   ListItemText,
 } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
 import Link from "./Link";
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: 0,
     paddingBottom: 0,
@@ -225,10 +225,9 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-});
+}));
 
 const MenuItem = ({
-  classes,
   route,
   title,
   subtitle,
@@ -242,6 +241,7 @@ const MenuItem = ({
   const ItemIcon = icon;
   const showIcon = ItemIcon !== null;
   const isIconDefined = showIcon && Boolean(ItemIcon);
+  const classes = useStyles();
 
   const isDrawerVariant = variant === "drawer";
   const isAppBarVariant = variant === "appbar";
@@ -311,7 +311,6 @@ const MenuItem = ({
 };
 
 MenuItem.propTypes = {
-  classes: PropTypes.object.isRequired,
   route: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
@@ -333,4 +332,4 @@ MenuItem.defaultProps = {
   direction: "ltr", // ltr | rtl
 };
 
-export default withStyles(styles, { name: "BananasMenuItem" })(MenuItem);
+export default MenuItem;

@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { Form as FForm } from "react-final-form";
 
-import AdminContext from "../context";
+import AdminContext from "../contexts/AdminContext";
 import FormContext from "./FormContext";
 
 /*

@@ -2,7 +2,7 @@ import { Typography } from "@material-ui/core";
 import { Content } from "django-bananas";
 import React from "react";
 
-export default () => (
+const RedDelicious = () => (
   <Content>
     <Typography gutterBottom variant="h3">
       Red delicious
@@ -17,3 +17,5 @@ export default () => (
     <a href="https://en.wikipedia.org/wiki/Red_Delicious">More info</a>
   </Content>
 );
+
+export default RedDelicious;

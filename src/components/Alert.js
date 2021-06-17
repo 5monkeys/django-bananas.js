@@ -9,7 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
-import { t } from "./utils";
+import { t } from "../utils";
 
 const styles = theme => ({
   root: {},
@@ -25,6 +25,8 @@ const styles = theme => ({
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="down" ref={ref} {...props} />
 ));
+
+Transition.displayName = "RefTransition";
 
 class Alert extends React.Component {
   static propTypes = {

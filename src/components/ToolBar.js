@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import {
   createMuiTheme,
@@ -14,8 +15,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import Container from "./Container";
-import { extendTheme } from "./themes";
+import { extendTheme } from "../themes";
 
 const styles = theme => ({
   root: {
@@ -227,19 +227,21 @@ class ToolBar extends React.Component {
   };
 
   renderAppBar() {
+    /* eslint-disable no-unused-vars */
     const {
       classes,
-      theme,
+      theme: _theme,
       autoStyle,
-      emphasize,
+      emphasize: _emphasize,
       overrides,
-      children,
+      children: _children,
       color,
-      border,
-      dense,
-      justify,
+      border: _border,
+      dense: _dense,
+      justify: _justify,
       ...rest
     } = this.props;
+    /* eslint-enable no-unused-vars */
 
     return (
       <AppBar
@@ -264,7 +266,7 @@ class ToolBar extends React.Component {
         }}
         {...rest}
       >
-        <Container>
+        <Box>
           {autoStyle ? (
             <MuiThemeProvider theme={this.getTheme()}>
               {this.renderToolbar()}
@@ -272,7 +274,7 @@ class ToolBar extends React.Component {
           ) : (
             this.renderToolbar()
           )}
-        </Container>
+        </Box>
       </AppBar>
     );
   }

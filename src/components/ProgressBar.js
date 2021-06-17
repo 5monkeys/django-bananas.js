@@ -1,9 +1,9 @@
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
-const styles = () => ({
+const useStyles = makeStyles(() => ({
   root: {
     position: "absolute",
     zIndex: 3000,
@@ -11,9 +11,10 @@ const styles = () => ({
     backgroundColor: "transparent",
   },
   bar: {},
-});
+}));
 
-const ProgressBar = ({ classes, color, loading }) => {
+const ProgressBar = ({ color, loading }) => {
+  const classes = useStyles();
   return (
     loading && (
       <LinearProgress
@@ -28,7 +29,6 @@ const ProgressBar = ({ classes, color, loading }) => {
 };
 
 ProgressBar.propTypes = {
-  classes: PropTypes.object.isRequired,
   loading: PropTypes.bool,
   color: PropTypes.string,
 };
@@ -38,7 +38,4 @@ ProgressBar.defaultProps = {
   color: "secondary",
 };
 
-const BananasProgressBar = withStyles(styles, {
-  name: "BananasProgressBar",
-})(ProgressBar);
-export default BananasProgressBar;
+export default ProgressBar;

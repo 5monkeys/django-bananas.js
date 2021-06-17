@@ -10,7 +10,7 @@ import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
-import AdminContext from "../context";
+import AdminContext from "../contexts/AdminContext";
 import { t, Translate } from "../utils";
 
 const logger = Logger.get("bananas");

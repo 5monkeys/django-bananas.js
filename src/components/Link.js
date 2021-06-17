@@ -3,8 +3,8 @@ import MuiLink from "@material-ui/core/Link";
 import PropTypes from "prop-types";
 import React, { Children } from "react";
 
-import AdminContext from "./context";
-import { toQuery } from "./utils";
+import AdminContext from "../contexts/AdminContext";
+import { toQuery } from "../utils";
 
 export default class Link extends React.Component {
   static contextType = AdminContext;
@@ -48,8 +48,9 @@ export default class Link extends React.Component {
       path,
       query,
       href,
+      //eslint-disable-next-line
+      patch: _patch,
       children,
-      patch,
       passHref,
       ...rest
     } = this.props;

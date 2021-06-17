@@ -1,11 +1,10 @@
-import { Paper } from "@material-ui/core";
+import { Box, Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
-import Content from "../Content";
-import AdminContext from "../context";
-import TitleBar from "../TitleBar";
+import TitleBar from "../components/TitleBar";
+import AdminContext from "../contexts/AdminContext";
 import ChangePasswordForm from "./ChangePasswordForm";
 import SettingsForm from "./SettingsForm";
 
@@ -37,7 +36,7 @@ class MePage extends React.Component {
     return (
       <>
         <TitleBar title={user.full_name} />
-        <Content>
+        <Box>
           <div className={classes.root}>
             <Paper
               classes={{
@@ -68,7 +67,7 @@ class MePage extends React.Component {
               </Paper>
             )}
           </div>
-        </Content>
+        </Box>
       </>
     );
   }

@@ -6,16 +6,15 @@ import {
   SwipeableDrawer,
   Toolbar,
 } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { useContext, useMemo, useState } from "react";
 
+import AdminContext from "../contexts/AdminContext";
 import Branding from "./Branding";
-import Container from "./Container";
-import AdminContext from "./context";
 import Hamburger from "./Hamburger";
 import Navigation from "./Navigation";
 import User from "./User";
@@ -25,7 +24,7 @@ const DEFAULT_NAV = {
   "bananas.me:list": AccountCircleIcon,
 };
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   branding: {
     padding: 0,
     flexGrow: 0,
@@ -126,7 +125,7 @@ const styles = theme => ({
     ...theme.mixins.toolbar,
   },
   header: {}, // Put last for easier overriding .branding and .appbar
-});
+}));
 
 const NavBar = props => {
   const {
@@ -134,13 +133,14 @@ const NavBar = props => {
     dense,
     logo,
     title,
-    classes,
     branding,
     version,
     permanent,
     collapsed,
     nav: passedNav,
   } = props;
+
+  const classes = useStyles();
 
   const { admin, router } = useContext(AdminContext);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -317,9 +317,7 @@ const NavBar = props => {
           }}
           data-testid="navbar-appbar"
         >
-          <Container className={classes.appbarContainer}>
-            {renderChildren()}
-          </Container>
+          <Box className={classes.appbarContainer}>{renderChildren()}</Box>
         </AppBar>
       </>
     );
@@ -340,7 +338,6 @@ NavBar.propTypes = {
   dense: PropTypes.bool,
   permanent: PropTypes.bool,
   collapsed: PropTypes.bool,
-  classes: PropTypes.object.isRequired,
 
   title: PropTypes.string,
   branding: PropTypes.string,
@@ -364,7 +361,7 @@ NavBar.defaultProps = {
   nav: undefined,
 };
 
-export default withStyles(styles, { name: "BananasNavBar" })(NavBar);
+export default NavBar;
 
 function makeNav(propsNav) {
   const navObject =
