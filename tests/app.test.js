@@ -453,7 +453,7 @@ test("Can customize menu with array", async () => {
 test("Can customize menu with with settings object", async () => {
   const { findByText, queryAllByTestId } = await renderApp({
     props: {
-      nav: [{ "example.user:list": { icon: <div>{"testIcon"}</div> } }],
+      nav: { "example.user:list": { icon: <div>{"testIcon"}</div> } },
     },
   });
 
