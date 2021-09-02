@@ -31,12 +31,9 @@ jobs:
         run: |
           npm ci
           cp app/src/_bananas.settings.js app/src/bananas.settings.js
-      - name: Lint CSS
-        run: |
-          npm run lint:css
       - name: Lint JS
         run: |
-          npm run lint:js
+          npm run eslint
       - name: Run tests
         run: |
           npm run coverage
