@@ -1,5 +1,5 @@
 import { amber } from "@material-ui/core/colors";
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createTheme } from "@material-ui/core/styles";
 import { cloneDeep, merge } from "lodash";
 
 import { django } from "./colors";
@@ -25,7 +25,7 @@ export function applyThemeDefaults(theme) {
 }
 
 export function createBananasTheme(theme) {
-  return createMuiTheme(applyThemeDefaults(theme));
+  return createTheme(applyThemeDefaults(theme));
 }
 
 export function extendTheme(source, overrides) {

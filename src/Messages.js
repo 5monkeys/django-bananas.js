@@ -81,7 +81,7 @@ class Message extends React.Component {
         }}
         TransitionComponent={Slide}
         onClose={this.handleClose}
-        onExited={remove}
+        TransitionProps={{ onExited: remove }}
         open={open}
         autoHideDuration={type !== "error" ? 6000 : undefined} // don't autohide errors.
         data-testid="Message"
@@ -131,9 +131,10 @@ class Messages extends React.Component {
   }
 }
 
-const BananasMessages = withStyles({ root: {} }, { name: "BananasMessages" })(
-  Messages
-);
+const BananasMessages = withStyles(
+  { root: {} },
+  { name: "BananasMessages" }
+)(Messages);
 
 class MessagesController extends React.Component {
   state = {

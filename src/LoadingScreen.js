@@ -1,7 +1,7 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Fade from "@material-ui/core/Fade";
 import { withStyles } from "@material-ui/core/styles";
-import { fade } from "@material-ui/core/styles/colorManipulator";
+import { alpha } from "@material-ui/core/styles/colorManipulator";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -23,16 +23,16 @@ const styles = theme => ({
   backdrop: {
     position: "absolute",
     zIndex: 2000,
-    backgroundColor: fade(theme.palette.background.default, 0.666),
+    backgroundColor: alpha(theme.palette.background.default, 0.666),
   },
   backdropPrimary: {
-    backgroundColor: fade(theme.palette.primary.main, 0.666),
+    backgroundColor: alpha(theme.palette.primary.main, 0.666),
   },
   backdropSecondary: {
-    backgroundColor: fade(theme.palette.secondary.main, 0.666),
+    backgroundColor: alpha(theme.palette.secondary.main, 0.666),
   },
   backdropPaper: {
-    backgroundColor: fade(theme.palette.background.paper, 0.666),
+    backgroundColor: alpha(theme.palette.background.paper, 0.666),
   },
   spinner: {
     color: theme.palette.primary.main,
@@ -70,15 +70,8 @@ class LoadingScreen extends React.Component {
   };
 
   renderScreen() {
-    const {
-      classes,
-      loading,
-      color,
-      logo,
-      backdrop,
-      role,
-      ...rest
-    } = this.props;
+    const { classes, loading, color, logo, backdrop, role, ...rest } =
+      this.props;
     return (
       <div
         data-testid={role}

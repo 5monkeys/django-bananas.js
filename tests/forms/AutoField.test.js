@@ -61,6 +61,7 @@ test.each([
   "Can render field of type '%s' and variant '%s'",
   async (name, variant, fieldComponent) => {
     const api = await getAPIClient();
+
     const tree = renderer.create(
       <TestContext api={api}>
         <Form route="example.user:form.create">

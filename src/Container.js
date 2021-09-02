@@ -2,7 +2,7 @@ import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import React from "react";
 
-const styles = _ => ({
+const styles = () => ({
   root: {},
 });
 

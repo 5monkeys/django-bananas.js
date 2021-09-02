@@ -2,7 +2,7 @@ import { Typography } from "@material-ui/core";
 import { Content } from "django-bananas";
 import React from "react";
 
-export default () => (
+const Page = () => (
   <Content>
     <Typography gutterBottom variant="h3">
       Granny Smith
@@ -17,3 +17,4 @@ export default () => (
     <a href="https://en.wikipedia.org/wiki/Granny_Smith">More info</a>
   </Content>
 );
+export default Page;

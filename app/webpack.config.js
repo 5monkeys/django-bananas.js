@@ -20,14 +20,10 @@ module.exports = {
     },
   },
   devServer: {
-    // hot: true, // crashes
-    disableHostCheck: true,
-    contentBase: path.join(__dirname, "dist"),
-    // lazy: true, // works to dynamically add pages with this setting on. But only on reload.
+    hot: true,
     compress: true,
     host: "0.0.0.0",
     port: 3000,
-    publicPath: "/",
     historyApiFallback: true,
   },
   plugins: [

@@ -82,13 +82,8 @@ class Content extends React.Component {
   }
 
   render() {
-    const {
-      classes,
-      children,
-      disablePadding,
-      contained,
-      ...rest
-    } = this.props;
+    const { classes, children, disablePadding, contained, ...rest } =
+      this.props;
 
     return (
       <div className={classNames(classes.root)}>

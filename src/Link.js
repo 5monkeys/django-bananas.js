@@ -49,7 +49,7 @@ export default class Link extends React.Component {
       query,
       href,
       children,
-      patch,
+      patch: _,
       passHref,
       ...rest
     } = this.props;

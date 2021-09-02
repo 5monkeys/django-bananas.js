@@ -26,6 +26,8 @@ const Transition = React.forwardRef((props, ref) => (
   <Slide direction="down" ref={ref} {...props} />
 ));
 
+Transition.displayName = "SlideTransition";
+
 class Alert extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
@@ -73,15 +75,8 @@ class Alert extends React.Component {
   };
 
   render() {
-    const {
-      classes,
-      open,
-      title,
-      message,
-      agree,
-      dismiss,
-      keepMounted,
-    } = this.props;
+    const { classes, open, title, message, agree, dismiss, keepMounted } =
+      this.props;
     return (
       <Dialog
         open={open}

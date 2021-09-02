@@ -1,10 +1,4 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  wait,
-  waitForElement,
-} from "@testing-library/react";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import fetchMock from "fetch-mock";
 import Logger from "js-logger";
 import React from "react";
@@ -31,16 +25,16 @@ const renderApp = async ({ anonymous = false, props = {} } = {}) => {
     />
   );
 
-  await wait(() => window.bananas);
+  await waitFor(() => window.bananas);
   const app = window.bananas;
   const { container, getByText, getByLabelText } = helpers;
 
   if (anonymous) {
     const loginSubmitButton = () => getByLabelText("login");
-    await waitForElement(loginSubmitButton, { container });
+    await waitFor(loginSubmitButton, { container });
   } else {
     const profileMenuItem = () => getByText(user.full_name);
-    await waitForElement(profileMenuItem, { container });
+    await waitFor(profileMenuItem, { container });
   }
 
   return { ...helpers, app };
@@ -87,7 +81,7 @@ test("Can boot and login", async () => {
 
   // Wait for logged in username to be rendered, i.e. NavBar is rendered
   const profileMenuItem = () => getByText(user.full_name);
-  await waitForElement(profileMenuItem, { container });
+  await waitFor(profileMenuItem, { container });
 });
 
 test("Can shutdown", async () => {
@@ -115,7 +109,10 @@ test("Can render dashboard and navigate using menu", async () => {
   expect(usersMenuItem).toBeTruthy();
 
   // Mock Users API call
-  const users = [{ id: 1, username: "user1" }, { id: 2, username: "user2" }];
+  const users = [
+    { id: 1, username: "user1" },
+    { id: 2, username: "user2" },
+  ];
   fetchMock.mock(`http://foo.bar/api/v1.0${userListRoute.path}`, {
     body: users,
   });
@@ -124,7 +121,7 @@ test("Can render dashboard and navigate using menu", async () => {
   fireEvent.click(usersMenuItem);
 
   // Wait for user list page to be rendered
-  await waitForElement(() => getByText(`${userListRoute.title} (users)`), {
+  await waitFor(() => getByText(`${userListRoute.title} (users)`), {
     container,
   });
 
@@ -134,7 +131,7 @@ test("Can render dashboard and navigate using menu", async () => {
 
   // Click one of the users and expect page template not to implemented
   fireEvent.click(user1Link);
-  await waitForElement(() => getByText("Status: 501"), { container });
+  await waitFor(() => getByText("Status: 501"), { container });
 
   // Click profile menu item
   const profileMenuItem = getByText(user.full_name);
@@ -144,7 +141,7 @@ test("Can render dashboard and navigate using menu", async () => {
   const changePasswordRoute = app.router.getRoute(
     "bananas.change_password:create"
   );
-  await waitForElement(() => getByText(changePasswordRoute.title), {
+  await waitFor(() => getByText(changePasswordRoute.title), {
     container,
   });
 
@@ -163,7 +160,7 @@ test("Handles unauthenticated page load", async () => {
   });
 
   app.router.route(userListRoute.path);
-  await waitForElement(() => getByLabelText("login"), { container });
+  await waitFor(() => getByLabelText("login"), { container });
 });
 
 test("Handles unauthorized page load", async () => {
@@ -176,20 +173,20 @@ test("Handles unauthorized page load", async () => {
   });
 
   app.router.route(userListRoute.path);
-  await waitForElement(() => getByText("Status: 403"), { container });
+  await waitFor(() => getByText("Status: 403"), { container });
   expect(getByText(/You are authenticated as admin/)).toBeDefined();
 });
 
 test("Handles 404", async () => {
   const { app, container, getByText } = await renderApp();
   app.router.route("/foobar/");
-  await waitForElement(() => getByText("Status: 404"), { container });
+  await waitFor(() => getByText("Status: 404"), { container });
 });
 
 test("Handles 501", async () => {
   const { app, container, getByText } = await renderApp();
   app.router.route({ id: "bananas.i18n:list" });
-  await waitForElement(() => getByText("Status: 501"), { container });
+  await waitFor(() => getByText("Status: 501"), { container });
 });
 
 test("Handles 500", async () => {
@@ -202,12 +199,12 @@ test("Handles 500", async () => {
   app.router.route({ id: "example.user:bar", params: { id: 1 } });
 
   // Expect 500 error page to be shown and the error logged to console
-  await waitForElement(() => getByText("Status: 500"));
+  await waitFor(() => getByText("Status: 500"));
   expect(error).toBeCalled();
 
   // TODO: Currently needed to prevent real async console.error's after unmocked
   app.router.route({ id: "home" });
-  await waitForElement(() => getByText("Dashboard Test Page"));
+  await waitFor(() => getByText("Dashboard Test Page"));
 
   await app.shutdown();
   error.mockRestore();
@@ -215,46 +212,41 @@ test("Handles 500", async () => {
 
 test("Handles missing route", async () => {
   const { app } = await renderApp({ anonymous: true });
-  expect(app.loadPage(document.location, null)).rejects.toThrow(
+  await expect(app.loadPage(document.location, null)).rejects.toThrow(
     PageNotFoundError
   );
 });
 
 test("Handles missing page file", async () => {
   const { app } = await renderApp({ anonymous: true });
-  expect(app.loadPageComponent("foobar.js")).rejects.toThrow(
+  await expect(app.loadPageComponent("foobar.js")).rejects.toThrow(
     PageNotImplementedError
   );
 });
 
 test("Can show and dismiss messages", async () => {
-  const {
-    app,
-    container,
-    getByText,
-    getAllByTestId,
-    queryByTestId,
-  } = await renderApp();
+  const { app, container, getByText, getAllByTestId, queryByTestId } =
+    await renderApp();
 
   // Expect no messages showing
   expect(queryByTestId("Message")).toBeNull();
 
   app.admin.success("SUCCESS_MSG");
-  await waitForElement(() => getByText("SUCCESS_MSG"), { container });
+  await waitFor(() => getByText("SUCCESS_MSG"), { container });
 
   app.admin.info("INFO_MSG");
-  await waitForElement(() => getByText("INFO_MSG"), { container });
+  await waitFor(() => getByText("INFO_MSG"), { container });
 
   app.admin.warning("WARNING_MSG");
-  await waitForElement(() => getByText("WARNING_MSG"), { container });
+  await waitFor(() => getByText("WARNING_MSG"), { container });
 
   app.admin.error("ERROR_MSG");
-  await waitForElement(() => getByText("ERROR_MSG"), { container });
+  await waitFor(() => getByText("ERROR_MSG"), { container });
 
   // Click X icon and expect error message to go away, the other ones goes away by clickAway
   const closeButton = getAllByTestId("message-close-button")[0];
   fireEvent.click(closeButton);
-  await wait(
+  await waitFor(
     () =>
       expect(
         app.controllers.MessagesController.current.state.messages
@@ -267,7 +259,7 @@ test("Can show simple alert", async () => {
   const { app, container, getByText } = await renderApp();
 
   app.admin.alert("AlertMessageOnly");
-  await waitForElement(() => getByText("AlertMessageOnly"), { container });
+  await waitFor(() => getByText("AlertMessageOnly"), { container });
 });
 
 test("Can show configured alert", async () => {
@@ -287,7 +279,7 @@ test("Can show configured alert", async () => {
 
   // Show and wait for alert
   app.admin.alert(alert);
-  await waitForElement(() => getByText("AlertTitle"), { container });
+  await waitFor(() => getByText("AlertTitle"), { container });
 
   const agreeButton = getByText("AlertAgree");
   const dismissButton = getByText("AlertDismiss");
@@ -297,22 +289,22 @@ test("Can show configured alert", async () => {
 
   // Click dismiss button and expect onDismiss callback to been called
   fireEvent.click(dismissButton);
-  await wait(() => expect(dismissed).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(dismissed).toHaveBeenCalledTimes(1));
 
   // Show and wait for another alert
   app.admin.alert(alert);
-  await waitForElement(() => getByText("AlertTitle"), { container });
+  await waitFor(() => getByText("AlertTitle"), { container });
 
   // Click agree button and expect onAgree callback to been called
   fireEvent.click(getByText("AlertAgree"));
-  await wait(() => expect(agreed).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(agreed).toHaveBeenCalledTimes(1));
 });
 
 test("Can show simple confirm", async () => {
   const { app, container, getByText } = await renderApp();
 
   app.admin.confirm("ConfirmMessageOnly");
-  await waitForElement(() => getByText("Är du säker?"), { container });
+  await waitFor(() => getByText("Är du säker?"), { container });
   expect(getByText("ConfirmMessageOnly")).toBeTruthy();
 });
 
@@ -320,18 +312,14 @@ test("Can show configured confirm", async () => {
   const { app, container, getByText } = await renderApp();
 
   app.admin.confirm({ message: "ConfirmMessageOnly", agree: "ConfirmAgree" });
-  await waitForElement(() => getByText("Är du säker?"), { container });
+  await waitFor(() => getByText("Är du säker?"), { container });
   expect(getByText("ConfirmMessageOnly")).toBeTruthy();
   expect(getByText("ConfirmAgree")).toBeTruthy();
 });
 
 test("Can change settings", async () => {
-  const {
-    getByTestId,
-    queryByTestId,
-    getByText,
-    getByLabelText,
-  } = await renderApp();
+  const { getByTestId, queryByTestId, getByText, getByLabelText } =
+    await renderApp();
 
   expect(getByTestId("navbar-drawer")).toBeTruthy();
   expect(queryByTestId("navbar-appbar")).toBeFalsy();
@@ -341,12 +329,12 @@ test("Can change settings", async () => {
   fireEvent.click(profileMenuItem);
 
   // Wait for settings to be rendered and click one of them
-  await waitForElement(() => getByText("Settings"));
+  await waitFor(() => getByText("Settings"));
   const horizontal = getByLabelText("Horizontal Layout");
   fireEvent.click(horizontal);
 
   // Expect layout to change
-  await waitForElement(() => getByTestId("navbar-appbar"));
+  await waitFor(() => getByTestId("navbar-appbar"));
   expect(queryByTestId("navbar-drawer")).toBeFalsy();
 
   // Click reset button
@@ -354,26 +342,24 @@ test("Can change settings", async () => {
   fireEvent.click(resetButton);
 
   // Expect layout to change back
-  await waitForElement(() => getByTestId("navbar-drawer"));
+  await waitFor(() => getByTestId("navbar-drawer"));
   expect(queryByTestId("navbar-appbar")).toBeFalsy();
 });
 
 test("Can change password", async () => {
-  const {
-    container,
-    getByText,
-    getByLabelText,
-    getByTestId,
-  } = await renderApp();
+  const { container, getByText, getByLabelText, getByTestId } =
+    await renderApp();
 
   // Click profile menu item
   const profileMenuItem = getByText(user.full_name);
   fireEvent.click(profileMenuItem);
 
   // Wait for submit button and therefore change passsword form rendered
-  const submitButton = await waitForElement(
-    () => getByText("Change my password"),
-    { container }
+  const submitButton = await waitFor(
+    () => getByText("Change my password").closest("button"),
+    {
+      container,
+    }
   );
   expect(submitButton).toBeDisabled();
 
@@ -389,7 +375,7 @@ test("Can change password", async () => {
   fireEvent.change(new2, { target: { value: "new" } });
 
   // Wait for submit button to be enabled (valid filled fields)
-  await wait(() => expect(submitButton).toBeEnabled());
+  await waitFor(() => expect(submitButton).toBeEnabled());
 
   // Mock fail endpoint and click submit
   fetchMock.post("http://foo.bar/api/v1.0/bananas/change_password/", {
@@ -400,9 +386,7 @@ test("Can change password", async () => {
   fireEvent.submit(form);
 
   // Expect error message to show
-  await waitForElement(() =>
-    getByText("Incorrect authentication credentials.")
-  );
+  await waitFor(() => getByText("Incorrect authentication credentials."));
 
   // Mock success endpoint and click submit, again
   fetchMock.post("http://foo.bar/api/v1.0/bananas/change_password/", {
@@ -412,7 +396,7 @@ test("Can change password", async () => {
   fireEvent.submit(form);
 
   // Expect success message to show
-  await waitForElement(() => getByText("Password changed successfully."));
+  await waitFor(() => getByText("Password changed successfully."));
 });
 
 test("A hash change will trigger rerender", async () => {
@@ -423,13 +407,13 @@ test("A hash change will trigger rerender", async () => {
   fetchMock.mock(`http://foo.bar/api/v1.0${userListRoute.path}`, { body: [] });
 
   app.router.reroute({ id: "example.user:list" });
-  await waitForElement(() => getByText("Hash: none"), { container });
+  await waitFor(() => getByText("Hash: none"), { container });
 
   app.router.reroute({ id: "example.user:list", hash: "#foo" });
-  await waitForElement(() => getByText("Hash: foo"), { container });
+  await waitFor(() => getByText("Hash: foo"), { container });
 
   app.router.reroute({ id: "example.user:list", hash: "#bar" });
-  await waitForElement(() => getByText("Hash: bar"), { container });
+  await waitFor(() => getByText("Hash: bar"), { container });
 });
 
 test("Can customize menu", async () => {
@@ -437,7 +421,9 @@ test("Can customize menu", async () => {
     props: {
       nav: {
         "example.user:list": null,
-        home: () => <span data-testid="CustomMenuItemIcon" />,
+        home: function TC() {
+          return <span data-testid="CustomMenuItemIcon" />;
+        },
       },
     },
   });
