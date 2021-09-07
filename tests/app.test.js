@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import fetchMock from "fetch-mock";
 import Logger from "js-logger";
 import React from "react";
@@ -72,12 +73,12 @@ test("Can boot and login", async () => {
   // Fill login form and
   const username = getByLabelText("Username", { selector: "input" });
   const password = getByLabelText("Password", { selector: "input" });
-  fireEvent.change(username, { target: { value: "admin" } });
-  fireEvent.change(password, { target: { value: "test" } });
+  userEvent.type(username, "admin");
+  userEvent.type(password, "test");
 
   // Click login submit button
   const loginSubmitButton = getByLabelText("login");
-  fireEvent.click(loginSubmitButton);
+  userEvent.click(loginSubmitButton);
 
   // Wait for logged in username to be rendered, i.e. NavBar is rendered
   const profileMenuItem = () => getByText(user.full_name);
@@ -118,7 +119,7 @@ test("Can render dashboard and navigate using menu", async () => {
   });
 
   // Click Users menu item
-  fireEvent.click(usersMenuItem);
+  userEvent.click(usersMenuItem);
 
   // Wait for user list page to be rendered
   await waitFor(() => getByText(`${userListRoute.title} (users)`), {
@@ -130,12 +131,12 @@ test("Can render dashboard and navigate using menu", async () => {
   expect(user1Link).toBeTruthy();
 
   // Click one of the users and expect page template not to implemented
-  fireEvent.click(user1Link);
+  userEvent.click(user1Link);
   await waitFor(() => getByText("Status: 501"), { container });
 
   // Click profile menu item
   const profileMenuItem = getByText(user.full_name);
-  fireEvent.click(profileMenuItem);
+  userEvent.click(profileMenuItem);
 
   // Wait for password form and therefore profile page to be rendered
   const changePasswordRoute = app.router.getRoute(
@@ -245,7 +246,7 @@ test("Can show and dismiss messages", async () => {
 
   // Click X icon and expect error message to go away, the other ones goes away by clickAway
   const closeButton = getAllByTestId("message-close-button")[0];
-  fireEvent.click(closeButton);
+  userEvent.click(closeButton);
   await waitFor(
     () =>
       expect(
@@ -288,7 +289,7 @@ test("Can show configured alert", async () => {
   expect(dismissButton).toBeTruthy();
 
   // Click dismiss button and expect onDismiss callback to been called
-  fireEvent.click(dismissButton);
+  userEvent.click(dismissButton);
   await waitFor(() => expect(dismissed).toHaveBeenCalledTimes(1));
 
   // Show and wait for another alert
@@ -296,7 +297,7 @@ test("Can show configured alert", async () => {
   await waitFor(() => getByText("AlertTitle"), { container });
 
   // Click agree button and expect onAgree callback to been called
-  fireEvent.click(getByText("AlertAgree"));
+  userEvent.click(getByText("AlertAgree"));
   await waitFor(() => expect(agreed).toHaveBeenCalledTimes(1));
 });
 
@@ -326,12 +327,12 @@ test("Can change settings", async () => {
 
   // Click profile menu item
   const profileMenuItem = getByText(user.full_name);
-  fireEvent.click(profileMenuItem);
+  userEvent.click(profileMenuItem);
 
   // Wait for settings to be rendered and click one of them
   await waitFor(() => getByText("Settings"));
   const horizontal = getByLabelText("Horizontal Layout");
-  fireEvent.click(horizontal);
+  userEvent.click(horizontal);
 
   // Expect layout to change
   await waitFor(() => getByTestId("navbar-appbar"));
@@ -339,7 +340,7 @@ test("Can change settings", async () => {
 
   // Click reset button
   const resetButton = getByText("Reset");
-  fireEvent.click(resetButton);
+  userEvent.click(resetButton);
 
   // Expect layout to change back
   await waitFor(() => getByTestId("navbar-drawer"));
@@ -352,7 +353,7 @@ test("Can change password", async () => {
 
   // Click profile menu item
   const profileMenuItem = getByText(user.full_name);
-  fireEvent.click(profileMenuItem);
+  userEvent.click(profileMenuItem);
 
   // Wait for submit button and therefore change passsword form rendered
   const submitButton = await waitFor(
@@ -370,9 +371,9 @@ test("Can change password", async () => {
   const new2 = getByLabelText("Bekr\u00e4fta nytt l\u00f6senord", {
     selector: "input",
   });
-  fireEvent.change(old, { target: { value: "old" } });
-  fireEvent.change(new1, { target: { value: "new" } });
-  fireEvent.change(new2, { target: { value: "new" } });
+  userEvent.type(old, "old");
+  userEvent.type(new1, "new");
+  userEvent.type(new2, "new");
 
   // Wait for submit button to be enabled (valid filled fields)
   await waitFor(() => expect(submitButton).toBeEnabled());
@@ -382,7 +383,7 @@ test("Can change password", async () => {
     status: 400,
     body: {},
   });
-  // TODO: Click button instead of submiting form; fireEvent.click(submitButton);
+  // TODO: Click button instead of submiting form; userEvent.click(submitButton);
   fireEvent.submit(form);
 
   // Expect error message to show
@@ -451,17 +452,19 @@ test("Can customize menu with array", async () => {
 });
 
 test("Can customize menu with with settings object", async () => {
-  const { findByText, queryAllByTestId } = await renderApp({
+  const TestIcon = () => <div>{"testIcon"}</div>;
+  const { getAllByTestId, getByText } = await renderApp({
     props: {
-      nav: { "example.user:list": { icon: <div>{"testIcon"}</div> } },
+      nav: { "example.user:list": { icon: TestIcon } },
     },
   });
 
-  const items = queryAllByTestId("MenuItemText").map(
+  const items = getAllByTestId("MenuItemText").map(
     element => element.textContent
   );
-  expect(findByText("testIcon")).toBeTruthy();
-  expect(items[0]).toBe("Användare");
+
+  expect(getByText("testIcon")).toBeTruthy();
+  expect(items[0]).toBe("Dashboard");
 });
 
 test("Can customize HTTP headers", async () => {
@@ -520,7 +523,7 @@ test("Can customize user", async () => {
 });
 
 test("Can hide menu items", async () => {
-  const { queryAllByTestId } = await renderApp({
+  const { getAllByTestId } = await renderApp({
     props: {
       nav: {
         "example.user:list": {
@@ -529,26 +532,10 @@ test("Can hide menu items", async () => {
       },
     },
   });
-  const items = queryAllByTestId("MenuItemText").map(
+  const items = getAllByTestId("MenuItemText").map(
     element => element.textContent
   );
   expect(items.indexOf("Användare")).toBe(-1);
-});
-
-test("Can hide submenu labels", async () => {
-  const { queryAllByTestId } = await renderApp({
-    props: {
-      nav: {
-        example: {
-          showSubheader: false,
-        },
-      },
-    },
-  });
-  const items = queryAllByTestId("MenuSubheader").map(
-    element => element.textContent
-  );
-  expect(items.indexOf("example")).toBe(-1);
 });
 
 const TestLogo = () => {
@@ -556,11 +543,11 @@ const TestLogo = () => {
 };
 
 test("Can render logo as component", async () => {
-  const { findByTestId } = await renderApp({
+  const { getByTestId } = await renderApp({
     props: {
       logo: <TestLogo />,
     },
   });
 
-  expect(findByTestId("custom_logo")).toBeTruthy();
+  expect(getByTestId("custom_logo")).toBeTruthy();
 });
