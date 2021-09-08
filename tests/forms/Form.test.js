@@ -1,4 +1,5 @@
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
+import { cleanup, render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import fetchMock from "fetch-mock";
 import Logger from "js-logger";
 import React from "react";
@@ -25,7 +26,8 @@ test("Ensure the default 'onSubmit' is firing a correct request", async () => {
   const button = getByText("Submit");
   const matcher = "http://foo.bar/api/v1.0/example/user/form/";
   fetchMock.post(matcher, { body: { text: "foo" } });
-  fireEvent.click(button);
+  userEvent.click(button);
+
   await waitFor(() => success.calls);
   expect(success).toHaveBeenCalledWith("Changes have been saved!");
   expect(fetchMock.called(matcher)).toBe(true);
@@ -34,27 +36,29 @@ test("Ensure the default 'onSubmit' is firing a correct request", async () => {
 test("Ensure the default 'onSubmit' can handle errors", async () => {
   const api = await getAPIClient();
   const error = jest.fn();
-  const { getByText, queryByText } = render(
+  const { getByTestId, queryByText } = render(
     <TestContext api={api} admin={{ error }}>
       <Form route="example.user:form.create" initialValues={{ text: "foo" }}>
         {({ submitError }) => (
           <>
             {submitError}
             <AutoField name="text" />
-            <button type="submit">Submit</button>
+            <button data-testid="submit-button" type="submit">
+              Submit
+            </button>
           </>
         )}
       </Form>
     </TestContext>
   );
-  const button = getByText("Submit");
+  const button = getByTestId("submit-button");
   const matcher = "http://foo.bar/api/v1.0/example/user/form/";
   fetchMock.post(matcher, {
     body: { text: "Invalid text", non_field_errors: ["bazrror"] },
     status: 400,
   });
 
-  fireEvent.click(button);
+  userEvent.click(button);
 
   await waitFor(() => error.calls);
   expect(error).toHaveBeenCalledWith("Please correct the errors on this form.");
@@ -79,7 +83,7 @@ test("Ensure custom 'onSubmit' is called", async () => {
   );
   const button = getByText("Submit");
 
-  fireEvent.click(button);
+  userEvent.click(button);
 
   expect(onSubmit).toHaveBeenCalledTimes(1);
   expect(typeof onSubmit.mock.calls[0][0].endpoint).toBe("function");
