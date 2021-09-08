@@ -419,7 +419,7 @@ exports[`Can render field of type 'date' and variant 'default' 1`] = `
         readOnly={true}
         required={false}
         type="text"
-        value="July 4th"
+        value="November 22nd"
       />
     </div>
   </div>
@@ -459,7 +459,7 @@ exports[`Can render field of type 'date' and variant 'default' with partial fiel
         readOnly={true}
         required={false}
         type="text"
-        value="July 4th"
+        value="November 22nd"
       />
     </div>
   </div>
@@ -499,7 +499,7 @@ exports[`Can render field of type 'datetime' and variant 'default' 1`] = `
         readOnly={true}
         required={false}
         type="text"
-        value="July 4th 05:49 p.m."
+        value="November 22nd 01:00 a.m."
       />
     </div>
   </div>

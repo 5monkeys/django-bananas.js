@@ -14,9 +14,9 @@ import getAPIClient from "../api.mock";
 import { TestContext } from "./utils";
 
 // Set a fixed current date and timezone to make snapshots stable and tests work
-// both locally and on Travis.
+// both locally and in CI.
 // This won’t affect other files.
-MockDate.set("2019-07-04T15:49:55.441Z", 120);
+MockDate.set("Tue Nov 21 2000 18:00:00 GMT-0600 (CST)");
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
