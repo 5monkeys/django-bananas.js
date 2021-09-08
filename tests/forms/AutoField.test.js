@@ -14,6 +14,13 @@ import { TestContext } from "./utils";
 
 Logger.get("bananas").setLevel(Logger.OFF);
 
+beforeEach(() => {
+  // surpress errors we're triggering by choice
+  jest.spyOn(console, "error").mockImplementation(() => {});
+  // hide MUI-warnings
+  jest.spyOn(console, "warn").mockImplementation(() => {});
+});
+
 class Boundary extends React.Component {
   state = {};
 
