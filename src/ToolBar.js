@@ -1,6 +1,6 @@
 import AppBar from "@material-ui/core/AppBar";
 import {
-  createMuiTheme,
+  createTheme,
   MuiThemeProvider,
   withStyles,
 } from "@material-ui/core/styles";
@@ -213,7 +213,7 @@ class ToolBar extends React.Component {
       },
     };
 
-    this.theme = createMuiTheme(
+    this.theme = createTheme(
       extendTheme(theme, {
         palette: {
           primary,
@@ -229,15 +229,15 @@ class ToolBar extends React.Component {
   renderAppBar() {
     const {
       classes,
-      theme,
+      theme: _theme,
       autoStyle,
-      emphasize,
+      emphasize: _emphasize,
       overrides,
-      children,
+      children: _children,
       color,
-      border,
-      dense,
-      justify,
+      border: _border,
+      dense: _dense,
+      justify: _justify,
       ...rest
     } = this.props;
 

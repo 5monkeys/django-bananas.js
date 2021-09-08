@@ -1,7 +1,6 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
-import deprecated from "deprecated-prop-type";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
@@ -25,6 +24,8 @@ import Settings from "./settings";
 import themes, { createBananasTheme } from "./themes";
 import { ComponentProxy, getFromSchema, makeUser, t } from "./utils";
 
+// eslint thinks this is a hook.
+// eslint-disable-next-line
 Logger.useDefaults();
 const logger = Logger.get("bananas");
 
@@ -258,6 +259,7 @@ class Admin extends React.Component {
   }
 
   shutdown() {
+    // eslint-disable-next-line
     return new Promise(async resolve => {
       await this.unmountPage();
 
@@ -465,6 +467,7 @@ class Admin extends React.Component {
     logger.info("Mount Page:", pageProps);
     this.admin.loading(false);
     this.PageComponent = PageComponent;
+
     this.setState({ pageProps }, () => {
       this.setTitle(pageProps.title);
     });
@@ -627,7 +630,6 @@ class App extends React.Component {
       PropTypes.string,
       PropTypes.node,
     ]),
-    icons: deprecated(PropTypes.object, 'Please use "nav" instead.'),
     nav: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.string.isRequired),
       PropTypes.object,
@@ -652,9 +654,8 @@ class App extends React.Component {
 
     title: "Bananas",
     branding: "Bananas",
-    version: "v2.0.0", // TODO: Get package version
+    version: "v3.4.3", // TODO: Get package version
     logo: true,
-    icons: undefined,
     nav: undefined,
 
     theme: themes.default,
@@ -666,11 +667,7 @@ class App extends React.Component {
   };
 
   render() {
-    const {
-      // Default `nav` to the legacy `icons` prop, and remove `icons` from props.
-      props: { icons, nav = icons, ...rest },
-    } = this;
-    const props = { nav, ...rest };
+    const { props } = this;
     const theme = createBananasTheme(props.theme);
     const pageTheme = props.pageTheme
       ? createBananasTheme(props.pageTheme)

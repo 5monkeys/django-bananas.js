@@ -2,7 +2,7 @@ import React from "react";
 
 import { AdminContext, Content } from "../../src";
 
-export default () => {
+const IndexPage = () => {
   return (
     <Content>
       <p>Dashboard Test Page</p>
@@ -15,3 +15,5 @@ export default () => {
     </Content>
   );
 };
+
+export default IndexPage;

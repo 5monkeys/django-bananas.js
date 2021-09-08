@@ -3,7 +3,7 @@ import { AdminContext } from "django-bananas";
 import gravatar from "gravatar";
 import React from "react";
 
-export default ({ props }) => (
+const Gravatar = ({ props }) => (
   <AdminContext.Consumer>
     {context => {
       const url = gravatar.url(context.user.email);
@@ -11,3 +11,5 @@ export default ({ props }) => (
     }}
   </AdminContext.Consumer>
 );
+
+export default Gravatar;

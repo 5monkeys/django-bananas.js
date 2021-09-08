@@ -89,13 +89,8 @@ class ChangePasswordForm extends React.Component {
     const endpoint = api["bananas.change_password:create"];
     const schema = endpoint.schema.data;
 
-    const {
-      errors,
-      touched,
-      old_password,
-      new_password1,
-      new_password2,
-    } = this.state;
+    const { errors, touched, old_password, new_password1, new_password2 } =
+      this.state;
 
     const passwordCheckError =
       new_password2 !== "" && new_password2 !== new_password1;

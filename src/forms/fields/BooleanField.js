@@ -23,7 +23,7 @@ const BooleanField = ({
             <Checkbox checked={value} {...inputProps} />
           )
         }
-        label={fieldProps.label}
+        {...(fieldProps || {})}
       />
     </FormGroup>
     {fieldProps.error && (

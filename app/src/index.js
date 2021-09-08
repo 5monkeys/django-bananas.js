@@ -104,9 +104,8 @@ ReactDOM.render(
     // permanent={true}
     // collapsed: false,
     // dense: true,
-    // icons={null}
     nav={{
-      "fruit.peach:list": CustomIconComponent,
+      "fruit.peach:list": { icon: CustomIconComponent, title: "Custom Peach" },
       "fruit.apple:red_delicious": FaceIcon,
       "fruit.apple:granny_smith": FaceIcon,
       "fruit.apple:list": AppleIcon,

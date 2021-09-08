@@ -1,7 +1,6 @@
+import { render } from "@testing-library/react";
 import Logger from "js-logger";
-import MockDate from "mockdate";
 import React from "react";
-import renderer from "react-test-renderer";
 
 import { AutoField, Form } from "../../src/forms";
 import BooleanField from "../../src/forms/fields/BooleanField";
@@ -13,12 +12,14 @@ import TextField from "../../src/forms/fields/TextField";
 import getAPIClient from "../api.mock";
 import { TestContext } from "./utils";
 
-// Set a fixed current date and timezone to make snapshots stable and tests work
-// both locally and on Travis.
-// This won’t affect other files.
-MockDate.set("2019-07-04T15:49:55.441Z", 120);
-
 Logger.get("bananas").setLevel(Logger.OFF);
+
+beforeEach(() => {
+  // surpress errors we're triggering by choice
+  jest.spyOn(console, "error").mockImplementation(() => {});
+  // hide MUI-warnings
+  jest.spyOn(console, "warn").mockImplementation(() => {});
+});
 
 class Boundary extends React.Component {
   state = {};
@@ -35,17 +36,15 @@ class Boundary extends React.Component {
 }
 
 test("Get a friendly reminder about FormContext, if missing", () => {
-  expect(
-    renderer
-      .create(
-        <Boundary>
-          <AutoField name="test" />
-        </Boundary>
-      )
-      .toJSON()
-  ).toMatchInlineSnapshot(
-    '"This component requires FormContext to be present."'
+  const { getByText } = render(
+    <Boundary>
+      <AutoField name="test" />
+    </Boundary>
   );
+
+  expect(
+    getByText("This component requires FormContext to be present.")
+  ).toBeTruthy();
 });
 
 test.each([
@@ -57,36 +56,52 @@ test.each([
   ["integer", "default", TextField],
   ["multiple_choices", "default", MultipleChoiceField],
   ["text", "default", TextField],
-])(
-  "Can render field of type '%s' and variant '%s'",
-  async (name, variant, fieldComponent) => {
-    const api = await getAPIClient();
-    const tree = renderer.create(
-      <TestContext api={api}>
-        <Form route="example.user:form.create">
-          <AutoField name={name} variant={variant} />
-        </Form>
-      </TestContext>
-    );
-    expect(tree.root.findByType(fieldComponent)).toBeTruthy();
-    expect(tree.toJSON()).toMatchSnapshot();
-  }
-);
+])("Can render field of type '%s' and variant '%s'", async (name, variant) => {
+  const api = await getAPIClient();
+
+  const { getByTestId } = render(
+    <TestContext api={api}>
+      <Form route="example.user:form.create">
+        <AutoField
+          name={name}
+          variant={variant}
+          fieldProps={{ "data-testid": name }}
+        />
+      </Form>
+    </TestContext>
+  );
+  expect(getByTestId(name)).toBeTruthy();
+});
 
 const CustomFieldsByType = {
   string: {
-    default: { component: () => "text" },
-    date: { component: () => "date" },
-    "date-time": { component: () => "date-time" },
-  },
-  boolean: {
-    default: { component: () => "boolean", type: "checkbox" },
-  },
-  enum: {
-    default: { component: () => "enum", type: "select" },
-  },
-  array: {
-    default: { component: () => "array", type: "select" },
+    default: {
+      component: ({ fieldProps = {} }) => <input {...fieldProps} />,
+    },
+    date: {
+      component: ({ fieldProps = {} }) => <input {...fieldProps} />,
+      "date-time": {
+        component: ({ fieldProps = {} }) => <input {...fieldProps} />,
+      },
+    },
+    boolean: {
+      default: {
+        component: ({ fieldProps = {} }) => <input {...fieldProps} />,
+        type: "checkbox",
+      },
+    },
+    enum: {
+      default: {
+        component: ({ fieldProps = {} }) => <input {...fieldProps} />,
+        type: "select",
+      },
+    },
+    array: {
+      default: {
+        component: ({ fieldProps = {} }) => <input {...fieldProps} />,
+        type: "select",
+      },
+    },
   },
 };
 
@@ -94,18 +109,19 @@ test.each([
   ["boolean", "checkbox", "boolean"],
   ["boolean", "switch", "boolean"],
   ["date", "default", "date"],
-  ["datetime", "default", "date-time"],
+  ["datetime", "default", "datetime"],
   ["integer", "default", "text"],
   ["multiple_choices", "default", "array"],
   ["text", "default", "text"],
 ])(
   "Can render field of type '%s' and variant '%s' with custom field mapping",
-  async (name, variant, child) => {
+  async (name, variant) => {
     const api = await getAPIClient();
-    const tree = renderer.create(
+    const { getByTestId } = render(
       <TestContext api={api}>
         <Form route="example.user:form.create">
           <AutoField
+            fieldProps={{ "data-testid": name }}
             fieldsByType={CustomFieldsByType}
             name={name}
             variant={variant}
@@ -113,11 +129,11 @@ test.each([
         </Form>
       </TestContext>
     );
-    expect(tree.toJSON().children[0]).toMatch(child);
+    expect(getByTestId(name)).toBeTruthy();
   }
 );
 
-const DateTimeComponent = () => "date-time";
+const DateTimeComponent = ({ fieldProps = {} }) => <input {...fieldProps} />;
 
 const CustomPartialFieldsByType = {
   string: {
@@ -136,12 +152,13 @@ test.each([
   ["text", "default", TextField],
 ])(
   "Can render field of type '%s' and variant '%s' with partial fieldsByType",
-  async (name, variant, fieldComponent) => {
+  async (name, variant) => {
     const api = await getAPIClient();
-    const tree = renderer.create(
+    const { getByTestId } = render(
       <TestContext api={api}>
         <Form route="example.user:form.create">
           <AutoField
+            fieldProps={{ "data-testid": name }}
             fieldsByType={CustomPartialFieldsByType}
             name={name}
             variant={variant}
@@ -149,20 +166,19 @@ test.each([
         </Form>
       </TestContext>
     );
-    expect(tree.root.findByType(fieldComponent)).toBeTruthy();
-    expect(tree.toJSON()).toMatchSnapshot();
+    expect(getByTestId(name)).toBeTruthy();
   }
 );
 
 const modifiedTextField = props => (
   <div>
-    <TextField {...props} />
+    <TextField {...props} fieldProps={{ "data-testid": "t1" }} />
   </div>
 );
 
 test("Can use FieldComponent prop to render a custom component", async () => {
   const api = await getAPIClient();
-  const tree = renderer.create(
+  const { getByTestId } = render(
     <Boundary>
       <TestContext api={api}>
         <Form route="example.user:form.create">
@@ -171,6 +187,5 @@ test("Can use FieldComponent prop to render a custom component", async () => {
       </TestContext>
     </Boundary>
   );
-  expect(tree.toJSON()).toMatchSnapshot();
-  expect(tree.root.findByType(modifiedTextField)).toBeTruthy();
+  expect(getByTestId("t1")).toBeTruthy();
 });

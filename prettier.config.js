@@ -1,4 +1,5 @@
 module.exports = {
   trailingComma: "es5",
-  proseWrap: "always",
+  proseWrap: "never",
+  arrowParens: "avoid",
 };

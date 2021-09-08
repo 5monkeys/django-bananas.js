@@ -51,7 +51,7 @@ export default class Router {
         []
       )
       .filter(
-        ([_, method, spec]) =>
+        ([, method, spec]) =>
           spec.operationId && ["get", "post"].includes(method)
       )
       .map(([endpoint, method, spec]) => {

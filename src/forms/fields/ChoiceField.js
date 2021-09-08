@@ -7,10 +7,10 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
-const ChoiceField = ({ input, schema, fieldProps }) => (
+const ChoiceField = ({ input, schema, fieldProps = {} }) => (
   <FormControl error={fieldProps.error}>
     <InputLabel htmlFor="name-error">{fieldProps.label}</InputLabel>
-    <Select {...input} value={input.value || []}>
+    <Select {...input} {...fieldProps} value={input.value || []}>
       {!schema.required && (
         <MenuItem value="">
           <em>None</em>

@@ -19,6 +19,7 @@ const MultipleChoiceField = ({ input, schema, fieldProps }) => (
           ? [input.value]
           : []
       }
+      {...fieldProps}
       multiple
     >
       {!schema.required && (
