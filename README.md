@@ -40,6 +40,7 @@ ReactDOM.render(
 | **logLevel** | String, Object | _WARN_ | INFO, DEBUG, WARN, ERROR, OFF |
 | **prefix** | String | _""_ |  |
 | **customizeContext** | Function | _undefined_ |  |
+| **container** | Function | _React.Fragment_ |  |
 
 ### api
 
@@ -171,6 +172,17 @@ Prefix sets the base url for the router. Use this if the admin app is mounted on
 ### customizeContext
 
 A function that receives the standard `AdminContext` and returns a new context object.
+
+## container
+
+A function (React component) that resides under the AdminContext but above pages. Useful for wrapping the entire app in a custom context so data can persist between pages.
+
+```jsx
+<Bananas.App
+  // ...
+  container={MyCustomContainer}
+/>
+```
 
 ## Browser support
 

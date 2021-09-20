@@ -551,3 +551,17 @@ test("Can render logo as component", async () => {
 
   expect(getByTestId("custom_logo")).toBeTruthy();
 });
+
+const TestContainer = ({ children }) => {
+  return <div data-testid="custom_container">{children}</div>;
+};
+
+test("Can render using an app container", async () => {
+  const { getByTestId } = await renderApp({
+    props: {
+      container: TestContainer,
+    },
+  });
+
+  expect(getByTestId("custom_container")).toBeTruthy();
+});
