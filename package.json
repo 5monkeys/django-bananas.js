@@ -1,6 +1,6 @@
 {
   "name": "django-bananas",
-  "version": "3.5.3",
+  "version": "3.6.0",
   "license": "MIT",
   "author": "Jonas Lundberg",
   "repository": "5monkeys/django-bananas.js",
