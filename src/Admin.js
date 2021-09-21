@@ -70,6 +70,7 @@ class Admin extends React.Component {
       collapsable: !(props.permanent || false),
       collapsed: props.collapsed || false,
       dense: props.dense || false,
+      container: props.container || undefined,
     };
 
     // Initialize GUI settings
@@ -531,7 +532,7 @@ class Admin extends React.Component {
 
   render() {
     const { PageComponent } = this;
-    const { classes, pageTheme, loginForm } = this.props;
+    const { classes, pageTheme, loginForm, container: Container } = this.props;
     const { booting, booted, context, settings, pageProps } = this.state;
     const { user } = context;
 
@@ -548,42 +549,44 @@ class Admin extends React.Component {
         >
           {booted ? (
             <AdminContext.Provider value={context}>
-              {user ? (
-                <>
-                  <NavBar
-                    variant={isHorizontalLayout ? "drawer" : "appbar"}
-                    dense={settings.dense}
-                    permanent={!settings.collapsable}
-                    collapsed={settings.collapsed}
-                    nav={
-                      settings.icons
-                        ? this.props.nav
-                        : Array.isArray(this.props.nav)
-                        ? this.props.nav
-                        : this.props.nav
-                        ? Object.keys(this.props.nav)
-                        : null
-                    }
+              <Container>
+                {user ? (
+                  <>
+                    <NavBar
+                      variant={isHorizontalLayout ? "drawer" : "appbar"}
+                      dense={settings.dense}
+                      permanent={!settings.collapsable}
+                      collapsed={settings.collapsed}
+                      nav={
+                        settings.icons
+                          ? this.props.nav
+                          : Array.isArray(this.props.nav)
+                          ? this.props.nav
+                          : this.props.nav
+                          ? Object.keys(this.props.nav)
+                          : null
+                      }
+                      logo={this.props.logo}
+                      title={this.props.title}
+                      branding={this.props.branding}
+                      version={this.props.version}
+                    />
+                    <Page
+                      theme={pageTheme}
+                      component={PageComponent}
+                      controller={this.controllers.PageLoadController}
+                      {...pageProps}
+                    />
+                  </>
+                ) : (
+                  <LoginPage
+                    form={loginForm}
+                    logger={logger}
                     logo={this.props.logo}
                     title={this.props.title}
-                    branding={this.props.branding}
-                    version={this.props.version}
                   />
-                  <Page
-                    theme={pageTheme}
-                    component={PageComponent}
-                    controller={this.controllers.PageLoadController}
-                    {...pageProps}
-                  />
-                </>
-              ) : (
-                <LoginPage
-                  form={loginForm}
-                  logger={logger}
-                  logo={this.props.logo}
-                  title={this.props.title}
-                />
-              )}
+                )}
+              </Container>
             </AdminContext.Provider>
           ) : (
             <LoadingScreen
@@ -641,6 +644,11 @@ class App extends React.Component {
     editableSettings: PropTypes.bool,
     customizeContext: PropTypes.func,
     customizeUser: PropTypes.func,
+    container: PropTypes.oneOfType([
+      PropTypes.symbol,
+      PropTypes.func,
+      PropTypes.node,
+    ]),
   };
 
   static defaultProps = {
@@ -664,6 +672,7 @@ class App extends React.Component {
     editableSettings: false,
     customizeContext: undefined,
     customizeUser: undefined,
+    container: React.Fragment,
   };
 
   render() {
