@@ -479,7 +479,7 @@ class Admin extends React.Component {
     logger.info("Mount Page:", pageProps);
     this.admin.loading(false);
     this.PageComponent = PageComponent;
-    let title = this.getCustomTitle(pageProps);
+    const title = this.getCustomTitle(pageProps);
 
     this.setState({ pageProps }, () => {
       this.setTitle(title);
