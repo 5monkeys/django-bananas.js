@@ -106,7 +106,7 @@ ReactDOM.render(
     // dense: true,
     nav={{
       "fruit.peach:list": { icon: CustomIconComponent, title: "Custom Peach" },
-      "fruit.apple:red_delicious": FaceIcon,
+      "fruit.apple:red_delicious": { icon: FaceIcon, title: "Red apple" },
       "fruit.apple:granny_smith": FaceIcon,
       "fruit.apple:list": AppleIcon,
       "bananas.me:list": Gravatar,
