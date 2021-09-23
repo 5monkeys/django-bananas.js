@@ -464,13 +464,25 @@ class Admin extends React.Component {
     return null;
   }
 
+  getCustomTitle(pageProps) {
+    const { nav } = this.props;
+    if (nav && pageProps && pageProps.route && pageProps.route.id) {
+      const routeConfig = nav[pageProps.route.id];
+      if (routeConfig) {
+        return routeConfig.title || pageProps.title;
+      }
+    }
+    return pageProps.title;
+  }
+
   mountPage(PageComponent, pageProps) {
     logger.info("Mount Page:", pageProps);
     this.admin.loading(false);
     this.PageComponent = PageComponent;
+    let title = this.getCustomTitle(pageProps);
 
     this.setState({ pageProps }, () => {
-      this.setTitle(pageProps.title);
+      this.setTitle(title);
     });
   }
 
