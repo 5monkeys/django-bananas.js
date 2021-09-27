@@ -13,9 +13,9 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { useContext, useMemo, useState } from "react";
 
+import AdminContext from "./AdminContext";
 import Branding from "./Branding";
 import Container from "./Container";
-import AdminContext from "./context";
 import Hamburger from "./Hamburger";
 import Navigation from "./Navigation";
 import User from "./User";

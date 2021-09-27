@@ -1,15 +1,13 @@
 import { Avatar } from "@material-ui/core";
-import { AdminContext } from "django-bananas";
+import { useAdmin } from "django-bananas";
 import gravatar from "gravatar";
 import React from "react";
 
-const Gravatar = ({ props }) => (
-  <AdminContext.Consumer>
-    {context => {
-      const url = gravatar.url(context.user.email);
-      return <Avatar src={url} {...props} />;
-    }}
-  </AdminContext.Consumer>
-);
+const Gravatar = ({ props }) => {
+  const { user } = useAdmin();
+  const url = gravatar.url(user.email);
+
+  return <Avatar src={url} {...props} />;
+};
 
 export default Gravatar;

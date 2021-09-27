@@ -5,9 +5,9 @@ import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
+import AdminContext from "./AdminContext";
 import { AlertController } from "./Alert";
 import APIClient from "./api";
-import AdminContext from "./context";
 import {
   AnonymousUserError,
   PageError,

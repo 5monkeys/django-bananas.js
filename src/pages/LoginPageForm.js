@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
 import React from "react";
 
-import AdminContext from "../context";
+import AdminContext from "../AdminContext";
 import { t } from "../utils";
 
 const styles = () => ({

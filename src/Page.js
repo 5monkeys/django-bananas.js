@@ -2,6 +2,7 @@ import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
+import { PageContext } from ".";
 import ErrorBoundary from "./ErrorBoundary";
 import LoadingScreen from "./LoadingScreen";
 import ProgressBar from "./ProgressBar";
@@ -73,7 +74,9 @@ class Page extends React.Component {
         <PageLoadController ref={controller} />
         {PageComponent && (
           <ErrorBoundary key={pageProps ? pageProps.key : undefined}>
-            <PageComponent {...pageProps} />
+            <PageContext.Provider value={pageProps}>
+              <PageComponent {...pageProps} />
+            </PageContext.Provider>
           </ErrorBoundary>
         )}
       </div>
