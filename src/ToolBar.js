@@ -14,8 +14,8 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import { extendTheme } from "../themes";
 import Container from "./Container";
+import { extendTheme } from "./themes";
 
 const styles = theme => ({
   root: {

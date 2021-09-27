@@ -5,24 +5,24 @@ import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
 
-import APIClient from "../api";
-import AdminContext from "../context/AdminContext";
+import { AlertController } from "./Alert";
+import APIClient from "./api";
+import AdminContext from "./context/AdminContext";
 import {
   AnonymousUserError,
   PageError,
   PageNotFoundError,
   PageNotImplementedError,
-} from "../errors";
-import { ErrorPage, LoginPage } from "../pages";
-import Router from "../router";
-import Settings from "../settings";
-import themes, { createBananasTheme } from "../themes";
-import { ComponentProxy, getFromSchema, makeUser, t } from "../utils";
-import { AlertController } from "./Alert";
+} from "./errors";
 import LoadingScreen from "./LoadingScreen";
 import { MessagesController } from "./Messages";
 import NavBar from "./NavBar";
 import { Page, PageLoadController } from "./Page";
+import { ErrorPage, LoginPage } from "./pages";
+import Router from "./router";
+import Settings from "./settings";
+import themes, { createBananasTheme } from "./themes";
+import { ComponentProxy, getFromSchema, makeUser, t } from "./utils";
 
 // eslint thinks this is a hook.
 // eslint-disable-next-line

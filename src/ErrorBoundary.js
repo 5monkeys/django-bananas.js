@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import AdminContext from "../context/AdminContext";
-import { InternalPageError } from "../errors";
-import ErrorPage from "../pages/ErrorPage";
+import AdminContext from "./context/AdminContext";
+import { InternalPageError } from "./errors";
+import ErrorPage from "./pages/ErrorPage";
 
 class ErrorBoundary extends React.Component {
   static contextType = AdminContext;

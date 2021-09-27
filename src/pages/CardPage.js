@@ -5,8 +5,8 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
-import Content from "../components/Content";
-import TitleBar from "../components/TitleBar";
+import Content from "../Content";
+import TitleBar from "../TitleBar";
 
 const styles = () => ({
   root: {
