@@ -4,7 +4,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
 
-import AdminContext from "./context/AdminContext";
+import AdminContext from "./AdminContext";
 import MenuItem from "./MenuItem";
 
 const hasSelectedChild = (url, children = []) => {

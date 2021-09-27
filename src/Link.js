@@ -3,7 +3,7 @@ import MuiLink from "@material-ui/core/Link";
 import PropTypes from "prop-types";
 import React, { Children } from "react";
 
-import AdminContext from "./context/AdminContext";
+import AdminContext from "./AdminContext";
 import { toQuery } from "./utils";
 
 export default class Link extends React.Component {

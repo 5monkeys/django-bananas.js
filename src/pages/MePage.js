@@ -3,8 +3,8 @@ import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
+import AdminContext from "../AdminContext";
 import Content from "../Content";
-import AdminContext from "../context/AdminContext";
 import TitleBar from "../TitleBar";
 import ChangePasswordForm from "./ChangePasswordForm";
 import SettingsForm from "./SettingsForm";

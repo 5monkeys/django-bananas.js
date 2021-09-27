@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import AdminContext from "./context/AdminContext";
+import AdminContext from "./AdminContext";
 import { InternalPageError } from "./errors";
 import ErrorPage from "./pages/ErrorPage";
 
