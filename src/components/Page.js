@@ -2,11 +2,11 @@ import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
-import { PageContext } from ".";
+import PageContext from "../context/PageContext";
+import { MultiMeter } from "../utils";
 import ErrorBoundary from "./ErrorBoundary";
 import LoadingScreen from "./LoadingScreen";
 import ProgressBar from "./ProgressBar";
-import { MultiMeter } from "./utils";
 
 const styles = theme => ({
   root: {
