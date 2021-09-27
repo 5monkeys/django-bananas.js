@@ -7,7 +7,7 @@ import React from "react";
 
 import { AlertController } from "./Alert";
 import APIClient from "./api";
-import AdminContext from "./context";
+import AdminContext from "./context/AdminContext";
 import {
   AnonymousUserError,
   PageError,

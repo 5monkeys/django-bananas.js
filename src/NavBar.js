@@ -15,7 +15,7 @@ import React, { useContext, useMemo, useState } from "react";
 
 import Branding from "./Branding";
 import Container from "./Container";
-import AdminContext from "./context";
+import AdminContext from "./context/AdminContext";
 import Hamburger from "./Hamburger";
 import Navigation from "./Navigation";
 import User from "./User";

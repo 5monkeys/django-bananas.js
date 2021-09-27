@@ -6,5 +6,5 @@ const AdminContext = React.createContext({
   api: undefined,
   user: undefined,
 });
-
+export const useAdmin = () => React.useContext(AdminContext);
 export default AdminContext;

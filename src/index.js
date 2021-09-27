@@ -2,7 +2,8 @@ import App from "./Admin";
 
 export { default as Container } from "./Container";
 export { default as Content } from "./Content";
-export { default as AdminContext } from "./context";
+export { default as AdminContext, useAdmin } from "./context/AdminContext";
+export { default as PageContext, usePage } from "./context/PageContext";
 export { default as Link } from "./Link";
 export { default as LoginForm } from "./pages/LoginPageForm";
 export { default as TitleBar } from "./TitleBar";

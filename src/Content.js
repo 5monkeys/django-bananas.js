@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import Container from "./Container";
-import AdminContext from "./context";
+import AdminContext from "./context/AdminContext";
 
 const logger = Logger.get("bananas");
 
