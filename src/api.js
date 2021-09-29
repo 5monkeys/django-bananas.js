@@ -33,7 +33,7 @@ class APIClient extends Swagger {
     });
   }
 
-  execute(argHash) {
+  execute({ errorHandler, ...argHash }) {
     this.progressHandler({ done: false });
 
     return super
@@ -53,18 +53,27 @@ class APIClient extends Swagger {
         responseInterceptor: response => {
           // Intercept response and catch API errors
           if (response.status >= 403) {
-            const { operationId } = argHash;
-            logger.debug("Catched API Response:", operationId, response);
+            const handler = () => {
+              const { operationId } = argHash;
+              logger.debug("Catched API Response:", operationId, response);
 
-            const message =
-              response.obj && response.obj.detail
-                ? response.obj.detail
-                : `API ${response.statusText}`;
+              const message =
+                response.obj && response.obj.detail
+                  ? response.obj.detail
+                  : `API ${response.statusText}`;
 
-            this.errorHandler(message);
+              this.errorHandler(message);
+            };
+
+            if (typeof errorHandler === "function") {
+              errorHandler(response, handler);
+            } else {
+              handler();
+            }
           } else {
             this.progressHandler({ done: true });
           }
+
           return this.responseInterceptor
             ? this.responseInterceptor(response)
             : response;
