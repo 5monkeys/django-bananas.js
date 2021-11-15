@@ -71,6 +71,7 @@ class Admin extends React.Component {
       collapsed: props.collapsed || false,
       dense: props.dense || false,
       container: props.container || undefined,
+      hideNav: props.hideNav || false,
     };
 
     // Initialize GUI settings
@@ -564,25 +565,27 @@ class Admin extends React.Component {
               <Container>
                 {user ? (
                   <>
-                    <NavBar
-                      variant={isHorizontalLayout ? "drawer" : "appbar"}
-                      dense={settings.dense}
-                      permanent={!settings.collapsable}
-                      collapsed={settings.collapsed}
-                      nav={
-                        settings.icons
-                          ? this.props.nav
-                          : Array.isArray(this.props.nav)
-                          ? this.props.nav
-                          : this.props.nav
-                          ? Object.keys(this.props.nav)
-                          : null
-                      }
-                      logo={this.props.logo}
-                      title={this.props.title}
-                      branding={this.props.branding}
-                      version={this.props.version}
-                    />
+                    {!settings.hideNav && (
+                      <NavBar
+                        variant={isHorizontalLayout ? "drawer" : "appbar"}
+                        dense={settings.dense}
+                        permanent={!settings.collapsable}
+                        collapsed={settings.collapsed}
+                        nav={
+                          settings.icons
+                            ? this.props.nav
+                            : Array.isArray(this.props.nav)
+                            ? this.props.nav
+                            : this.props.nav
+                            ? Object.keys(this.props.nav)
+                            : null
+                        }
+                        logo={this.props.logo}
+                        title={this.props.title}
+                        branding={this.props.branding}
+                        version={this.props.version}
+                      />
+                    )}
                     <Page
                       theme={pageTheme}
                       component={PageComponent}
