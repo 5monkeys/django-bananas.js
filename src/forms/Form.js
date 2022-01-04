@@ -1,5 +1,5 @@
-import DateFnsUtils from "@date-io/date-fns";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { FORM_ERROR } from "final-form";
 import arrayMutators from "final-form-arrays";
 import PropTypes from "prop-types";
@@ -79,7 +79,7 @@ class Form extends React.Component {
   render() {
     const { route, children, formProps, mutators, ...props } = this.props;
     return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <FForm
           {...props}
           mutators={{ ...arrayMutators, ...mutators }}
@@ -95,7 +95,7 @@ class Form extends React.Component {
             </form>
           )}
         </FForm>
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     );
   }
 }

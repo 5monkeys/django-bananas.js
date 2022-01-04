@@ -1,3 +1,6 @@
+import FilterListIcon from "@mui/icons-material/FilterList";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import {
   Badge,
   Box,
@@ -15,10 +18,7 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@material-ui/core";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
+} from "@mui/material";
 import {
   AdminContext,
   Content,
@@ -37,13 +37,13 @@ const useStyles = makeStyles(
     },
     addButton: {
       boxShadow: "none",
-      paddingRight: theme.spacing(2),
+      paddingRight: theme.gap(2),
     },
     addIcon: {
-      marginRight: theme.spacing(1),
+      marginRight: theme.gap(1),
     },
     users: {
-      marginTop: theme.spacing(3),
+      marginTop: theme.gap(3),
     },
     userHover: {
       cursor: "pointer",
@@ -55,7 +55,7 @@ const useStyles = makeStyles(
     },
     spacedContent: {
       "& > *": {
-        margin: theme.spacing(0.5),
+        margin: theme.gap(0.5),
       },
     },
   }))

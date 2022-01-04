@@ -1,8 +1,8 @@
-import Button from "@material-ui/core/Button";
-import MuiDialogActions from "@material-ui/core/DialogActions";
-import MuiDialogContent from "@material-ui/core/DialogContent";
-import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+import Button from "@mui/material/Button";
+import MuiDialogActions from "@mui/material/DialogActions";
+import MuiDialogContent from "@mui/material/DialogContent";
+import TextField from "@mui/material/TextField";
+import { withStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -16,9 +16,9 @@ const styles = () => ({
 const DialogContent = withStyles(theme => ({
   root: {
     margin: 0,
-    padding: theme.spacing(2),
+    padding: theme.gap(2),
     "& > * + * ": {
-      marginTop: theme.spacing(2),
+      marginTop: theme.gap(2),
     },
   },
 }))(MuiDialogContent);
@@ -27,7 +27,7 @@ const DialogActions = withStyles(theme => ({
   root: {
     borderTop: `1px solid ${theme.palette.divider}`,
     margin: 0,
-    padding: theme.spacing(1),
+    padding: theme.gap(1),
   },
 }))(MuiDialogActions);
 

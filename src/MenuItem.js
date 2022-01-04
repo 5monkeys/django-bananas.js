@@ -1,10 +1,5 @@
-import {
-  Avatar,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-} from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { withStyles } from "@mui/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -58,24 +53,24 @@ const styles = theme => ({
     },
     "&$wide": {
       // Wide outer height
-      minHeight: 40 + theme.spacing(1),
+      minHeight: 40 + theme.gap(1),
 
       "& $avatarItem": {
         // Expanded avatar wrapper width, with centered Avatar
-        width: 40 + theme.spacing(3),
+        width: 40 + theme.gap(3),
       },
       "&$collapsed $avatarItem": {
         // Collapsed avatar wrapper width, with centered Avatar
-        width: 40 + theme.spacing(2),
+        width: 40 + theme.gap(2),
       },
     },
     "&$dense": {
       // Dense outer height
-      minHeight: 24 + theme.spacing(1),
+      minHeight: 24 + theme.gap(1),
 
       "& $avatarItem": {
         // Avatar wrapper width, with centered Avatar
-        width: 40 + theme.spacing(2),
+        width: 40 + theme.gap(2),
       },
     },
     "&$expanded $labelItem": {
@@ -86,7 +81,7 @@ const styles = theme => ({
     },
     "& $labelInset:first-child": {
       // Outermost left edge padding when icons disabled
-      paddingLeft: theme.spacing(3),
+      paddingLeft: theme.gap(3),
     },
   },
 
@@ -99,28 +94,28 @@ const styles = theme => ({
 
       "&$leftAligned": {
         // Outermost edge padding
-        paddingLeft: theme.spacing(5),
-        paddingRight: theme.spacing(5),
+        paddingLeft: theme.gap(5),
+        paddingRight: theme.gap(5),
       },
     },
     "&$leftAligned": {
       // Outermost edge padding
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2),
+      paddingLeft: theme.gap(2),
+      paddingRight: theme.gap(2),
 
       "& $avatarItem": {
         // Padding between avatar and label
-        marginRight: theme.spacing(1),
+        marginRight: theme.gap(1),
       },
     },
     "&$rightAligned": {
       // Outermost edge padding
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(3),
+      paddingLeft: theme.gap(2),
+      paddingRight: theme.gap(3),
 
       "& $avatarItem": {
         // Padding between avatar and label
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.gap(1),
       },
     },
     "& $labelInset:first-child": {
@@ -192,6 +187,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    overflow: "visible",
   },
 
   listItemAvatarRoot: {

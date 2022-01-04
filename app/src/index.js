@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
-import Badge from "@material-ui/core/Badge";
-import { blue } from "@material-ui/core/colors";
-import AppleIcon from "@material-ui/icons/ColorLens";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import FaceIcon from "@material-ui/icons/Face";
-import EmotIcon from "@material-ui/icons/InsertEmoticon";
-import MailIcon from "@material-ui/icons/Mail";
-import PeopleIcon from "@material-ui/icons/People";
-import SettingsIcon from "@material-ui/icons/Settings";
+import AppleIcon from "@mui/icons-material/ColorLens";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import FaceIcon from "@mui/icons-material/Face";
+import EmotIcon from "@mui/icons-material/InsertEmoticon";
+import MailIcon from "@mui/icons-material/Mail";
+import PeopleIcon from "@mui/icons-material/People";
+import SettingsIcon from "@mui/icons-material/Settings";
+import Badge from "@mui/material/Badge";
+import { blue } from "@mui/material/colors";
 import Bananas from "django-bananas";
 import { django } from "django-bananas/colors";
 import themes from "django-bananas/themes";

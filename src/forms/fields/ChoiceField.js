@@ -4,7 +4,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
-} from "@material-ui/core";
+} from "@mui/material";
 import React from "react";
 
 const ChoiceField = ({ input, schema, fieldProps = {} }) => (

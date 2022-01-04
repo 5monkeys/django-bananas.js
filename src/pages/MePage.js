@@ -1,5 +1,5 @@
-import { Paper } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { Paper } from "@mui/material";
+import { withStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -16,7 +16,7 @@ const styles = theme => ({
     justifyContent: "space-between",
   },
   paper: {
-    padding: theme.spacing(3),
+    padding: theme.gap(3),
     alignSelf: "flex-start",
   },
 });

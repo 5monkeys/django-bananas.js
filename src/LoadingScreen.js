@@ -1,7 +1,7 @@
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Fade from "@material-ui/core/Fade";
-import { withStyles } from "@material-ui/core/styles";
-import { alpha } from "@material-ui/core/styles/colorManipulator";
+import CircularProgress from "@mui/material/CircularProgress";
+import Fade from "@mui/material/Fade";
+import { alpha } from "@mui/material/styles";
+import { withStyles } from "@mui/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -43,7 +43,7 @@ const styles = theme => ({
   logo: {
     position: "absolute",
     margin: 0,
-    marginTop: -36 - theme.spacing(3),
+    marginTop: -36 - theme.gap(3),
   },
 });
 

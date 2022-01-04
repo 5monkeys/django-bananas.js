@@ -1,4 +1,5 @@
-import { DateTimePicker } from "@material-ui/pickers";
+import { DateTimePicker } from "@mui/lab";
+import { TextField } from "@mui/material";
 import React from "react";
 
 const DateTimeField = ({ input: { onChange, ...inputProps }, fieldProps }) => {
@@ -9,6 +10,7 @@ const DateTimeField = ({ input: { onChange, ...inputProps }, fieldProps }) => {
       onChange={date => {
         onChange(date.toISOString());
       }}
+      renderInput={props => <TextField {...props} {...fieldProps} />}
     />
   );
 };

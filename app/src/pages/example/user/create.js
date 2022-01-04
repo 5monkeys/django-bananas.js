@@ -5,7 +5,7 @@ import {
   makeStyles,
   Tooltip,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import { Content, TitleBar, ToolBar, Tools } from "django-bananas";
 import { Form } from "django-bananas/forms";
 import React from "react";
@@ -16,8 +16,8 @@ import AutoField from "../../../components/CustomAutoField";
 const useStyles = makeStyles(
   createStyles(theme => ({
     paper: {
-      margin: theme.spacing(2),
-      padding: theme.spacing(2),
+      margin: theme.gap(2),
+      padding: theme.gap(2),
     },
     formRoot: {
       display: "flex",

@@ -1,3 +1,5 @@
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import HomeIcon from "@mui/icons-material/Home";
 import {
   AppBar,
   Box,
@@ -5,10 +7,8 @@ import {
   Hidden,
   SwipeableDrawer,
   Toolbar,
-} from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import HomeIcon from "@material-ui/icons/Home";
+} from "@mui/material";
+import { withStyles } from "@mui/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { useContext, useMemo, useState } from "react";
@@ -88,7 +88,7 @@ const styles = theme => ({
     }),
   },
   drawerCollapsed: {
-    width: 40 + theme.spacing(2) + 1,
+    width: 40 + theme.gap(2) + 1,
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -98,8 +98,8 @@ const styles = theme => ({
   drawerBranding: {},
   permanentDrawerBrandingButton: {
     padding: 0,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    paddingLeft: theme.gap(2),
+    paddingRight: theme.gap(2),
   },
   /* APPBAR STYLES */
   appbar: {
@@ -119,8 +119,8 @@ const styles = theme => ({
   },
   permanentAppbarBrandingButton: {
     padding: 0,
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(2),
+    paddingLeft: theme.gap(3),
+    paddingRight: theme.gap(2),
   },
   pageOffset: {
     ...theme.mixins.toolbar,
@@ -158,7 +158,7 @@ const NavBar = props => {
 
   const renderHamburger = () => (
     <>
-      <Hidden xsDown>
+      <Hidden smDown>
         {isDrawerVariant && !permanent && (
           <Hamburger open={!collapsed} onToggle={toggle} />
         )}
@@ -328,7 +328,7 @@ const NavBar = props => {
   return (
     <>
       <Hidden smUp>{renderMobileDrawer()}</Hidden>
-      <Hidden implementation="css" xsDown>
+      <Hidden implementation="css" smDown>
         {renderDesktopDrawer()}
       </Hidden>
     </>
