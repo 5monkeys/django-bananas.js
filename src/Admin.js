@@ -697,11 +697,11 @@ class App extends React.Component {
       : undefined;
 
     logger.debug("Main Theme:", theme);
-    console.log("Main Theme:", theme);
     logger.debug("Page Theme:", pageTheme);
 
     return (
       <StyledEngineProvider injectFirst>
+        {/* <GlobalStyles styles={jssStyles} /> */}
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <BananasAdmin {...{ ...props, theme, pageTheme }} />
