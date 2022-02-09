@@ -1,15 +1,10 @@
-import AppBar from "@material-ui/core/AppBar";
-import {
-  createTheme,
-  MuiThemeProvider,
-  withStyles,
-} from "@material-ui/core/styles";
-import {
-  darken,
-  getLuminance,
-  lighten,
-} from "@material-ui/core/styles/colorManipulator";
-import Toolbar from "@material-ui/core/Toolbar";
+import { ThemeProvider } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import { createTheme } from "@mui/material/styles";
+import { StyledEngineProvider } from "@mui/material/styles";
+import { darken, getLuminance, lighten } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import { withStyles } from "@mui/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -266,9 +261,11 @@ class ToolBar extends React.Component {
       >
         <Container>
           {autoStyle ? (
-            <MuiThemeProvider theme={this.getTheme()}>
-              {this.renderToolbar()}
-            </MuiThemeProvider>
+            <StyledEngineProvider injectFirst>
+              <ThemeProvider theme={this.getTheme()}>
+                {this.renderToolbar()}
+              </ThemeProvider>
+            </StyledEngineProvider>
           ) : (
             this.renderToolbar()
           )}
@@ -313,7 +310,9 @@ class ToolBar extends React.Component {
     const { theme } = this.props;
 
     return theme ? (
-      <MuiThemeProvider theme={theme}>{this.renderAppBar()}</MuiThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>{this.renderAppBar()}</ThemeProvider>
+      </StyledEngineProvider>
     ) : (
       this.renderAppBar()
     );

@@ -1,9 +1,5 @@
-import {
-  Button,
-  createStyles,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { Button, Typography } from "@mui/material";
+import { createStyles, makeStyles } from "@mui/styles";
 import { Content, TitleBar, ToolBar, Tools } from "django-bananas";
 import { AutoField, Form } from "django-bananas/forms";
 import PropTypes from "prop-types";
@@ -12,8 +8,8 @@ import React from "react";
 const useStyles = makeStyles(
   createStyles(theme => ({
     paper: {
-      margin: theme.spacing(2),
-      padding: theme.spacing(2),
+      margin: theme.gap(2),
+      padding: theme.gap(2),
     },
     formRoot: {
       display: "flex",

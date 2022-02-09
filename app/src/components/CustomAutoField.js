@@ -1,4 +1,4 @@
-import { InputAdornment, TextField } from "@material-ui/core";
+import { InputAdornment, TextField } from "@mui/material";
 import { AutoField } from "django-bananas/forms";
 import React from "react";
 

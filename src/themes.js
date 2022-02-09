@@ -1,5 +1,5 @@
-import { amber } from "@material-ui/core/colors";
-import { createTheme } from "@material-ui/core/styles";
+import { amber } from "@mui/material/colors";
+import { createTheme } from "@mui/material/styles";
 import { cloneDeep, merge } from "lodash";
 
 import { django } from "./colors";
@@ -24,8 +24,25 @@ export function applyThemeDefaults(theme) {
   return theme;
 }
 
-export function createBananasTheme(theme) {
-  return createTheme(applyThemeDefaults(theme));
+export function createBananasTheme(rawTheme) {
+  const theme = createTheme(applyThemeDefaults(rawTheme));
+
+  theme.gap = (...multipliers) => {
+    const parse = m => m * parseInt(theme.spacing(1), 10);
+
+    if (multipliers.length === 0) {
+      return parse(1);
+    }
+    if (multipliers.length === 1) {
+      return parse(multipliers[0]);
+    }
+
+    return multipliers
+      .reduce((aggr, m) => [...aggr, `${parse(m)}px`], [])
+      .join(" ");
+  };
+
+  return theme;
 }
 
 export function extendTheme(source, overrides) {
@@ -36,12 +53,9 @@ export function extendTheme(source, overrides) {
 
 const lightTheme = {
   palette: {
-    type: "light",
+    mode: "light",
     primary: django,
-    secondary: {
-      main: amber[700],
-      contrastText: "#fff",
-    },
+    secondary: amber,
     background: {
       default: "#fafafa",
     },
@@ -50,7 +64,7 @@ const lightTheme = {
 
 const darkTheme = {
   palette: {
-    type: "dark",
+    mode: "dark",
     primary: lightTheme.palette.primary,
     secondary: lightTheme.palette.secondary,
     background: {

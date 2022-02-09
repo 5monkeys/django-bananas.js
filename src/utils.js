@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";

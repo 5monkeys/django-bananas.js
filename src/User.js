@@ -1,6 +1,6 @@
-import { ButtonBase, List, Typography } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { ButtonBase, List, Typography } from "@mui/material";
+import { withStyles } from "@mui/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";

@@ -1,5 +1,5 @@
-import { Collapse, List, ListSubheader, MenuList } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import { Collapse, List, ListSubheader, MenuList } from "@mui/material";
+import { createStyles, makeStyles } from "@mui/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme =>
       paddingTop: 0,
       paddingBottom: 0,
       "& > *": {
-        paddingLeft: `${theme.spacing(2)}px !important`,
+        paddingLeft: `${theme.gap(2)} !important`,
       },
       "&$dense > *": {
         paddingLeft: "0 !important",
@@ -63,8 +63,8 @@ const useStyles = makeStyles(theme =>
     },
     vertical: {
       "&multiple": {
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
+        paddingTop: theme.gap(1),
+        paddingBottom: theme.gap(1),
       },
     },
     dense: {},
@@ -76,7 +76,7 @@ const useStyles = makeStyles(theme =>
       textTransform: "uppercase",
       fontSize: `${0.75}rem`,
       overflow: "hidden",
-      height: theme.spacing(4),
+      height: theme.gap(4),
       display: "flex",
       alignItems: "center",
     },

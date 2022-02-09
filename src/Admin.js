@@ -1,5 +1,7 @@
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { StyledEngineProvider } from "@mui/material/styles";
+import { withStyles } from "@mui/styles";
 import classNames from "classnames";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
@@ -43,7 +45,7 @@ const styles = theme => {
     horizontalRoot: {
       width: "100%",
       flexDirection: "row",
-      [theme.breakpoints.down("xs")]: {
+      [theme.breakpoints.down("sm")]: {
         flexDirection: "column",
       },
     },
@@ -698,10 +700,13 @@ class App extends React.Component {
     logger.debug("Page Theme:", pageTheme);
 
     return (
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <BananasAdmin {...{ ...props, theme, pageTheme }} />
-      </MuiThemeProvider>
+      <StyledEngineProvider injectFirst>
+        {/* <GlobalStyles styles={jssStyles} /> */}
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <BananasAdmin {...{ ...props, theme, pageTheme }} />
+        </ThemeProvider>
+      </StyledEngineProvider>
     );
   }
 }

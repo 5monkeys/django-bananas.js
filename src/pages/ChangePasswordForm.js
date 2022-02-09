@@ -4,8 +4,8 @@ import {
   FormGroup,
   FormLabel,
   TextField,
-} from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import { withStyles } from "@mui/styles";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
 import React from "react";
@@ -20,14 +20,14 @@ const styles = theme => ({
     maxWidth: 350,
   },
   formLabel: {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.gap(2),
   },
   formControlNormal: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.gap(3),
     marginBottom: 0,
   },
   field: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.gap(3),
   },
 });
 

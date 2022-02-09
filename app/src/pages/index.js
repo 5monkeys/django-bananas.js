@@ -1,5 +1,6 @@
-import { createStyles, makeStyles, Typography } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
+import { Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import { createStyles, makeStyles } from "@mui/styles";
 import { Link, useAdmin } from "django-bananas";
 import React from "react";
 
@@ -13,7 +14,7 @@ const useStyles = makeStyles(
       flexDirection: "column",
     },
     button: {
-      margin: theme.spacing(1),
+      margin: theme.gap(1),
     },
   }))
 );

@@ -1,7 +1,7 @@
-import Fab from "@material-ui/core/Fab";
-import { withStyles, withTheme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
+import { withStyles, withTheme } from "@mui/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -18,15 +18,15 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    paddingRight: theme.spacing(2),
+    paddingRight: theme.gap(2),
   },
   title: {
     flexGrow: 0,
     flexShrink: 0,
   },
   back: {
-    marginLeft: -theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginLeft: -theme.gap(2),
+    marginRight: theme.gap(2),
     boxShadow: "none",
     borderWidth: "1.5pt",
     borderStyle: "solid",
@@ -35,7 +35,7 @@ const styles = theme => ({
     "&:hover, &:active": {
       boxShadow: "none",
     },
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       marginLeft: 0,
     },
   },

@@ -1,14 +1,14 @@
-import { amber, blue, green } from "@material-ui/core/colors";
-import IconButton from "@material-ui/core/IconButton";
-import Slide from "@material-ui/core/Slide";
-import Snackbar from "@material-ui/core/Snackbar";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
-import { withStyles } from "@material-ui/core/styles";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import CloseIcon from "@material-ui/icons/Close";
-import ErrorIcon from "@material-ui/icons/Error";
-import InfoIcon from "@material-ui/icons/Info";
-import WarningIcon from "@material-ui/icons/Warning";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloseIcon from "@mui/icons-material/Close";
+import ErrorIcon from "@mui/icons-material/Error";
+import InfoIcon from "@mui/icons-material/Info";
+import WarningIcon from "@mui/icons-material/Warning";
+import { amber, blue, green } from "@mui/material/colors";
+import IconButton from "@mui/material/IconButton";
+import Slide from "@mui/material/Slide";
+import Snackbar from "@mui/material/Snackbar";
+import SnackbarContent from "@mui/material/SnackbarContent";
+import { withStyles } from "@mui/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -38,7 +38,7 @@ const styles = theme => ({
   },
   icontype: {
     opacity: 0.9,
-    marginRight: theme.spacing(1),
+    marginRight: theme.gap(1),
   },
   message: {
     display: "flex",
@@ -103,6 +103,7 @@ class Message extends React.Component {
               className={classes.close}
               onClick={this.handleClose}
               data-testid="message-close-button"
+              size="large"
             >
               <CloseIcon className={classes.icon} />
             </IconButton>,

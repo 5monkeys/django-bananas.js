@@ -1,4 +1,6 @@
-import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/material";
+import { StyledEngineProvider } from "@mui/material/styles";
+import { withStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -38,9 +40,11 @@ class ThemedPage extends React.Component {
   render() {
     const { theme, ...rest } = this.props;
     return theme ? (
-      <MuiThemeProvider theme={theme}>
-        <BananasPage {...rest} />
-      </MuiThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <BananasPage {...rest} />
+        </ThemeProvider>
+      </StyledEngineProvider>
     ) : (
       <BananasPage {...rest} />
     );

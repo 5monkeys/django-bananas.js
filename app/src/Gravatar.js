@@ -1,4 +1,4 @@
-import { Avatar } from "@material-ui/core";
+import { Avatar } from "@mui/material";
 import { useAdmin } from "django-bananas";
 import gravatar from "gravatar";
 import React from "react";

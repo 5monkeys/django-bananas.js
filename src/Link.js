@@ -1,5 +1,5 @@
 /* inspired by next/link : https://github.com/zeit/next.js/blob/canary/packages/next/client/link.js */
-import MuiLink from "@material-ui/core/Link";
+import MuiLink from "@mui/material/Link";
 import PropTypes from "prop-types";
 import React, { Children } from "react";
 

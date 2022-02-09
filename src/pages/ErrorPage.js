@@ -1,5 +1,5 @@
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+import Button from "@mui/material/Button";
+import { withStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -15,7 +15,7 @@ const errorMessages = {
 
 const styles = theme => ({
   actions: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.gap(3),
     textAlign: "right",
   },
   actionButton: {

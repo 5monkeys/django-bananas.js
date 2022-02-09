@@ -1,4 +1,4 @@
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@mui/styles";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
@@ -11,7 +11,7 @@ const styles = theme => ({
     alignItems: "center",
     "& > * + *": {
       // Margin between nodes (buttons)
-      marginLeft: theme.spacing(1),
+      marginLeft: theme.gap(1),
     },
   },
 });

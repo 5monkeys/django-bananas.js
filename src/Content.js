@@ -1,4 +1,4 @@
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@mui/styles";
 import classNames from "classnames";
 import Logger from "js-logger";
 import PropTypes from "prop-types";
@@ -23,7 +23,7 @@ const styles = theme => ({
     height: "100%",
   },
   padded: {
-    padding: theme.spacing(3),
+    padding: theme.gap(3),
   },
 });
 

@@ -1,8 +1,4 @@
-import {
-  darken,
-  lighten,
-  rgbToHex,
-} from "@material-ui/core/styles/colorManipulator";
+import { darken, lighten, rgbToHex } from "@mui/material/styles";
 
 export const createColor = base => {
   const color = {

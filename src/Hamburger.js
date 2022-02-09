@@ -1,7 +1,7 @@
-import IconButton from "@material-ui/core/IconButton";
-import { withStyles } from "@material-ui/core/styles";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
+import { withStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -10,8 +10,8 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: theme.spacing(0.5),
-    paddingRight: theme.spacing(0.5),
+    paddingLeft: theme.gap(0.5),
+    paddingRight: theme.gap(0.5),
     marginRight: "1px",
   },
 });
@@ -25,11 +25,17 @@ const Hamburger = ({ classes, open, onToggle, ...rest }) => {
           color="inherit"
           onClick={onToggle}
           {...rest}
+          size="large"
         >
           <ChevronLeftIcon />
         </IconButton>
       ) : (
-        <IconButton color="inherit" aria-label="Open drawer" onClick={onToggle}>
+        <IconButton
+          color="inherit"
+          aria-label="Open drawer"
+          onClick={onToggle}
+          size="large"
+        >
           <MenuIcon />
         </IconButton>
       )}
