@@ -57,9 +57,11 @@ class APIClient extends Swagger {
               const { operationId } = argHash;
               logger.debug("Catched API Response:", operationId, response);
 
+              console.log(response);
+
               const message =
-                response.obj && response.obj.detail
-                  ? response.obj.detail
+                response.body && response.body.detail
+                  ? response.body.detail
                   : `API ${response.statusText}`;
 
               this.errorHandler(message);
@@ -102,6 +104,10 @@ Swagger.makeApisTagOperation = client => {
   const interfaces = makeApisTagOperation(client);
   const { apis } = interfaces;
 
+  const version3 =
+    client.spec.openapi?.startsWith("3") ??
+    !client.spec.swagger?.startsWith("2");
+
   // operationId -> originalOperationId mapping
   const operationIdMap = Object.values(client.spec.paths).reduce(
     (result, specs) => ({
@@ -138,28 +144,63 @@ Swagger.makeApisTagOperation = client => {
 
             // Build schema spec for this endpoint
             call.title = spec.summary;
-            call.schema = spec.parameters.reduce((parameters, parameter) => {
-              if (parameter.in === "body") {
-                const required = parameter.schema.required || [];
-                parameters[parameter.name] = Object.entries(
-                  parameter.schema.properties
-                ).reduce(
-                  (schema, [key, value]) => ({
-                    ...schema,
-                    [key]: { ...value, required: required.includes(key) },
-                  }),
-                  {}
-                );
-              } else if (parameter.in === "query") {
-                parameters[parameter.name] = parameter;
+
+            if (version3) {
+              call.schema = {};
+
+              if (spec.requestBody) {
+                const requestBody =
+                  spec.requestBody.content["application/json"];
+                call.schema[spec["x-codegen-request-body-name"] ?? "data"] =
+                  Object.fromEntries(
+                    Object.entries(requestBody.schema.properties).map(
+                      ([name, property]) => {
+                        return [
+                          name,
+                          {
+                            ...property,
+                            required:
+                              requestBody.schema.required.includes(name),
+                          },
+                        ];
+                      }
+                    )
+                  );
               }
-              return parameters;
-            }, {});
-            const response200 = spec.responses[200];
-            call.response =
-              response200 != null && response200.schema != null
-                ? simplifySchema(response200.schema)
-                : undefined;
+
+              if (spec.parameters) {
+                call.schema = spec.parameters.reduce(
+                  (parameters, parameter) => {
+                    parameters[parameter.name] = parameter;
+                    return parameters;
+                  },
+                  call.schema
+                );
+              }
+            } else {
+              call.schema = spec.parameters.reduce((parameters, parameter) => {
+                if (parameter.in === "body") {
+                  const required = parameter.schema.required || [];
+                  parameters[parameter.name] = Object.entries(
+                    parameter.schema.properties
+                  ).reduce(
+                    (schema, [key, value]) => ({
+                      ...schema,
+                      [key]: { ...value, required: required.includes(key) },
+                    }),
+                    {}
+                  );
+                } else if (parameter.in === "query") {
+                  parameters[parameter.name] = parameter;
+                }
+                return parameters;
+              }, {});
+              const response200 = spec.responses[200];
+              call.response =
+                response200 != null && response200.schema != null
+                  ? simplifySchema(response200.schema)
+                  : undefined;
+            }
 
             return {
               ...originals,

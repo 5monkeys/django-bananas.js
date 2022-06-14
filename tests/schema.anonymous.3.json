@@ -1,0 +1,147 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Django Bananas Admin API Schema",
+        "description": "API for django-bananas.js",
+        "version": "v1.0"
+    },
+    "servers": [
+        {
+            "url": "http://foo.bar/api/v1.0"
+        }
+    ],
+    "security": [
+        {
+            "Basic": []
+        }
+    ],
+    "paths": {
+        "/bananas/i18n/": {
+            "get": {
+                "tags": [
+                    "app:bananas"
+                ],
+                "summary": "Translation catalog",
+                "description": "Retrieve the translation catalog.",
+                "operationId": "bananas.i18n:list",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/bananas/login/": {
+            "post": {
+                "tags": [
+                    "app:bananas"
+                ],
+                "summary": "Logga in",
+                "description": "Log in django staff user",
+                "operationId": "bananas.login:create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Authentication"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codegen-request-body-name": "data"
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Authentication": {
+                "required": [
+                    "password",
+                    "username"
+                ],
+                "type": "object",
+                "properties": {
+                    "password": {
+                        "title": "Lösenord",
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "username": {
+                        "title": "Användarnamn",
+                        "minLength": 1,
+                        "type": "string"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "title": "Email",
+                        "minLength": 1,
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "full_name": {
+                        "title": "Full name",
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Falls back to username, if not implemented or empty",
+                        "readOnly": true
+                    },
+                    "groups": {
+                        "type": "array",
+                        "readOnly": true,
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "id": {
+                        "title": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "is_superuser": {
+                        "title": "Is superuser",
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "permissions": {
+                        "type": "array",
+                        "description": "Permissions that the user has, both through group and user permissions.",
+                        "readOnly": true,
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "username": {
+                        "title": "Username",
+                        "minLength": 1,
+                        "type": "string",
+                        "readOnly": true
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Basic": {
+                "type": "http",
+                "scheme": "basic"
+            }
+        }
+    }
+}

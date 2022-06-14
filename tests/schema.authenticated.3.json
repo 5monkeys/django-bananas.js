@@ -1,0 +1,722 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Django Bananas Admin API Schema",
+        "description": "API for django-bananas.js",
+        "version": "v1.0"
+    },
+    "servers": [
+        {
+            "url": "http://foo.bar/api/v1.0"
+        }
+    ],
+    "security": [
+        {
+            "Basic": []
+        }
+    ],
+    "paths": {
+        "/bananas/change_password/": {
+            "post": {
+                "tags": [
+                    "app:bananas"
+                ],
+                "summary": "Ändra lösenord",
+                "description": "Change password for logged in django staff user",
+                "operationId": "bananas.change_password:create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordChange"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {}
+                    }
+                },
+                "x-codegen-request-body-name": "data"
+            }
+        },
+        "/bananas/i18n/": {
+            "get": {
+                "tags": [
+                    "app:bananas"
+                ],
+                "summary": "Translation catalog",
+                "description": "Retrieve the translation catalog.",
+                "operationId": "bananas.i18n:list",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/bananas/logout/": {
+            "post": {
+                "tags": [
+                    "app:bananas"
+                ],
+                "summary": "Logga ut",
+                "description": "Log out django staff user",
+                "operationId": "bananas.logout:create",
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/bananas/me/": {
+            "get": {
+                "tags": [
+                    "app:bananas"
+                ],
+                "summary": "Me",
+                "description": "Retrieve logged in user info",
+                "operationId": "bananas.me:list",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/example/user/": {
+            "get": {
+                "tags": [
+                    "app:example",
+                    "navigation",
+                    "crud"
+                ],
+                "summary": "Användare",
+                "operationId": "example.user:list",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "schema": {
+                            "minLength": 1,
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserDetails"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Lägg till användare",
+                "operationId": "example.user:create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codegen-request-body-name": "data"
+            }
+        },
+        "/example/user/foo/": {
+            "get": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Foo",
+                "operationId": "example.user:foo",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/example/user/form/": {
+            "get": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Form",
+                "operationId": "example.user:form.read",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Form"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Form",
+                "operationId": "example.user:form.create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Form"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Form"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codegen-request-body-name": "data"
+            }
+        },
+        "/example/user/{id}/": {
+            "get": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Användare",
+                "operationId": "example.user:read",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "A unique integer value identifying this användare.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDetails"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Användare",
+                "operationId": "example.user:update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "A unique integer value identifying this användare.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codegen-request-body-name": "data"
+            },
+            "delete": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Användare",
+                "operationId": "example.user:delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "A unique integer value identifying this användare.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "",
+                        "content": {}
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Användare",
+                "operationId": "example.user:partial_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "A unique integer value identifying this användare.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codegen-request-body-name": "data"
+            }
+        },
+        "/example/user/{id}/bar/": {
+            "get": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Bar",
+                "operationId": "example.user:bar",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "A unique integer value identifying this användare.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/example/user/{id}/baz/{x}/ham/{y}/": {
+            "get": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Baz",
+                "operationId": "example.user:baz.baz",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "A unique integer value identifying this användare.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "x",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "y",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/example/user/{id}/send_activation_email/": {
+            "post": {
+                "tags": [
+                    "app:example",
+                    "crud"
+                ],
+                "summary": "Send activation e-mail",
+                "operationId": "example.user:send_activation_email",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "A unique integer value identifying this användare.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-codegen-request-body-name": "data"
+            }
+        },
+        "/test/route/": {
+            "get": {
+                "tags": [
+                    "app:test",
+                    "navigation",
+                    "crud"
+                ],
+                "summary": "A test route for listing",
+                "operationId": "test.route:list",
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {}
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Form": {
+                "required": [
+                    "boolean",
+                    "choices",
+                    "date",
+                    "datetime",
+                    "integer",
+                    "multiple_choices",
+                    "text"
+                ],
+                "type": "object",
+                "properties": {
+                    "boolean": {
+                        "title": "Boolean",
+                        "type": "boolean"
+                    },
+                    "choices": {
+                        "title": "Choices",
+                        "type": "string",
+                        "enum": [
+                            "se",
+                            "no",
+                            "fi",
+                            "dk"
+                        ]
+                    },
+                    "date": {
+                        "title": "Date",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "datetime": {
+                        "title": "Datetime",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "integer": {
+                        "title": "Integer",
+                        "type": "integer"
+                    },
+                    "multiple_choices": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "se",
+                                "no",
+                                "fi",
+                                "dk"
+                            ]
+                        }
+                    },
+                    "text": {
+                        "title": "Text",
+                        "minLength": 1,
+                        "type": "string"
+                    }
+                }
+            },
+            "PasswordChange": {
+                "required": [
+                    "new_password1",
+                    "new_password2",
+                    "old_password"
+                ],
+                "type": "object",
+                "properties": {
+                    "new_password1": {
+                        "title": "Nytt lösenord",
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "['Ditt lösenord kan inte vara alltför lik din personliga information.', 'Ditt lösenord måste innehålla minst 8 tecken.', 'Ditt lösenord kan inte vara ett allmänt använt lösenord.', 'Ditt lösenord kan inte bara vara numeriskt.']"
+                    },
+                    "new_password2": {
+                        "title": "Bekräfta nytt lösenord",
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "old_password": {
+                        "title": "Gammalt lösenord",
+                        "minLength": 1,
+                        "type": "string"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "title": "Email",
+                        "minLength": 1,
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "full_name": {
+                        "title": "Full name",
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Falls back to username, if not implemented or empty",
+                        "readOnly": true
+                    },
+                    "groups": {
+                        "type": "array",
+                        "readOnly": true,
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "id": {
+                        "title": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "is_superuser": {
+                        "title": "Is superuser",
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "permissions": {
+                        "type": "array",
+                        "description": "Permissions that the user has, both through group and user permissions.",
+                        "readOnly": true,
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "username": {
+                        "title": "Username",
+                        "minLength": 1,
+                        "type": "string",
+                        "readOnly": true
+                    }
+                }
+            },
+            "UserDetails": {
+                "required": [
+                    "username"
+                ],
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "title": "E-postadress",
+                        "maxLength": 254,
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "full_name": {
+                        "title": "Full name",
+                        "minLength": 1,
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "id": {
+                        "title": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "is_staff": {
+                        "title": "Personalstatus",
+                        "type": "boolean",
+                        "description": "Avgör om användaren kan logga in på denna adminsida."
+                    },
+                    "url": {
+                        "title": "Url",
+                        "type": "string",
+                        "format": "uri",
+                        "readOnly": true
+                    },
+                    "username": {
+                        "title": "Användarnamn",
+                        "maxLength": 150,
+                        "minLength": 1,
+                        "pattern": "^[\\w.@+-]+$",
+                        "type": "string",
+                        "description": "Obligatoriskt. 150 tecken eller färre. Endast bokstäver, siffror och @/./+/-/_."
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Basic": {
+                "type": "http",
+                "scheme": "basic"
+            }
+        }
+    }
+}
