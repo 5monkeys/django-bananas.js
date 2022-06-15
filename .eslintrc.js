@@ -40,7 +40,7 @@ module.exports = {
       env: { node: true },
     },
     {
-      files: ["*.test.js", "{test,__mocks__}/*.js"],
+      files: ["*.test.js", "*.mock.js", "{test,__mocks__}/*.js"],
       env: { node: true, jest: true },
       rules: {
         "jest/no-truthy-falsy": "off",

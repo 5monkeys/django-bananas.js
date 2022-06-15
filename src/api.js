@@ -57,8 +57,6 @@ class APIClient extends Swagger {
               const { operationId } = argHash;
               logger.debug("Catched API Response:", operationId, response);
 
-              console.log(response);
-
               const message =
                 response.body && response.body.detail
                   ? response.body.detail
@@ -106,7 +104,8 @@ Swagger.makeApisTagOperation = client => {
 
   const version3 =
     client.spec.openapi?.startsWith("3") ??
-    !client.spec.swagger?.startsWith("2");
+    !client.spec.swagger?.startsWith("2") ??
+    false;
 
   // operationId -> originalOperationId mapping
   const operationIdMap = Object.values(client.spec.paths).reduce(
@@ -149,18 +148,19 @@ Swagger.makeApisTagOperation = client => {
               call.schema = {};
 
               if (spec.requestBody) {
+                // Assumes json as request body, not ideal
                 const requestBody =
                   spec.requestBody.content["application/json"];
+                const required = requestBody.schema.required ?? [];
                 call.schema[spec["x-codegen-request-body-name"] ?? "data"] =
                   Object.fromEntries(
                     Object.entries(requestBody.schema.properties).map(
-                      ([name, property]) => {
+                      ([key, property]) => {
                         return [
-                          name,
+                          key,
                           {
                             ...property,
-                            required:
-                              requestBody.schema.required.includes(name),
+                            required: required.includes(key),
                           },
                         ];
                       }
@@ -171,6 +171,11 @@ Swagger.makeApisTagOperation = client => {
               if (spec.parameters) {
                 call.schema = spec.parameters.reduce(
                   (parameters, parameter) => {
+                    // Rename schema.type to type to match 2.0 and internal api
+                    const type = parameter.schema.type;
+                    parameter["type"] = type;
+                    delete parameter["schema"];
+
                     parameters[parameter.name] = parameter;
                     return parameters;
                   },
@@ -180,7 +185,7 @@ Swagger.makeApisTagOperation = client => {
             } else {
               call.schema = spec.parameters.reduce((parameters, parameter) => {
                 if (parameter.in === "body") {
-                  const required = parameter.schema.required || [];
+                  const required = parameter.schema.required ?? [];
                   parameters[parameter.name] = Object.entries(
                     parameter.schema.properties
                   ).reduce(
@@ -195,12 +200,13 @@ Swagger.makeApisTagOperation = client => {
                 }
                 return parameters;
               }, {});
-              const response200 = spec.responses[200];
-              call.response =
-                response200 != null && response200.schema != null
-                  ? simplifySchema(response200.schema)
-                  : undefined;
             }
+
+            const response200 = spec.responses[200];
+            call.response =
+              response200 != null && response200.schema != null
+                ? simplifySchema(response200.schema)
+                : undefined;
 
             return {
               ...originals,

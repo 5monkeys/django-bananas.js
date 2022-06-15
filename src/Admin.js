@@ -185,7 +185,9 @@ class Admin extends React.Component {
         ? { url: this.props.api }
         : this.props.api;
     const { url: apiBase, ...rest } = apiProp;
-    const apiUrl = `${apiBase}/v1/openapi.json`;
+    const apiUrl = apiBase.endsWith(".json")
+      ? apiBase
+      : `${apiBase}/v1.0/schema.json`;
     let swagger = undefined;
     try {
       swagger = await new APIClient({
@@ -213,7 +215,7 @@ class Admin extends React.Component {
     );
 
     this.swagger = swagger;
-    this.api = swagger.apis;
+    this.api = swagger.operations;
 
     // Load translations
     const i18n = await this.api["bananas.i18n:list"]();

@@ -19,14 +19,14 @@ export const user = {
   groups: [],
 };
 
-export function mockAPI({ anonymous, schema, version2 } = {}) {
-  schema ??= version2
+export function mockAPI({ anonymous, schema, version3 } = {}) {
+  schema ??= version3
     ? anonymous
-      ? anonymSchema2
-      : authedSchema2
+      ? anonymSchema3
+      : authedSchema3
     : anonymous
-    ? anonymSchema3
-    : authedSchema3;
+    ? anonymSchema2
+    : authedSchema2;
 
   // Mock Schema
   fetchMock.mock(schemaUrl, schema);
@@ -57,7 +57,8 @@ export function mockAPI({ anonymous, schema, version2 } = {}) {
 }
 
 const getAPIClient = ({ anonymous, schema, ...handlers } = {}) => {
-  mockAPI({ anonymous: true, schema, version2: false });
+  const version3 = process.env.VERSION3 ?? false;
+  mockAPI({ anonymous, schema, version3 });
   return new APIClient({ url: schemaUrl, ...handlers });
 };
 

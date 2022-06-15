@@ -69,9 +69,11 @@ export default class Router {
         const app = this.getAppLabel(tags);
         const apiView = this.getAPIView(id);
         const title = this.getTitle(summary, id);
-        const params = parameters.filter(
+
+        const params = (parameters ?? []).filter(
           param => param.required && param.in === "path"
         );
+
         return {
           id,
           operationId,
@@ -333,16 +335,15 @@ export default class Router {
           ? match
               .slice(1)
               .map((value, index) => [route.parameters.names[index], value])
-              .reduce(
-                (groups, [name, value]) => ({
+              .reduce((groups, [name, value]) => {
+                return {
                   ...groups,
                   [name]:
                     route.parameters.types[name] === "integer"
                       ? parseInt(value, 10)
                       : value,
-                }),
-                {}
-              )
+                };
+              }, {})
           : null;
 
       const resolved = this.ResolvedRoute(route, { path: pathname, params });
