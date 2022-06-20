@@ -524,7 +524,20 @@ class Admin extends React.Component {
 
   login(username, password) {
     return new Promise((resolve, reject) => {
-      this.api["bananas.login:create"]({ data: { username, password } }).then(
+      this.api["bananas.login:create"](
+        {
+          username,
+          password,
+          requestBody: { username, password },
+          parameters: { username, password },
+        },
+        {
+          username,
+          password,
+          requestBody: { username, password },
+          parameters: { username, password },
+        }
+      ).then(
         response => {
           logger.info("Successful login...reboot");
           const user = makeUser(response.obj);

@@ -175,7 +175,6 @@ Swagger.makeApisTagOperation = client => {
                     const type = parameter.schema.type;
                     parameter["type"] = type;
                     delete parameter["schema"];
-
                     parameters[parameter.name] = parameter;
                     return parameters;
                   },
