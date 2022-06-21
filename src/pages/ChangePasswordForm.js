@@ -57,12 +57,11 @@ class ChangePasswordForm extends React.Component {
 
     admin.dismissMessages();
 
-    api["bananas.change_password:create"]({
-      data: {
-        old_password,
-        new_password1,
-        new_password2,
-      },
+    api["bananas.change_password:create"](undefined, {
+          // openapi3 support
+          requestBody: { old_password, new_password1, new_password2 },
+          // openapi2 support
+          parameters: { old_password, new_password1, new_password2 },
     }).then(
       () => {
         admin.success(t("Password changed successfully."));

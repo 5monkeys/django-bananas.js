@@ -207,6 +207,14 @@ class Admin extends React.Component {
       return;
     }
 
+    // TODO: Remove this once BCOM is fixed to return multiple different schemas
+    try {
+      await swagger.operations["bananas.me:list"]();
+      swagger.isAuthenticated = true;
+    } catch {
+      swagger.isAuthenticated = false;
+    }
+
     logger.info(
       `Initialized ${
         swagger.isAuthenticated ? "Authenticated" : "Un-authenticated"
@@ -434,7 +442,9 @@ class Admin extends React.Component {
 
   async loadPageComponent(template) {
     const { pages } = this.props;
-    const exports = await pages(template).catch(() => {
+    const exports = await pages(template).catch(err => {
+      logger.error("Error loading page...", err);
+
       throw new PageNotImplementedError();
     });
     return exports.default;
@@ -525,16 +535,11 @@ class Admin extends React.Component {
   login(username, password) {
     return new Promise((resolve, reject) => {
       this.api["bananas.login:create"](
+        undefined,
         {
-          username,
-          password,
+          // openapi3 support
           requestBody: { username, password },
-          parameters: { username, password },
-        },
-        {
-          username,
-          password,
-          requestBody: { username, password },
+          // openapi2 support
           parameters: { username, password },
         }
       ).then(
