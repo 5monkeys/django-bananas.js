@@ -58,8 +58,8 @@ class APIClient extends Swagger {
               logger.debug("Catched API Response:", operationId, response);
 
               const message =
-                response.obj && response.obj.detail
-                  ? response.obj.detail
+                response.body && response.body.detail
+                  ? response.body.detail
                   : `API ${response.statusText}`;
 
               this.errorHandler(message);
@@ -102,6 +102,11 @@ Swagger.makeApisTagOperation = client => {
   const interfaces = makeApisTagOperation(client);
   const { apis } = interfaces;
 
+  const version3 =
+    client.spec.openapi?.startsWith("3") ??
+    !client.spec.swagger?.startsWith("2") ??
+    false;
+
   // operationId -> originalOperationId mapping
   const operationIdMap = Object.values(client.spec.paths).reduce(
     (result, specs) => ({
@@ -138,23 +143,64 @@ Swagger.makeApisTagOperation = client => {
 
             // Build schema spec for this endpoint
             call.title = spec.summary;
-            call.schema = spec.parameters.reduce((parameters, parameter) => {
-              if (parameter.in === "body") {
-                const required = parameter.schema.required || [];
-                parameters[parameter.name] = Object.entries(
-                  parameter.schema.properties
-                ).reduce(
-                  (schema, [key, value]) => ({
-                    ...schema,
-                    [key]: { ...value, required: required.includes(key) },
-                  }),
-                  {}
-                );
-              } else if (parameter.in === "query") {
-                parameters[parameter.name] = parameter;
+
+            if (version3) {
+              call.schema = {};
+
+              if (spec.requestBody) {
+                // Assumes json as request body, not ideal
+                const requestBody =
+                  spec.requestBody.content["application/json"];
+                const required = requestBody.schema.required ?? [];
+                call.schema[spec["x-codegen-request-body-name"] ?? "data"] =
+                  Object.fromEntries(
+                    Object.entries(requestBody.schema.properties).map(
+                      ([key, property]) => {
+                        return [
+                          key,
+                          {
+                            ...property,
+                            required: required.includes(key),
+                          },
+                        ];
+                      }
+                    )
+                  );
               }
-              return parameters;
-            }, {});
+
+              if (spec.parameters) {
+                call.schema = spec.parameters.reduce(
+                  (parameters, parameter) => {
+                    // Rename schema.type to type to match 2.0 and internal api
+                    const type = parameter.schema.type;
+                    parameter["type"] = type;
+                    delete parameter["schema"];
+                    parameters[parameter.name] = parameter;
+                    return parameters;
+                  },
+                  call.schema
+                );
+              }
+            } else {
+              call.schema = spec.parameters.reduce((parameters, parameter) => {
+                if (parameter.in === "body") {
+                  const required = parameter.schema.required ?? [];
+                  parameters[parameter.name] = Object.entries(
+                    parameter.schema.properties
+                  ).reduce(
+                    (schema, [key, value]) => ({
+                      ...schema,
+                      [key]: { ...value, required: required.includes(key) },
+                    }),
+                    {}
+                  );
+                } else if (parameter.in === "query") {
+                  parameters[parameter.name] = parameter;
+                }
+                return parameters;
+              }, {});
+            }
+
             const response200 = spec.responses[200];
             call.response =
               response200 != null && response200.schema != null

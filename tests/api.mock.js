@@ -1,8 +1,10 @@
 import fetchMock from "fetch-mock";
 
 import APIClient from "../src/api";
-import anonymSchema from "./schema.anonymous.json";
-import authedSchema from "./schema.authenticated.json";
+import anonymSchema2 from "./schema.anonymous.2.json";
+import anonymSchema3 from "./schema.anonymous.3.json";
+import authedSchema2 from "./schema.authenticated.2.json";
+import authedSchema3 from "./schema.authenticated.3.json";
 
 const schemaUrl = "http://foo.bar/api/v1.0/schema.json";
 fetchMock.config.overwriteRoutes = true;
@@ -17,12 +19,17 @@ export const user = {
   groups: [],
 };
 
-export function mockAPI({ anonymous, schema } = {}) {
+export function mockAPI({ anonymous, schema, version3 } = {}) {
+  schema ??= version3
+    ? anonymous
+      ? anonymSchema3
+      : authedSchema3
+    : anonymous
+    ? anonymSchema2
+    : authedSchema2;
+
   // Mock Schema
-  fetchMock.mock(
-    schemaUrl,
-    schema || (anonymous ? anonymSchema : authedSchema)
-  );
+  fetchMock.mock(schemaUrl, schema);
 
   const translations = {
     catalog: {
@@ -50,7 +57,8 @@ export function mockAPI({ anonymous, schema } = {}) {
 }
 
 const getAPIClient = ({ anonymous, schema, ...handlers } = {}) => {
-  mockAPI({ anonymous, schema });
+  const version3 = process.env.VERSION3 ?? false;
+  mockAPI({ anonymous, schema, version3 });
   return new APIClient({ url: schemaUrl, ...handlers });
 };
 

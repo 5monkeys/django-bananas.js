@@ -96,5 +96,5 @@ test("Can handle unreachable endpoint", async () => {
   await expect(client.operations["bananas.logout:create"]()).rejects.toThrow();
 
   expect(error).toHaveBeenCalledTimes(1);
-  expect(error).toHaveBeenCalledWith("API Unreachable");
+  expect(error).toHaveBeenCalledWith("API undefined");
 });

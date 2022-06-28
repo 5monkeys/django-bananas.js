@@ -185,7 +185,9 @@ class Admin extends React.Component {
         ? { url: this.props.api }
         : this.props.api;
     const { url: apiBase, ...rest } = apiProp;
-    const apiUrl = `${apiBase}/v1.0/schema.json`;
+    const apiUrl = apiBase.endsWith(".json")
+      ? apiBase
+      : `${apiBase}/v1.0/schema.json`;
     let swagger = undefined;
     try {
       swagger = await new APIClient({
@@ -203,6 +205,14 @@ class Admin extends React.Component {
       this.admin.error(`Failed to boot: API ${cause}`);
       this.setState({ booting: false });
       return;
+    }
+
+    // TODO: Remove this once BCOM is fixed to return multiple different schemas
+    try {
+      await swagger.operations["bananas.me:list"]();
+      swagger.isAuthenticated = true;
+    } catch {
+      swagger.isAuthenticated = false;
     }
 
     logger.info(
@@ -432,7 +442,9 @@ class Admin extends React.Component {
 
   async loadPageComponent(template) {
     const { pages } = this.props;
-    const exports = await pages(template).catch(() => {
+    const exports = await pages(template).catch(err => {
+      logger.error("Error loading page...", err);
+
       throw new PageNotImplementedError();
     });
     return exports.default;
@@ -522,7 +534,12 @@ class Admin extends React.Component {
 
   login(username, password) {
     return new Promise((resolve, reject) => {
-      this.api["bananas.login:create"]({ data: { username, password } }).then(
+      this.api["bananas.login:create"](undefined, {
+        // openapi3 support
+        requestBody: { username, password },
+        // openapi2 support
+        parameters: { username, password },
+      }).then(
         response => {
           logger.info("Successful login...reboot");
           const user = makeUser(response.obj);
