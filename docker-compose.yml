@@ -1,13 +1,9 @@
-version: "3.3"
+version: "3.9"
 
 services:
   app:
     build: .
-    command: ["npm", "start"]
-    stdin_open: true
-    tty: true
     ports:
-      - "3000:3000"
-    volumes:
-      - ./:/code
-      - /code/node_modules
+      - "8123:80"
+#    volumes:
+#      - ../:/usr/src/app/node_modules/bananas-commerce-admin
