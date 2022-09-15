@@ -35,12 +35,14 @@ export const UserContextProvider: React.FC<React.PropsWithChildren<{}>> = (
   const [user, setUser] = useLocalStorage("user", null);
 
   React.useEffect(() => {
-    api.isAuthenticated().then((authenticated) => {
-      if (!authenticated) {
-        setUser(null);
-      }
-    });
-  }, [user]);
+    if (api !== undefined) {
+      api.isAuthenticated().then((authenticated) => {
+        if (!authenticated) {
+          setUser(null);
+        }
+      });
+    }
+  }, [user, api]);
 
   const login = async (username: string, password: string) => {
     const response = await api?.operations["bananas.login:create"].call({
