@@ -4,6 +4,4 @@ services:
   app:
     build: .
     ports:
-      - "8123:80"
-#    volumes:
-#      - ../:/usr/src/app/node_modules/bananas-commerce-admin
+      - "3000:3000"

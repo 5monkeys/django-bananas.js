@@ -1,38 +1,27 @@
-FROM node:16 as build_package
+FROM node:16 as build
 
-WORKDIR /usr/src/package
-
-# Copy package source
-COPY . .
-
-# Install dependencies
-RUN npm ci
-
-# Build the package source
-RUN npm run build
-
-FROM node:16 as build_app
-
+# Set working directory
 WORKDIR /usr/src/app
 
-# Copy example source
-COPY ./example .
-
-# Copy bananas-commerce-admin to parent directory
-COPY --from=build_package /usr/src/package/package.json ../
-COPY --from=build_package /usr/src/package/dist ../
-
-# Install dependencies
-RUN npm link ../
+# Install dependencies, do this first to enable caching and re-running only
+# when dependencies change!
+COPY package*.json .
 RUN npm ci
+
+# Copy the source
+COPY . .
+
+# Pre-build bananas-commerce-admin
+WORKDIR /usr/src/app/node_modules/bananas-commerce-admin
+RUN npm run build
+
+# Return back to the correct working directory
+WORKDIR /usr/src/app
 
 # Build the app source
 RUN npm run build
 
-FROM nginx:alpine
+FROM lipanski/docker-static-website
 
 # Copy the built app from the build step
-COPY --from=build_app /usr/src/app/dist /usr/share/nginx/html
-
-# Expose port 80 by default
-EXPOSE 80
+COPY --from=build /usr/src/app/dist .
