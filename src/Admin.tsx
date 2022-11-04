@@ -19,10 +19,21 @@ export type AdminProps = {
   subtitle?: string;
   version?: string;
   nav: Record<string, React.ReactNode>;
+  basename?: string;
 } & RouterProps;
 
 const Admin: React.FC<AdminProps> = (
-  { logo, title, subtitle, version, nav, pages, extensions, dashboard },
+  {
+    logo,
+    title,
+    subtitle,
+    version,
+    nav,
+    pages,
+    extensions,
+    dashboard,
+    basename,
+  },
 ) => {
   const [loaded, setLoaded] = React.useState(false);
 
@@ -54,7 +65,7 @@ const Admin: React.FC<AdminProps> = (
         {loaded
           ? user !== null
             ? (
-              <BrowserRouter>
+              <BrowserRouter basename={basename}>
                 <RouterContextProvider>
                   <Box sx={{ display: "flex" }}>
                     <NavBar
