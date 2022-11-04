@@ -25,12 +25,16 @@ const Branding: React.FC<BrandingProps> = (
 ) => {
   return (
     <Box
-      sx={ss({
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        flexGrow: 1
-      }, [{ width: "100%" }, fullWidth ?? false], sx)}
+      sx={ss(
+        {
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          flexGrow: 1,
+        },
+        [{ width: "100%" }, fullWidth ?? false],
+        sx,
+      )}
     >
       <ButtonBase
         sx={{

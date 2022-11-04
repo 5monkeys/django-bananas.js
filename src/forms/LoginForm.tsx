@@ -1,18 +1,18 @@
-import { useSnackbar } from 'notistack';
-import React from 'react';
+import { useSnackbar } from "notistack";
+import React from "react";
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import Stack from '@mui/material/Stack';
-import { useTheme } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
 
-import { useApi } from '../contexts/ApiContext';
-import { useI18n } from '../contexts/I18nContext';
-import { useUser } from '../contexts/UserContext';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { useApi } from "../contexts/ApiContext";
+import { useI18n } from "../contexts/I18nContext";
+import { useUser } from "../contexts/UserContext";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const LoginForm: React.FC = () => {
   const theme = useTheme();
@@ -40,7 +40,7 @@ const LoginForm: React.FC = () => {
           variant: "error",
         });
       }
-    }).finally(() => setLoading(false));;
+    }).finally(() => setLoading(false));
   };
 
   return (
@@ -81,7 +81,7 @@ const LoginForm: React.FC = () => {
       >
         <LoadingButton
           sx={{
-            margin: "auto"
+            margin: "auto",
           }}
           variant="contained"
           type="submit"

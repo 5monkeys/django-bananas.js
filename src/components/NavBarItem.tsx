@@ -54,7 +54,7 @@ const NavBarItem: React.FC<React.PropsWithChildren<NavBarItemProps>> = (
           sx={{
             minWidth: 0,
             justifyContent: "center",
-            padding: theme.spacing(1, 1)
+            padding: theme.spacing(1, 1),
           }}
         >
           {Icon !== undefined ? <Logo src={Icon} /> : title.substring(0, 1)}

@@ -119,7 +119,7 @@ const PasswordChangeForm: React.FC = () => {
       >
         <LoadingButton
           sx={{
-            margin: "auto"
+            margin: "auto",
           }}
           variant="outlined"
           type="submit"
