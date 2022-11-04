@@ -18,14 +18,17 @@ const LoginPage: React.FC<LoginPageProps> = (
   Form ??= LoginForm;
 
   return (
-    <Dialog open>
+    <Dialog open sx={{ "> * > *": { width: "100%" } }}>
       <DialogTitle
         sx={{
           borderBottom: `1px solid ${theme.palette.divider}`,
           margin: 0,
-          textAlign: "center",
           backgroundColor: theme.palette.primary.main,
           padding: theme.spacing(2),
+          textAlign: "center",
+          alignItems: "middle",
+          justifyContent: "center",
+          display: "flex",
         }}
       >
         {logo ? <Logo src={logo} /> : (

@@ -54,6 +54,7 @@ const NavBarRoutes: React.FC<NavBarRoutesProps> = ({ nav, open }) => {
   }, [
     routes,
     nav,
+    open
   ]);
 
   return (

@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material/styles";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -24,6 +25,7 @@ const NavBarItem: React.FC<React.PropsWithChildren<NavBarItemProps>> = (
   const [selected, setSelected] = React.useState(false);
   const location = useLocation();
   const { navigate } = useRouter();
+  const theme = useTheme();
 
   const onClick = () => {
     navigate(route);
@@ -51,8 +53,8 @@ const NavBarItem: React.FC<React.PropsWithChildren<NavBarItemProps>> = (
         <ListItemIcon
           sx={{
             minWidth: 0,
-            mr: open ? 3 : "auto",
             justifyContent: "center",
+            padding: theme.spacing(1, 1)
           }}
         >
           {Icon !== undefined ? <Logo src={Icon} /> : title.substring(0, 1)}

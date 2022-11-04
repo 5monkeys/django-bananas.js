@@ -22,67 +22,34 @@ interface PurchaseListPageProps {
 }
 
 const PurchaseListPage: React.FC<PurchaseListPageProps> = ({ data }) => {
-  const [tab, setTab] = React.useState("0");
-
-  const onChange = (_event: React.SyntheticEvent, newTab: string) => {
-    setTab(newTab);
-  };
-
   return (
-    <>
-      <Content>
-        <Box sx={{ width: "100%" }}>
-          <TabContext value={tab}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList onChange={onChange}>
-                <Tab label="Nya" value="0" />
-                <Tab label="Bekräftade" value="1" />
-                <Tab label="Levererade" value="2" />
-                <Tab label="Makulerade" value="3" />
-              </TabList>
-            </Box>
-
-            <TabPanel value="0">
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Purchase#</TableCell>
-                      <TableCell>Kund</TableCell>
-                      <TableCell>Adress</TableCell>
-                      <TableCell>Ordervärde</TableCell>
-                      <TableCell>Betalstatus</TableCell>
-                      <TableCell>Orderdatum</TableCell>
-                      <TableCell>Leveransdatum</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data?.results.map((purchase) => (
-                      <PurchaseRow
-                        key={purchase.number}
-                        purchase={purchase}
-                      />
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </TabPanel>
-
-            <TabPanel value="1">
-              Bekräftade
-            </TabPanel>
-
-            <TabPanel value="2">
-              Levererade
-            </TabPanel>
-
-            <TabPanel value="3">
-              Makulerade
-            </TabPanel>
-          </TabContext>
-        </Box>
-      </Content>
-    </>
+    <Content>
+      <Box sx={{ width: "100%" }}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Purchase#</TableCell>
+                <TableCell>Kund</TableCell>
+                <TableCell>Adress</TableCell>
+                <TableCell>Ordervärde</TableCell>
+                <TableCell>Betalstatus</TableCell>
+                <TableCell>Orderdatum</TableCell>
+                <TableCell>Leveransdatum</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.results.map((purchase) => (
+                <PurchaseRow
+                  key={purchase.number}
+                  purchase={purchase}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </Content>
   );
 };
 

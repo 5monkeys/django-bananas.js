@@ -77,9 +77,10 @@ const NavBar: React.FC<NavBarProps> = (
       variant="permanent"
       open={open}
     >
-      <Box>
+      <Box sx={{ display: "flex", padding: theme.spacing(2, 0, 2) }}>
         <Hamburger open={open} onClick={toggleDrawerOpen} />
         <Branding
+          sx={{ opacity: open ? 1 : 0 }}
           logo={logo}
           title={title}
           subtitle={subtitle}

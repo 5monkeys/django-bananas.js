@@ -17,10 +17,11 @@ interface BrandingProps {
   version?: string;
   onClick?: React.MouseEventHandler;
   fullWidth?: boolean;
+  sx?: SxProps;
 }
 
 const Branding: React.FC<BrandingProps> = (
-  { logo, title, subtitle, version, onClick, fullWidth },
+  { logo, title, subtitle, version, onClick, fullWidth, sx },
 ) => {
   return (
     <Box
@@ -28,7 +29,8 @@ const Branding: React.FC<BrandingProps> = (
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-      }, [{ width: "100%" }, fullWidth ?? false])}
+        flexGrow: 1
+      }, [{ width: "100%" }, fullWidth ?? false], sx)}
     >
       <ButtonBase
         sx={{

@@ -2,7 +2,6 @@ import { useSnackbar } from "notistack";
 import React from "react";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
@@ -13,12 +12,14 @@ import Typography from "@mui/material/Typography";
 import { useApi } from "../../../contexts/ApiContext";
 import { useI18n } from "../../../contexts/I18nContext";
 import { useUser } from "../../../contexts/UserContext";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const PasswordChangeForm: React.FC = () => {
   const theme = useTheme();
   const { t } = useI18n();
   const api = useApi();
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = React.useState(false);
 
   const operation = api.operations["bananas.change_password:create"];
   const { properties } = operation.request.body.schema;
@@ -32,6 +33,8 @@ const PasswordChangeForm: React.FC = () => {
 
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true);
+
     changePassword(
       fields.old_password,
       fields.new_password1,
@@ -49,7 +52,7 @@ const PasswordChangeForm: React.FC = () => {
       enqueueSnackbar(t("Incorrect authentication credentials."), {
         variant: "error",
       });
-    });
+    }).finally(() => setLoading(false));
   };
 
   const onChange = (
@@ -100,6 +103,7 @@ const PasswordChangeForm: React.FC = () => {
               onChange={onChange}
               fullWidth
               required
+              color="secondary"
             />
           ))}
         </FormGroup>
@@ -113,14 +117,19 @@ const PasswordChangeForm: React.FC = () => {
           marginBottom: 0,
         }}
       >
-        <Button
+        <LoadingButton
+          sx={{
+            margin: "auto"
+          }}
           variant="outlined"
           type="submit"
-          color="primary"
+          color="secondary"
           fullWidth
+          aria-label="login"
+          loading={loading}
         >
           {t("Change my password")}
-        </Button>
+        </LoadingButton>
       </FormControl>
     </Box>
   );

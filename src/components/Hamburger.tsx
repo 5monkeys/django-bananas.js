@@ -19,9 +19,9 @@ const Hamburger: React.FC<HamburgerProps> = ({ open, onToggle, ...rest }) => {
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-end",
+        justifyContent: "flex-start",
         padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
+        flexShrink: 1,
         ...theme.mixins.toolbar,
       }}
     >
