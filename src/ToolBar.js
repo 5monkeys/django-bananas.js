@@ -1,8 +1,12 @@
-import { ThemeProvider } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import { createTheme } from "@mui/material/styles";
-import { StyledEngineProvider } from "@mui/material/styles";
-import { darken, getLuminance, lighten } from "@mui/material/styles";
+import {
+  StyledEngineProvider,
+  darken,
+  getLuminance,
+  lighten,
+  ThemeProvider,
+} from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import { withStyles } from "@mui/styles";
 import classNames from "classnames";
