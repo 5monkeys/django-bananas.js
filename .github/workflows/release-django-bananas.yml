@@ -1,0 +1,30 @@
+name: Release django-bananas
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/release-djedi-json.yml"
+      - "package.json"
+
+jobs:
+  release:
+    name: Build and push npm release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      - name: Build package
+        run: npm run build
+      - name: Publish package
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./dist/package.json
