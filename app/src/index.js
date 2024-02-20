@@ -10,7 +10,7 @@ import themes from "django-bananas/themes";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import settings from "./bananas.settings";
+import settings from "./_bananas.settings";
 import Gravatar from "./Gravatar";
 
 const exampleAppTheme = themes.default.extend({
@@ -90,7 +90,7 @@ const CustomIconComponent = () => {
   );
 };
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <Bananas.App
     pages={route => import(`./pages/${route}`)}
     logLevel="DEBUG"
@@ -118,6 +118,5 @@ ReactDOM.render(
     }}
     editableSettings
     {...settings}
-  />,
-  document.getElementById("root")
+  />
 );

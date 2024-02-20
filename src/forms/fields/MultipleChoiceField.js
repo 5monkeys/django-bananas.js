@@ -16,8 +16,8 @@ const MultipleChoiceField = ({ input, schema, fieldProps }) => (
         input.value instanceof Array
           ? input.value
           : input.value
-          ? [input.value]
-          : []
+            ? [input.value]
+            : []
       }
       {...fieldProps}
       multiple

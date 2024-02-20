@@ -1,3 +1,5 @@
+import "@testing-library/jest-dom";
+
 import { createMemoryHistory } from "history";
 import Logger from "js-logger";
 

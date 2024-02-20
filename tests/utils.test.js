@@ -1,3 +1,5 @@
+import "@testing-library/jest-dom";
+
 import Logger from "js-logger";
 
 import { t } from "../src";
