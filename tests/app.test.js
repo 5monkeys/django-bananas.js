@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import fetchMock from "fetch-mock";
 import Logger from "js-logger";
 import React from "react";
+import { act } from "react-dom/test-utils";
 
 import Bananas from "../src";
 import { PageNotFoundError, PageNotImplementedError } from "../src/errors";
@@ -564,4 +565,16 @@ test("Can render using an app container", async () => {
   });
 
   expect(getByTestId("custom_container")).toBeTruthy();
+});
+
+test("Can hide and show navBar", async () => {
+  const { queryByTestId } = await renderApp();
+
+  expect(queryByTestId("navbar-drawer")).toBeInTheDocument();
+
+  await act(async () => {
+    window.bananas.settings.callback({ hideNav: true });
+  });
+
+  expect(queryByTestId("navbar-drawer")).not.toBeInTheDocument();
 });

@@ -8,6 +8,15 @@ import { withStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import React from "react";
 
+const SETTINGS = [
+  "horizontal",
+  "collapsable",
+  "collapsed",
+  "icons",
+  "dense",
+  "hideNav",
+];
+
 const styles = theme => ({
   reset: {
     marginLeft: 48,
@@ -36,6 +45,7 @@ class SettingsForm extends React.Component {
       collapsed: "Collapsed",
       icons: "Show Menu Icons",
       dense: "Dense Menu Items",
+      hideNav: "Hide navigation",
     };
 
     return (
@@ -43,30 +53,28 @@ class SettingsForm extends React.Component {
         <FormLabel component="legend">Settings</FormLabel>
         <FormControl component="fieldset">
           <FormGroup>
-            {["horizontal", "collapsable", "collapsed", "icons", "dense"].map(
-              setting => (
-                <FormControlLabel
-                  key={setting}
-                  label={labels[setting]}
-                  disabled={
-                    (setting === "collapsable" &&
-                      (!settings.icons || !settings.horizontal)) ||
-                    (setting === "collapsed" &&
-                      (!settings.collapsable ||
-                        !settings.icons ||
-                        !settings.horizontal))
-                  }
-                  control={
-                    <Switch
-                      color="primary"
-                      checked={settings[setting]}
-                      value={setting}
-                      onChange={this.changeSetting(setting)}
-                    />
-                  }
-                />
-              )
-            )}
+            {SETTINGS.map(setting => (
+              <FormControlLabel
+                key={setting}
+                label={labels[setting]}
+                disabled={
+                  (setting === "collapsable" &&
+                    (!settings.icons || !settings.horizontal)) ||
+                  (setting === "collapsed" &&
+                    (!settings.collapsable ||
+                      !settings.icons ||
+                      !settings.horizontal))
+                }
+                control={
+                  <Switch
+                    color="primary"
+                    checked={settings[setting]}
+                    value={setting}
+                    onChange={this.changeSetting(setting)}
+                  />
+                }
+              />
+            ))}
           </FormGroup>
           <Button
             classes={{ root: classes.reset }}
