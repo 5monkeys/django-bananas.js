@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 
-import { act, cleanup, render, waitFor } from "@testing-library/react";
+import { cleanup, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import fetchMock from "fetch-mock";
 import Logger from "js-logger";

@@ -4,8 +4,8 @@ import {
   cleanup,
   fireEvent,
   render,
-  waitFor,
   screen,
+  waitFor,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import fetchMock from "fetch-mock";
@@ -74,9 +74,7 @@ test("Can unmount", async () => {
 });
 
 test("Can boot and login", async () => {
-  const { container, getByText, getByLabelText } = await renderApp({
-    anonymous: true,
-  });
+  await renderApp({ anonymous: true });
 
   // Fill login form and
   const username = screen.getByLabelText("Username", { selector: "input" });
