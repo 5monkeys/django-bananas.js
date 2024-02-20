@@ -35,7 +35,7 @@ const Logo = ({ src, classes }) => {
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
       >
-        <g xfill="#FFFFFF" className={classes.bananas}>
+        <g fill="#FFFFFF" className={classes.bananas}>
           <path
             d="M158.56,618.97l2.4-0.7c97-26.199,181.6-59.8,251.2-99.8c94.5-54.3,159.4-119.5,193-193.799l16-35.4l-28.699,26.2
 			c-57,52.1-134.801,91-231.4,115.8c-81.9,21-176,31.7-279.8,31.7c-5.4,0-17.4-0.1-24.6-0.2l-16.9-0.8c-13.3-0.6-25.4,7.6-29.8,20.2

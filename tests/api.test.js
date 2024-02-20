@@ -1,3 +1,5 @@
+import "@testing-library/jest-dom";
+
 import fetchMock from "fetch-mock";
 
 import getAPIClient from "./api.mock";

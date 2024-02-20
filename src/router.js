@@ -186,8 +186,8 @@ export default class Router {
           ? 1
           : -1
         : path1.length < path2.length // ... segment length
-        ? 1
-        : -1;
+          ? 1
+          : -1;
     });
   }
 

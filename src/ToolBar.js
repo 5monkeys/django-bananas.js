@@ -134,13 +134,13 @@ class ToolBar extends React.Component {
                 color: primary.contrastText,
               }
             : color === "secondary"
-            ? {
-                // Contained Button[primary] @ ToolBar[secondary]
-                color: theme.palette.primary.contrastText,
-              }
-            : {
-                // Contained Button[primary] @ ToolBar[paper]
-              },
+              ? {
+                  // Contained Button[primary] @ ToolBar[secondary]
+                  color: theme.palette.primary.contrastText,
+                }
+              : {
+                  // Contained Button[primary] @ ToolBar[paper]
+                },
         containedSecondary:
           color === "primary"
             ? {
@@ -148,13 +148,13 @@ class ToolBar extends React.Component {
                 color: theme.palette.secondary.contrastText,
               }
             : color === "secondary"
-            ? {
-                // Contained Button[secondary] @ ToolBar[secondary]
-                color: secondary.contrastText,
-              }
-            : {
-                // Contained Button[secondary] @ ToolBar[paper]
-              },
+              ? {
+                  // Contained Button[secondary] @ ToolBar[secondary]
+                  color: secondary.contrastText,
+                }
+              : {
+                  // Contained Button[secondary] @ ToolBar[paper]
+                },
         outlined:
           color === "primary"
             ? {
@@ -163,14 +163,14 @@ class ToolBar extends React.Component {
                 borderColor: primaryIsLight ? undefined : primary.light,
               }
             : color === "secondary"
-            ? {
-                // Outlined Button[default] @ ToolBar[secondary]
-                color: "inherit", // secondary.contrastText,
-                borderColor: secondaryIsLight ? undefined : secondary.light,
-              }
-            : {
-                // Outlined Button[default] @ ToolBar[paper]
-              },
+              ? {
+                  // Outlined Button[default] @ ToolBar[secondary]
+                  color: "inherit", // secondary.contrastText,
+                  borderColor: secondaryIsLight ? undefined : secondary.light,
+                }
+              : {
+                  // Outlined Button[default] @ ToolBar[paper]
+                },
         outlinedPrimary:
           color === "primary"
             ? {
@@ -183,13 +183,13 @@ class ToolBar extends React.Component {
                 },
               }
             : color === "secondary"
-            ? {
-                // Outlined Button[primary] @ ToolBar[secondary]
-                borderColor: primary.main,
-              }
-            : {
-                // Outlined Button[primary] @ ToolBar[paper]
-              },
+              ? {
+                  // Outlined Button[primary] @ ToolBar[secondary]
+                  borderColor: primary.main,
+                }
+              : {
+                  // Outlined Button[primary] @ ToolBar[paper]
+                },
         outlinedSecondary:
           color === "primary"
             ? {
@@ -197,18 +197,18 @@ class ToolBar extends React.Component {
                 borderColor: secondary.main,
               }
             : color === "secondary"
-            ? {
-                // Outlined Button[secondary] @ ToolBar[secondary]
-                color: secondary.contrastText,
-                borderColor: theme.palette.secondary.contrastText,
-                "&:hover": {
+              ? {
+                  // Outlined Button[secondary] @ ToolBar[secondary]
+                  color: secondary.contrastText,
                   borderColor: theme.palette.secondary.contrastText,
-                  backgroundColor: theme.palette.action.hover,
+                  "&:hover": {
+                    borderColor: theme.palette.secondary.contrastText,
+                    backgroundColor: theme.palette.action.hover,
+                  },
+                }
+              : {
+                  // Outlined Button[secondary] @ ToolBar[paper]
                 },
-              }
-            : {
-                // Outlined Button[secondary] @ ToolBar[paper]
-              },
       },
     };
 

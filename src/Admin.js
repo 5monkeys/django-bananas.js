@@ -575,10 +575,10 @@ class Admin extends React.Component {
                         settings.icons
                           ? this.props.nav
                           : Array.isArray(this.props.nav)
-                          ? this.props.nav
-                          : this.props.nav
-                          ? Object.keys(this.props.nav)
-                          : null
+                            ? this.props.nav
+                            : this.props.nav
+                              ? Object.keys(this.props.nav)
+                              : null
                       }
                       logo={this.props.logo}
                       title={this.props.title}
