@@ -39,6 +39,7 @@ jobs:
         run: |
           npm run coverage
       - name: Report coverage
+        continue-on-error: true
         if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'synchronize')
         uses: 5monkeys/cobertura-action@v7
         with:
