@@ -30,7 +30,7 @@
     "js-logger": "^1.6.1",
     "lodash": "^4.17.21",
     "prop-types": "^15.5.7",
-    "swagger-client": "3.8.22"
+    "swagger-client": "3.18.5"
   },
   "peerDependencies": {
     "@mui/icons-material": "^5.15.10",
