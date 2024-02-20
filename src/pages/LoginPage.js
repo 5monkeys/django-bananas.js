@@ -24,11 +24,7 @@ const DialogTitle = withStyles(theme => ({
   },
 }))(props => {
   const { children, classes } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root}>
-      {children}
-    </MuiDialogTitle>
-  );
+  return <MuiDialogTitle className={classes.root}>{children}</MuiDialogTitle>;
 });
 
 const pageStyles = theme => ({
