@@ -28,9 +28,7 @@ test("Ensure the default 'onSubmit' is firing a correct request", async () => {
   const button = getByText("Submit");
   const matcher = "http://foo.bar/api/v1.0/example/user/form/";
   fetchMock.post(matcher, { body: { text: "foo" } });
-  await act(async () => {
-    userEvent.click(button);
-  });
+  await userEvent.click(button);
 
   await waitFor(() => success.calls);
   expect(success).toHaveBeenCalledWith("Changes have been saved!");
@@ -61,9 +59,7 @@ test("Ensure the default 'onSubmit' can handle errors", async () => {
     body: { text: "Invalid text", non_field_errors: ["bazrror"] },
     status: 400,
   });
-  await act(async () => {
-    userEvent.click(button);
-  });
+  await userEvent.click(button);
 
   await waitFor(() => error.calls);
   expect(error).toHaveBeenCalledWith("Please correct the errors on this form.");
@@ -88,9 +84,7 @@ test("Ensure custom 'onSubmit' is called", async () => {
   );
   const button = getByText("Submit");
 
-  await act(async () => {
-    userEvent.click(button);
-  });
+  await userEvent.click(button);
 
   expect(onSubmit).toHaveBeenCalledTimes(1);
   expect(typeof onSubmit.mock.calls[0][0].endpoint).toBe("function");

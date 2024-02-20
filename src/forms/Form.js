@@ -1,5 +1,5 @@
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { LocalizationProvider } from "@mui/x-date-pickers/";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { FORM_ERROR } from "final-form";
 import arrayMutators from "final-form-arrays";
 import PropTypes from "prop-types";

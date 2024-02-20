@@ -1,6 +1,12 @@
 import "@testing-library/jest-dom";
 
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  waitFor,
+  screen,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import fetchMock from "fetch-mock";
 import Logger from "js-logger";
@@ -73,18 +79,17 @@ test("Can boot and login", async () => {
   });
 
   // Fill login form and
-  const username = getByLabelText("Username", { selector: "input" });
-  const password = getByLabelText("Password", { selector: "input" });
-  userEvent.type(username, "admin");
-  userEvent.type(password, "test");
+  const username = screen.getByLabelText("Username", { selector: "input" });
+  const password = screen.getByLabelText("Password", { selector: "input" });
+  await userEvent.type(username, "admin");
+  await userEvent.type(password, "test");
 
   // Click login submit button
-  const loginSubmitButton = getByLabelText("login");
-  userEvent.click(loginSubmitButton);
+  const loginSubmitButton = screen.getByLabelText("login");
+  await userEvent.click(loginSubmitButton);
 
-  // Wait for logged in username to be rendered, i.e. NavBar is rendered
-  const profileMenuItem = () => getByText(user.full_name);
-  await waitFor(profileMenuItem, { container });
+  // screen.getByText(user.full_name);
+  expect(await screen.findByText(user.full_name, {})).toBeVisible();
 });
 
 test("Can shutdown", async () => {
@@ -121,7 +126,7 @@ test("Can render dashboard and navigate using menu", async () => {
   });
 
   // Click Users menu item
-  userEvent.click(usersMenuItem);
+  await userEvent.click(usersMenuItem);
 
   // Wait for user list page to be rendered
   await waitFor(() => getByText(`${userListRoute.title} (users)`), {
@@ -133,12 +138,12 @@ test("Can render dashboard and navigate using menu", async () => {
   expect(user1Link).toBeTruthy();
 
   // Click one of the users and expect page template not to implemented
-  userEvent.click(user1Link);
+  await userEvent.click(user1Link);
   await waitFor(() => getByText("Status: 501"), { container });
 
   // Click profile menu item
   const profileMenuItem = getByText(user.full_name);
-  userEvent.click(profileMenuItem);
+  await userEvent.click(profileMenuItem);
 
   // Wait for password form and therefore profile page to be rendered
   const changePasswordRoute = app.router.getRoute(
@@ -248,7 +253,7 @@ test("Can show and dismiss messages", async () => {
 
   // Click X icon and expect error message to go away, the other ones goes away by clickAway
   const closeButton = getAllByTestId("message-close-button")[0];
-  userEvent.click(closeButton);
+  await userEvent.click(closeButton);
   await waitFor(
     () =>
       expect(
@@ -291,7 +296,7 @@ test("Can show configured alert", async () => {
   expect(dismissButton).toBeTruthy();
 
   // Click dismiss button and expect onDismiss callback to been called
-  userEvent.click(dismissButton);
+  await userEvent.click(dismissButton);
   await waitFor(() => expect(dismissed).toHaveBeenCalledTimes(1));
 
   // Show and wait for another alert
@@ -299,7 +304,7 @@ test("Can show configured alert", async () => {
   await waitFor(() => getByText("AlertTitle"), { container });
 
   // Click agree button and expect onAgree callback to been called
-  userEvent.click(getByText("AlertAgree"));
+  await userEvent.click(getByText("AlertAgree"));
   await waitFor(() => expect(agreed).toHaveBeenCalledTimes(1));
 });
 
@@ -329,12 +334,12 @@ test("Can change settings", async () => {
 
   // Click profile menu item
   const profileMenuItem = getByText(user.full_name);
-  userEvent.click(profileMenuItem);
+  await userEvent.click(profileMenuItem);
 
   // Wait for settings to be rendered and click one of them
   await waitFor(() => getByText("Settings"));
   const horizontal = getByLabelText("Horizontal Layout");
-  userEvent.click(horizontal);
+  await userEvent.click(horizontal);
 
   // Expect layout to change
   await waitFor(() => getByTestId("navbar-appbar"));
@@ -342,7 +347,7 @@ test("Can change settings", async () => {
 
   // Click reset button
   const resetButton = getByText("Reset");
-  userEvent.click(resetButton);
+  await userEvent.click(resetButton);
 
   // Expect layout to change back
   await waitFor(() => getByTestId("navbar-drawer"));
@@ -355,7 +360,7 @@ test("Can change password", async () => {
 
   // Click profile menu item
   const profileMenuItem = getByText(user.full_name);
-  userEvent.click(profileMenuItem);
+  await userEvent.click(profileMenuItem);
 
   // Wait for submit button and therefore change passsword form rendered
   const submitButton = await waitFor(
@@ -373,9 +378,9 @@ test("Can change password", async () => {
   const new2 = getByLabelText("Bekr\u00e4fta nytt l\u00f6senord", {
     selector: "input",
   });
-  userEvent.type(old, "old");
-  userEvent.type(new1, "new");
-  userEvent.type(new2, "new");
+  await userEvent.type(old, "old");
+  await userEvent.type(new1, "new");
+  await userEvent.type(new2, "new");
 
   // Wait for submit button to be enabled (valid filled fields)
   await waitFor(() => expect(submitButton).toBeEnabled());
@@ -385,7 +390,7 @@ test("Can change password", async () => {
     status: 400,
     body: {},
   });
-  // TODO: Click button instead of submiting form; userEvent.click(submitButton);
+  // TODO: Click button instead of submiting form; await userEvent.click(submitButton);
   fireEvent.submit(form);
 
   // Expect error message to show
