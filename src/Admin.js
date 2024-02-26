@@ -142,14 +142,21 @@ class Admin extends React.Component {
     };
   }
 
-  setContext(ctx, callback) {
-    const context = { ...this.state.context, ...ctx };
-    this.setState({ context }, () => {
-      logger.debug("Updated AdminContext:", context);
-      if (callback) {
-        callback(context);
+  setContext(newContext, callback) {
+    this.setState(
+      prev => ({
+        context: {
+          ...prev.context,
+          ...(typeof newContext === "function"
+            ? newContext(prev.context)
+            : newContext),
+        },
+      }),
+      () => {
+        logger.debug("Patched AdminContext with:", newContext);
+        callback?.();
       }
-    });
+    );
   }
 
   resetContext(callback) {
@@ -242,7 +249,7 @@ class Admin extends React.Component {
 
     // Allow adding extra things to the AdminContext.
     if (this.props.customizeContext) {
-      this.setContext(this.props.customizeContext(this.state.context));
+      this.setContext(this.props.customizeContext);
     }
 
     // Finalize boot
