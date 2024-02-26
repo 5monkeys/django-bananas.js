@@ -1,5 +1,5 @@
-import { DateTimePicker } from "@mui/lab";
 import { TextField } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import React from "react";
 
 const DateTimeField = ({ input: { onChange, ...inputProps }, fieldProps }) => {
