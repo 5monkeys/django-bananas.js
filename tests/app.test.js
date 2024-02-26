@@ -92,13 +92,15 @@ test("Can boot and login", async () => {
 });
 
 test("Can shutdown", async () => {
-  const { app, queryByTestId } = await renderApp({ anonymous: true });
+  const { app, queryByTestId, findByTestId } = await renderApp({
+    anonymous: true,
+  });
   expect(queryByTestId("bootscreen")).toBeFalsy();
 
-  // FIXME: This should use `act` but somehow that breaks all the tests in this
-  //        suite. gl/hf
-  await app.shutdown();
-  expect(queryByTestId("bootscreen")).toBeTruthy();
+  act(() => {
+    app.shutdown();
+  });
+  expect(await findByTestId("bootscreen")).toBeTruthy();
 });
 
 test("Can render dashboard and navigate using menu", async () => {
