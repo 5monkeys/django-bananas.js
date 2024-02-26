@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 
 import {
+  act,
   cleanup,
   fireEvent,
   render,
@@ -91,11 +92,15 @@ test("Can boot and login", async () => {
 });
 
 test("Can shutdown", async () => {
-  const { app, queryByTestId } = await renderApp({ anonymous: true });
+  const { app, queryByTestId, findByTestId } = await renderApp({
+    anonymous: true,
+  });
   expect(queryByTestId("bootscreen")).toBeFalsy();
 
-  await app.shutdown();
-  expect(queryByTestId("bootscreen")).toBeTruthy();
+  act(() => {
+    app.shutdown();
+  });
+  expect(await findByTestId("bootscreen")).toBeTruthy();
 });
 
 test("Can render dashboard and navigate using menu", async () => {
@@ -165,7 +170,7 @@ test("Handles unauthenticated page load", async () => {
     status: 403,
   });
 
-  app.router.route(userListRoute.path);
+  act(() => app.router.route(userListRoute.path));
   await waitFor(() => getByLabelText("login"), { container });
 });
 
@@ -178,20 +183,20 @@ test("Handles unauthorized page load", async () => {
     status: 403,
   });
 
-  app.router.route(userListRoute.path);
+  act(() => app.router.route(userListRoute.path));
   await waitFor(() => getByText("Status: 403"), { container });
   expect(getByText(/You are authenticated as admin/)).toBeDefined();
 });
 
 test("Handles 404", async () => {
   const { app, container, getByText } = await renderApp();
-  app.router.route("/foobar/");
+  act(() => app.router.route("/foobar/"));
   await waitFor(() => getByText("Status: 404"), { container });
 });
 
 test("Handles 501", async () => {
   const { app, container, getByText } = await renderApp();
-  app.router.route({ id: "bananas.i18n:list" });
+  act(() => app.router.route({ id: "bananas.i18n:list" }));
   await waitFor(() => getByText("Status: 501"), { container });
 });
 
@@ -237,16 +242,16 @@ test("Can show and dismiss messages", async () => {
   // Expect no messages showing
   expect(queryByTestId("Message")).toBeNull();
 
-  app.admin.success("SUCCESS_MSG");
+  act(() => app.admin.success("SUCCESS_MSG"));
   await waitFor(() => getByText("SUCCESS_MSG"), { container });
 
-  app.admin.info("INFO_MSG");
+  act(() => app.admin.info("INFO_MSG"));
   await waitFor(() => getByText("INFO_MSG"), { container });
 
-  app.admin.warning("WARNING_MSG");
+  act(() => app.admin.warning("WARNING_MSG"));
   await waitFor(() => getByText("WARNING_MSG"), { container });
 
-  app.admin.error("ERROR_MSG");
+  act(() => app.admin.error("ERROR_MSG"));
   await waitFor(() => getByText("ERROR_MSG"), { container });
 
   // Click X icon and expect error message to go away, the other ones goes away by clickAway
@@ -264,7 +269,7 @@ test("Can show and dismiss messages", async () => {
 test("Can show simple alert", async () => {
   const { app, container, getByText } = await renderApp();
 
-  app.admin.alert("AlertMessageOnly");
+  act(() => app.admin.alert("AlertMessageOnly"));
   await waitFor(() => getByText("AlertMessageOnly"), { container });
 });
 
@@ -284,7 +289,7 @@ test("Can show configured alert", async () => {
   };
 
   // Show and wait for alert
-  app.admin.alert(alert);
+  act(() => app.admin.alert(alert));
   await waitFor(() => getByText("AlertTitle"), { container });
 
   const agreeButton = getByText("AlertAgree");
@@ -298,7 +303,7 @@ test("Can show configured alert", async () => {
   await waitFor(() => expect(dismissed).toHaveBeenCalledTimes(1));
 
   // Show and wait for another alert
-  app.admin.alert(alert);
+  act(() => app.admin.alert(alert));
   await waitFor(() => getByText("AlertTitle"), { container });
 
   // Click agree button and expect onAgree callback to been called
@@ -309,7 +314,7 @@ test("Can show configured alert", async () => {
 test("Can show simple confirm", async () => {
   const { app, container, getByText } = await renderApp();
 
-  app.admin.confirm("ConfirmMessageOnly");
+  act(() => app.admin.confirm("ConfirmMessageOnly"));
   await waitFor(() => getByText("Är du säker?"), { container });
   expect(getByText("ConfirmMessageOnly")).toBeTruthy();
 });
@@ -317,7 +322,9 @@ test("Can show simple confirm", async () => {
 test("Can show configured confirm", async () => {
   const { app, container, getByText } = await renderApp();
 
-  app.admin.confirm({ message: "ConfirmMessageOnly", agree: "ConfirmAgree" });
+  act(() =>
+    app.admin.confirm({ message: "ConfirmMessageOnly", agree: "ConfirmAgree" })
+  );
   await waitFor(() => getByText("Är du säker?"), { container });
   expect(getByText("ConfirmMessageOnly")).toBeTruthy();
   expect(getByText("ConfirmAgree")).toBeTruthy();
@@ -412,13 +419,13 @@ test("A hash change will trigger rerender", async () => {
   const userListRoute = app.router.getRoute("example.user:list");
   fetchMock.mock(`http://foo.bar/api/v1.0${userListRoute.path}`, { body: [] });
 
-  app.router.reroute({ id: "example.user:list" });
+  act(() => app.router.reroute({ id: "example.user:list" }));
   await waitFor(() => getByText("Hash: none"), { container });
 
-  app.router.reroute({ id: "example.user:list", hash: "#foo" });
+  act(() => app.router.reroute({ id: "example.user:list", hash: "#foo" }));
   await waitFor(() => getByText("Hash: foo"), { container });
 
-  app.router.reroute({ id: "example.user:list", hash: "#bar" });
+  act(() => app.router.reroute({ id: "example.user:list", hash: "#bar" }));
   await waitFor(() => getByText("Hash: bar"), { container });
 });
 
