@@ -1,6 +1,6 @@
 import { fieldFromErrorResponse, fieldFromSchema } from "../../src/forms/utils";
 import { errorResponse } from "../fixtures/response";
-import { nestedSchema } from "../fixtures/schema";
+import { flatSchema, nestedSchema } from "../fixtures/schema";
 
 test("Get a top level field from schema", () => {
   expect(fieldFromSchema(nestedSchema, "id")).toEqual({
@@ -64,4 +64,14 @@ test("Get an array field from error response", () => {
   expect(fieldFromErrorResponse(errorResponse, "songs[0].isrc")).toEqual([
     "Ensure this field has at least 12 characters.",
   ]);
+});
+
+test("Get a field from a multipart/form-data schema", () => {
+  expect(fieldFromSchema(flatSchema, "attachment")).toEqual({
+    name: "attachment",
+    in: "formData",
+    required: false,
+    type: "file",
+    "x-nullable": true,
+  });
 });
