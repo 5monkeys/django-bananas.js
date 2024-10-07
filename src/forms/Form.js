@@ -51,7 +51,7 @@ class Form extends React.Component {
       this.context.api[route]({
         ...params,
         ...passedParams,
-        data: data || values,
+        data: data ?? values,
       });
     const promise = onSubmit
       ? Promise.resolve(onSubmit({ endpoint, values }))
@@ -65,12 +65,13 @@ class Form extends React.Component {
           return false;
         });
 
-    return promise.catch(({ response: { statusText, status, obj } }) => {
+    return promise.catch(({ response: { obj, ...response } }) => {
       const errorMessages = {
         400: "Please correct the errors on this form.",
       };
       this.context.admin.error(
-        errorMessages[status] || `${status} : ${statusText}`
+        errorMessages?.[response?.status] ??
+          `${response?.status ?? "Unknown status"} : ${response?.statusText ?? "Unknown cause"}`
       );
       return normalizeFormErrorData(obj);
     });
