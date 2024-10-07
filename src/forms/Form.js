@@ -65,7 +65,7 @@ class Form extends React.Component {
           return false;
         });
 
-    return promise.catch(({ response: { obj } }) => {
+    return promise.catch(({ response: { obj, ...response } }) => {
       const errorMessages = {
         400: "Please correct the errors on this form.",
       };
