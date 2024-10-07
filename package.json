@@ -1,6 +1,6 @@
 {
   "name": "django-bananas",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "license": "MIT",
   "author": "Jonas Lundberg",
   "repository": {
@@ -10,13 +10,7 @@
   "description": "React admin frontend for Django.",
   "main": "index.js",
   "private": true,
-  "keywords": [
-    "admin",
-    "bananas",
-    "django",
-    "django-admin",
-    "react"
-  ],
+  "keywords": ["admin", "bananas", "django", "django-admin", "react"],
   "scripts": {
     "start": "webpack-dev-server --config app/webpack.config.js",
     "watch": "jest --watchAll --verbose",

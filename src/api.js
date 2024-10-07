@@ -60,7 +60,7 @@ class APIClient extends Swagger {
               const message =
                 response.obj && response.obj.detail
                   ? response.obj.detail
-                  : `API ${response.statusText}`;
+                  : `API ${response?.statusText ?? "Unknown error"}`;
 
               this.errorHandler(message);
             };
