@@ -2,8 +2,16 @@ function normalizePath(path) {
   return path.replace("]", "").replace("[", ".");
 }
 
-// TODO: more verbose error messages
 export function fieldFromSchema(schema, field) {
+  if (Array.isArray(schema)) {
+    return fieldFromFlatSchema(schema, field);
+  }
+  return fieldFromNestedSchema(schema, field);
+}
+
+// TODO: more verbose error messages
+// Nested schema is typically used for content-type application/json
+export function fieldFromNestedSchema(schema, field) {
   const normalizedSchema = { type: "object", properties: schema };
   const normalizedPath = normalizePath(field);
   return normalizedPath.split(".").reduce((acc, key) => {
@@ -25,6 +33,15 @@ export function fieldFromSchema(schema, field) {
       `Encountered lookup "${key}" on unsupported type "${acc.type}".`
     );
   }, normalizedSchema);
+}
+
+// Flat schema is typically used for content-type multipart/form-data
+export function fieldFromFlatSchema(schema, field) {
+  const value = schema.find(({ name }) => name === field);
+  if (typeof value === "undefined") {
+    throw new Error(`Encountered a non-existent field "${field}".`);
+  }
+  return value;
 }
 
 export function fieldFromErrorResponse(response, field) {

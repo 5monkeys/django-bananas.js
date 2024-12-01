@@ -87,3 +87,35 @@ export const nestedSchema = {
     $$ref: "#/definitions/Artist",
   },
 };
+
+// Used when an endpoint expects multipart/form-data
+export const flatSchema = [
+  {
+    name: "order",
+    in: "formData",
+    required: true,
+    type: "integer",
+  },
+  {
+    name: "title",
+    in: "formData",
+    required: true,
+    type: "string",
+    maxLength: 64,
+    minLength: 1,
+  },
+  {
+    name: "content",
+    in: "formData",
+    required: false,
+    type: "string",
+    "x-nullable": true,
+  },
+  {
+    name: "attachment",
+    in: "formData",
+    required: false,
+    type: "file",
+    "x-nullable": true,
+  },
+];
