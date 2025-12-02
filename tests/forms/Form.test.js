@@ -32,7 +32,7 @@ test("Ensure the default 'onSubmit' is firing a correct request", async () => {
 
   await waitFor(() => success.calls);
   expect(success).toHaveBeenCalledWith("Changes have been saved!");
-  expect(fetchMock.called(matcher)).toBe(true);
+  expect(fetchMock.callHistory.called(matcher)).toBe(true);
 });
 
 test("Ensure the default 'onSubmit' can handle errors", async () => {
@@ -63,7 +63,7 @@ test("Ensure the default 'onSubmit' can handle errors", async () => {
 
   await waitFor(() => error.calls);
   expect(error).toHaveBeenCalledWith("Please correct the errors on this form.");
-  expect(fetchMock.called(matcher)).toBe(true);
+  expect(fetchMock.callHistory.called(matcher)).toBe(true);
   expect(queryByText("bazrror")).not.toBeNull();
 });
 

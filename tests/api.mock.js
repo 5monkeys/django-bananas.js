@@ -5,7 +5,6 @@ import anonymSchema from "./schema.anonymous.json";
 import authedSchema from "./schema.authenticated.json";
 
 const schemaUrl = "http://foo.bar/api/v1.0/schema.json";
-fetchMock.config.overwriteRoutes = true;
 
 export const user = {
   id: 1,
@@ -18,10 +17,14 @@ export const user = {
 };
 
 export function mockAPI({ anonymous, schema } = {}) {
+  // Clear existing routes and set up global mock
+  fetchMock.removeRoutes().clearHistory().mockGlobal();
+
   // Mock Schema
-  fetchMock.mock(
+  fetchMock.route(
     schemaUrl,
-    schema || (anonymous ? anonymSchema : authedSchema)
+    schema || (anonymous ? anonymSchema : authedSchema),
+    "schema"
   );
 
   const translations = {

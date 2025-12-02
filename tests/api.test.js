@@ -4,7 +4,6 @@ import fetchMock from "fetch-mock";
 
 import getAPIClient from "./api.mock";
 
-const { Response } = fetchMock.config;
 const nofAPIEndpoints = 17;
 
 test("Client is NOT authenticated", async () => {
@@ -34,7 +33,7 @@ test("Operations has attached OPTIONS method call", async () => {
   const client = await getAPIClient();
   const operation = client.operations["example.user:list"];
 
-  fetchMock.once("http://foo.bar/api/v1.0/example/user/", "{}");
+  fetchMock.route("http://foo.bar/api/v1.0/example/user/", "{}", { repeat: 1 });
 
   await expect(operation.options()).resolves.toMatchObject({ ok: true });
 });
@@ -57,9 +56,10 @@ test("Can subscribe to progress events", async () => {
     progressHandler: progress,
   });
 
-  fetchMock.once(
+  fetchMock.route(
     "http://foo.bar/api/v1.0/bananas/logout/",
-    new Response("", { status: 204 })
+    { status: 200, body: "" },
+    { repeat: 1 }
   );
 
   await client.operations["bananas.logout:create"]();
@@ -93,7 +93,10 @@ test("Can handle unreachable endpoint", async () => {
     errorHandler: error,
   });
 
-  fetchMock.post("http://foo.bar/api/v1.0/bananas/logout/", 523);
+  // Simulate a network error (unreachable endpoint)
+  fetchMock.post("http://foo.bar/api/v1.0/bananas/logout/", {
+    throws: new TypeError("Failed to fetch"),
+  });
 
   await expect(client.operations["bananas.logout:create"]()).rejects.toThrow();
 
