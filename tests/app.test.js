@@ -53,7 +53,7 @@ const renderApp = async ({ anonymous = false, props = {} } = {}) => {
 afterEach(() => {
   // Make sure that we always start on the dashboard page
   window.history.pushState({}, "", "/");
-  fetchMock.reset();
+  fetchMock.removeRoutes().clearHistory();
   cleanup();
 });
 
@@ -124,7 +124,7 @@ test("Can render dashboard and navigate using menu", async () => {
     { id: 1, username: "user1" },
     { id: 2, username: "user2" },
   ];
-  fetchMock.mock(`http://foo.bar/api/v1.0${userListRoute.path}`, {
+  fetchMock.route(`http://foo.bar/api/v1.0${userListRoute.path}`, {
     body: users,
   });
 
@@ -391,10 +391,14 @@ test("Can change password", async () => {
   await waitFor(() => expect(submitButton).toBeEnabled());
 
   // Mock fail endpoint and click submit
-  fetchMock.post("http://foo.bar/api/v1.0/bananas/change_password/", {
-    status: 400,
-    body: {},
-  });
+  fetchMock.post(
+    "http://foo.bar/api/v1.0/bananas/change_password/",
+    {
+      status: 400,
+      body: {},
+    },
+    { name: "change-password", repeat: 1 }
+  );
   // TODO: Click button instead of submiting form; await userEvent.click(submitButton);
   fireEvent.submit(form);
 
@@ -402,10 +406,14 @@ test("Can change password", async () => {
   await waitFor(() => getByText("Incorrect authentication credentials."));
 
   // Mock success endpoint and click submit, again
-  fetchMock.post("http://foo.bar/api/v1.0/bananas/change_password/", {
-    status: 204,
-    body: "",
-  });
+  fetchMock.post(
+    "http://foo.bar/api/v1.0/bananas/change_password/",
+    {
+      status: 200,
+      body: "",
+    },
+    { name: "change-password-success", repeat: 1 }
+  );
   fireEvent.submit(form);
 
   // Expect success message to show
@@ -417,7 +425,7 @@ test("A hash change will trigger rerender", async () => {
 
   // Mock Users API call
   const userListRoute = app.router.getRoute("example.user:list");
-  fetchMock.mock(`http://foo.bar/api/v1.0${userListRoute.path}`, { body: [] });
+  fetchMock.route(`http://foo.bar/api/v1.0${userListRoute.path}`, { body: [] });
 
   act(() => app.router.reroute({ id: "example.user:list" }));
   await waitFor(() => getByText("Hash: none"), { container });
@@ -493,9 +501,16 @@ test("Can customize HTTP headers", async () => {
     },
   });
 
-  expect(fetchMock.called()).toBe(true);
-  fetchMock.calls().forEach(([, options]) => {
-    expect(options.headers.Authorization).toBe("secret");
+  expect(fetchMock.callHistory.called()).toBe(true);
+  fetchMock.callHistory.calls().forEach(call => {
+    // In fetch-mock v12, headers may be stored with lowercase keys
+    const headers = call.options?.headers || {};
+    // Try both lowercase and capitalized versions since HTTP headers are case-insensitive
+    const authHeader =
+      headers instanceof Headers
+        ? headers.get("Authorization")
+        : headers.Authorization || headers.authorization;
+    expect(authHeader).toBe("secret");
   });
 });
 

@@ -14,6 +14,6 @@ module.exports = {
       },
     ],
   ],
-  testEnvironment: "jsdom",
+  testEnvironment: "<rootDir>/tests/jest-environment.js",
   modulePathIgnorePatterns: ["<rootDir>/dist/"],
 };
